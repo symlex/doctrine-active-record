@@ -105,17 +105,17 @@ class FormatTest extends UnitTestCase {
     }
 
     public function testToSqlDateException () {
-        $this->setExpectedException('Doctrine\ActiveRecord\FormatException');
+        $this->setExpectedException('Doctrine\ActiveRecord\Exception\FormatException');
         Format::toSql(Format::DATE, new Format());
     }
 
     public function testToSqlDatetimeException () {
-        $this->setExpectedException('Doctrine\ActiveRecord\FormatException');
+        $this->setExpectedException('Doctrine\ActiveRecord\Exception\FormatException');
         Format::toSql(Format::DATETIME, new Format());
     }
 
     public function testFromSqlNumberException () {
-        $this->setExpectedException('Doctrine\ActiveRecord\FormatException');
+        $this->setExpectedException('Doctrine\ActiveRecord\Exception\FormatException');
         Format::fromSql('#.00', 1234);
     }
 

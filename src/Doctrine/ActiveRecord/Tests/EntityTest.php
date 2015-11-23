@@ -22,7 +22,7 @@ class EntityTest extends UnitTestCase
     }
 
     /**
-     * @expectedException \Doctrine\ActiveRecord\NotFoundException
+     * @expectedException \Doctrine\ActiveRecord\Exception\NotFoundException
      */
     public function testFindNotFoundException()
     {

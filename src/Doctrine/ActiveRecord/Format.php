@@ -3,6 +3,7 @@
 namespace Doctrine\ActiveRecord;
 
 use DateTime;
+use Doctrine\ActiveRecord\Exception\FormatException;
 
 /**
  * Utility class to convert various data types from and to SQL format

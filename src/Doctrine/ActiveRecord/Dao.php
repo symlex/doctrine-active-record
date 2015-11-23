@@ -4,6 +4,7 @@ namespace Doctrine\ActiveRecord;
 
 use Doctrine\DBAL\Connection as Db;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ActiveRecord\Exception\Exception;
 
 /**
  * Data Access Object

@@ -3,6 +3,13 @@
 namespace Doctrine\ActiveRecord;
 
 use Doctrine\DBAL\Connection as Db;
+use Doctrine\ActiveRecord\Exception;
+use Doctrine\ActiveRecord\Exception\ModelException;
+use Doctrine\ActiveRecord\Exception\FindException;
+use Doctrine\ActiveRecord\Exception\CreateException;
+use Doctrine\ActiveRecord\Exception\UpdateException;
+use Doctrine\ActiveRecord\Exception\DeleteException;
+use Doctrine\ActiveRecord\Exception\NotFoundException;
 
 /**
  * Business Models are logically located between the controllers, which render

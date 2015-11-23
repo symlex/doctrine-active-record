@@ -6,6 +6,8 @@ use Doctrine\DBAL\Connection as Db;
 use DateTime;
 use InvalidArgumentException;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ActiveRecord\Exception\Exception;
+use Doctrine\ActiveRecord\Exception\NotFoundException;
 
 /**
  * Data Access Object for SQL database entities
@@ -1033,7 +1035,7 @@ abstract class Entity extends Dao
     protected function setPrimaryKey($key)
     {
         if (!is_array($key) && !is_string($key)) {
-            throw new \InvalidArgumentException ('Primary key must be a string or an array');
+            throw new InvalidArgumentException ('Primary key must be a string or an array');
         }
 
         $this->_primaryKey = $key;

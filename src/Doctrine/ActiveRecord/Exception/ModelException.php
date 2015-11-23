@@ -1,6 +1,6 @@
 <?php
 
-namespace Doctrine\ActiveRecord;
+namespace Doctrine\ActiveRecord\Exception;
 
 class ModelException extends Exception {
 }
