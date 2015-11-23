@@ -1,11 +1,9 @@
 Doctrine ActiveRecord
 =====================
 
-The Doctrine ActiveRecord Model and Database Access Object (DAO) classes encapsulate Doctrine DBAL to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.
+As an alternative to Doctrine ORM, this library provides **Model** and **Database Access Object** (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.
 
 ![Architecture](https://www.lucidchart.com/publicSegments/view/5461d17e-f5a8-4166-9e43-47200a00dd77/image.png)
-
-*Note: This is not an ORM (object-relational mapping) framework and there are no requirements to the underlying database structure.*
 
 Data Access Objects
 -------------------
