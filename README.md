@@ -1,5 +1,5 @@
-Doctrine ActiveRecord: Object-oriented CRUD for Doctrine DBAL
-=============================================================
+Doctrine ActiveRecord
+=====================
 
 The Doctrine ActiveRecord Model and Database Access Object (DAO) classes encapsulate Doctrine DBAL to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.
 
