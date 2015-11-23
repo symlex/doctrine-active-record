@@ -1,0 +1,22 @@
+parameters:
+    dbal.params:
+        driver:         mysqli
+        host:           localhost
+        port:           3306
+        dbname:         sympathy
+        charset:        utf8
+        user:           sympathy
+        password:       sympathy
+
+services:
+    dbal.driver:
+        class: Doctrine\DBAL\Driver\Mysqli\Driver
+
+    dbal.connection:
+        class: TestTools\Doctrine\DBAL\Connection
+        arguments:
+            - %dbal.params%
+            - @dbal.driver
+        calls:
+            - [setFixturePrefix, ['sql']]
+            - [useFixtures, ["%fixture.path%"]]

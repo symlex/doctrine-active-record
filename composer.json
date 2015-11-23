@@ -1,0 +1,31 @@
+{
+    "name": "lastzero/doctrine-active-record",
+    "type": "library",
+    "description": "ActiveRecord model and DAO implementation for Doctrine DBAL",
+    "keywords": ["database","db","dao","model","symfony","silex"],
+    "homepage": "https://github.com/lastzero/doctrine-active-record",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael Mayer",
+            "email": "michael@lastzero.net",
+            "homepage": "http://lastzero.net/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "doctrine/dbal": "~2.4",
+        "lastzero/test-tools": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable",
+        "sstalle/php7cc": "*"
+    },
+    "autoload": {
+        "psr-0": { "Doctrine\\ActiveRecord\\": "src/" }
+    },
+    "config": {
+        "bin-dir": "bin/"
+    }
+}
