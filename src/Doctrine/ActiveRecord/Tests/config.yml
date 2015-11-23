@@ -3,10 +3,10 @@ parameters:
         driver:         mysqli
         host:           localhost
         port:           3306
-        dbname:         sympathy
+        dbname:         doctrine-active-record
         charset:        utf8
-        user:           sympathy
-        password:       sympathy
+        user:           doctrine-active-record
+        password:       doctrine-active-record
 
 services:
     dbal.driver:
