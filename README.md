@@ -3,6 +3,8 @@ Doctrine ActiveRecord
 
 As an alternative to Doctrine ORM, this library provides **Business Model** and **Database Access Object** (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.
 
+*Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
+
 ![Architecture](https://www.lucidchart.com/publicSegments/view/5461d17e-f5a8-4166-9e43-47200a00dd77/image.png)
 
 Data Access Objects
