@@ -16,7 +16,7 @@ Example
     $db = $container->get('dbal.connection');
     $model = new ExampleModel ($db);
     $model->find(123);
-    $model->update(array('email' => 'bender@ilovebender.com');
+    $model->update(array('email' => 'bender@ilovebender.com'));
     $model->delete();
 
 Workflow
