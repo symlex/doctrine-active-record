@@ -66,7 +66,7 @@ DAO entities are configured using protected class properties:
     protected $_timestampCreatedCol = 'created';
     protected $_timestampUpdatedCol = 'updated';
 
-Possible values for $_formatMap are defined as constants in `Doctrine\ActiveRecord\Format`:
+Possible values for $_formatMap are defined as constants in `Doctrine\ActiveRecord\Dao\Format`:
 
     const NONE = '';
     const INT = 'int';
