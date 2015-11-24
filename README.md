@@ -82,8 +82,14 @@ Possible values for $_formatMap are defined as constants in `Doctrine\ActiveReco
     const JSON = 'json';
     const BOOL = 'bool';
     const TIME = 'H:i:s';
+    const TIMEU = 'H:i:s.u'; // Support for microseconds (up to six digits)
+    const TIMETZ = 'H:i:sO'; // Support for timezone (e.g. "+0230")
+    const TIMEUTZ = 'H:i:s.uO'; // Support for microseconds & timezone
     const DATE = 'Y-m-d';
     const DATETIME = 'Y-m-d H:i:s';
+    const DATETIMEU = 'Y-m-d H:i:s.u'; // Support for microseconds (up to six digits)
+    const DATETIMETZ = 'Y-m-d H:i:sO'; // Support for timezone (e.g. "+0230")
+    const DATETIMEUTZ = 'Y-m-d H:i:s.uO'; // Support for microseconds & timezone
     const TIMESTAMP = 'U';
 
 Example:
