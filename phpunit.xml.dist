@@ -13,7 +13,7 @@
         >
     <testsuites>
         <testsuite name="Doctrine Active Record Test Suite">
-            <directory>./src/Doctrine/ActiveRecord/Tests</directory>
+            <directory>./src/*/*/Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -21,7 +21,7 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
-                <directory>./src/*/Tests</directory>
+                <directory>./src/*/*/Tests</directory>
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>
