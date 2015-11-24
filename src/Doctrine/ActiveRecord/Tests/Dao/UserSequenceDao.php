@@ -1,9 +1,6 @@
 <?php
 
-namespace Doctrine\ActiveRecord\Tests;
-
-use Doctrine\ActiveRecord\Entity;
-use Doctrine\ActiveRecord\Format;
+namespace Doctrine\ActiveRecord\Tests\Dao;
 
 /**
  * @author Michael Mayer <michael@lastzero.net>

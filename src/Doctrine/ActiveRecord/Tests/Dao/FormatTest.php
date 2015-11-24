@@ -1,9 +1,9 @@
 <?php
 
-namespace Doctrine\ActiveRecord\Tests;
+namespace Doctrine\ActiveRecord\Tests\Dao;
 
 use TestTools\TestCase\UnitTestCase;
-use Doctrine\ActiveRecord\Format;
+use Doctrine\ActiveRecord\Dao\Format;
 use DateTime;
 
 /**

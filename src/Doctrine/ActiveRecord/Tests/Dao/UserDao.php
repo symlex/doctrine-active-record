@@ -1,16 +1,16 @@
 <?php
 
-namespace Doctrine\ActiveRecord\Tests;
+namespace Doctrine\ActiveRecord\Tests\Dao;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\ActiveRecord\Entity;
-use Doctrine\ActiveRecord\Format;
+use Doctrine\ActiveRecord\Dao\EntityDao;
+use Doctrine\ActiveRecord\Dao\Format;
 
 /**
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-class UserDao extends Entity
+class UserDao extends EntityDao
 {
     protected $_factoryNamespace = __NAMESPACE__;
     protected $_tableName = 'users';

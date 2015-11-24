@@ -50,3 +50,7 @@ composer.lock
 .*\.swp
 .tmp
 phpunit.xml
+
+# Project specific files #
+##########################
+*.local.yml

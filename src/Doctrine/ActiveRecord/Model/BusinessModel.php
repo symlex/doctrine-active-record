@@ -1,15 +1,16 @@
 <?php
 
-namespace Doctrine\ActiveRecord;
+namespace Doctrine\ActiveRecord\Model;
 
 use Doctrine\DBAL\Connection as Db;
-use Doctrine\ActiveRecord\Exception;
+use Doctrine\ActiveRecord\Exception\Exception;
 use Doctrine\ActiveRecord\Exception\ModelException;
 use Doctrine\ActiveRecord\Exception\FindException;
 use Doctrine\ActiveRecord\Exception\CreateException;
 use Doctrine\ActiveRecord\Exception\UpdateException;
 use Doctrine\ActiveRecord\Exception\DeleteException;
 use Doctrine\ActiveRecord\Exception\NotFoundException;
+use Doctrine\ActiveRecord\Dao\EntityDao as Dao;
 
 /**
  * Business Models are logically located between the controllers, which render
@@ -21,7 +22,7 @@ use Doctrine\ActiveRecord\Exception\NotFoundException;
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-abstract class Model
+abstract class BusinessModel
 {
     private $_db; // Reference to the database connection
     protected $_daoName = ''; // Main data access object (DAO) class name (without prefix)
@@ -51,7 +52,7 @@ abstract class Model
      *
      * @param string $name Class name without prefix namespace and postfix
      * @throws Exception
-     * @return Entity
+     * @return Dao
      */
     protected function daoFactory($name = '')
     {
@@ -75,7 +76,7 @@ abstract class Model
     /**
      * Returns main DAO instance; automatically creates an instance, if $this->_dao is empty
      *
-     * @return Entity
+     * @return Dao
      */
     protected function getDao()
     {
@@ -100,7 +101,7 @@ abstract class Model
      * @param string $name Optional model name (current model name if empty)
      * @param Dao $dao DB DAO instance
      * @throws Exception
-     * @return Model
+     * @return BusinessModel
      */
     public function factory($name = '', Dao $dao = null)
     {
@@ -493,7 +494,7 @@ abstract class Model
      *
      * @param array $values
      * @throws \Exception
-     * @return Model
+     * @return BusinessModel
      */
     public function update(array $values)
     {
@@ -534,7 +535,7 @@ abstract class Model
      *
      * @param array $values
      * @throws \Exception
-     * @return Model
+     * @return BusinessModel
      */
     public function create(array $values)
     {

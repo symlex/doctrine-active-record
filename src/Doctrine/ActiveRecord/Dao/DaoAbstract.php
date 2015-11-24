@@ -1,6 +1,6 @@
 <?php
 
-namespace Doctrine\ActiveRecord;
+namespace Doctrine\ActiveRecord\Dao;
 
 use Doctrine\DBAL\Connection as Db;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -15,7 +15,7 @@ use Doctrine\ActiveRecord\Exception\Exception;
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-abstract class Dao
+abstract class DaoAbstract
 {
     /**
      * @var Db

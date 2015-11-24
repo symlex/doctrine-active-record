@@ -1,6 +1,6 @@
 <?php
 
-namespace Doctrine\ActiveRecord;
+namespace Doctrine\ActiveRecord\Dao;
 
 use Doctrine\DBAL\Connection as Db;
 use DateTime;
@@ -13,13 +13,13 @@ use Doctrine\ActiveRecord\Exception\NotFoundException;
  * Data Access Object for SQL database entities
  *
  * DAOs directly deal with database tables and raw SQL, if needed. To implement raw SQL only,
- * you can use the basic \Doctrine\ActiveRecord\Dao class, while \Doctrine\ActiveRecord\Entity inherits from this and adds
- * many powerful methods to easily deal with single database tables.
+ * you can use the basic \Doctrine\ActiveRecord\DaoAbstract class, while \Doctrine\ActiveRecord\EntityDao
+ * inherits from this and adds many powerful methods to easily deal with single database tables.
  *
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-abstract class Entity extends Dao
+abstract class EntityDao extends DaoAbstract
 {
     private $_data = array(); // Property cache
     private $_originalData = array(); // Property cache (equals $_data after calling find() or update())

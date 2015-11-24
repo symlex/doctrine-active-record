@@ -1,6 +1,6 @@
 <?php
 
-namespace Doctrine\ActiveRecord;
+namespace Doctrine\ActiveRecord\Dao;
 
 use DateTime;
 use Doctrine\ActiveRecord\Exception\FormatException;

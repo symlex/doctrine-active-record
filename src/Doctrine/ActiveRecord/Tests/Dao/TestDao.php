@@ -1,14 +1,14 @@
 <?php
 
-namespace Doctrine\ActiveRecord\Tests;
+namespace Doctrine\ActiveRecord\Tests\Dao;
 
-use Doctrine\ActiveRecord\Dao;
+use Doctrine\ActiveRecord\Dao\DaoAbstract;
 
 /**
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-class TestDao extends Dao
+class TestDao extends DaoAbstract
 {
     protected $_factoryNamespace = __NAMESPACE__;
 

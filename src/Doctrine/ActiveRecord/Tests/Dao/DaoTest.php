@@ -1,6 +1,6 @@
 <?php
 
-namespace Doctrine\ActiveRecord\Tests;
+namespace Doctrine\ActiveRecord\Tests\Dao;
 
 use TestTools\TestCase\UnitTestCase;
 
@@ -55,6 +55,6 @@ class DaoTest extends UnitTestCase
     {
         $result = $this->dao->factory('Test');
 
-        $this->assertInstanceOf('\Doctrine\ActiveRecord\Tests\TestDao', $result);
+        $this->assertInstanceOf('\Doctrine\ActiveRecord\Tests\Dao\TestDao', $result);
     }
 }

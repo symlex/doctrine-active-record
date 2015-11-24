@@ -7,13 +7,13 @@ As an alternative to Doctrine ORM, this library provides **Model** and **Databas
 
 Data Access Objects
 -------------------
-DAOs directly deal with **database tables** and **raw SQL**, if needed. `Doctrine\ActiveRecord\Dao` is suited to implement custom methods using raw SQL. All DAOs expose the following public methods by default:
+DAOs directly deal with **database tables** and **raw SQL**, if needed. `Doctrine\ActiveRecord\Dao\DaoAbstract` is suited to implement custom methods using raw SQL. All DAOs expose the following public methods by default:
 - `factory($name)`: Returns a new DAO instance
 - `beginTransaction()`: Start a database transaction
 - `commit()`: Commit a database transaction
 - `rollBack()`: Roll back a database transaction
 
-In addition, `Doctrine\ActiveRecord\Entity` offers many powerful methods to easily deal with database table rows:
+In addition, `Doctrine\ActiveRecord\Dao\EntityDao` offers many powerful methods to easily deal with database table rows:
 - `setData(array $data)`: Set raw data (changes can not be detected, e.g. when calling update())
 - `setValues(array $data)`: Set multiple values
 - `setDefinedValues(array $data)`: Set values that exist in the table schema only (slower than setValues())
@@ -85,9 +85,9 @@ Example:
     
     namespace App\Dao;
     
-    use Doctrine\ActiveRecord\Entity;
+    use Doctrine\ActiveRecord\Dao\EntityDao;
     
-    class UserDao extends Entity
+    class UserDao extends EntityDao
     {
         protected $_factoryNamespace = 'App\\Dao';
         protected $_tableName = 'users';

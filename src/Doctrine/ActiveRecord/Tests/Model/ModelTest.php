@@ -1,6 +1,6 @@
 <?php
 
-namespace Doctrine\ActiveRecord\Tests;
+namespace Doctrine\ActiveRecord\Tests\Model;
 
 use TestTools\TestCase\UnitTestCase;
 
