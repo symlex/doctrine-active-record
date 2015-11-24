@@ -10,6 +10,13 @@ As an alternative to Doctrine ORM, this library provides **Business Model** and 
 
 *Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
 
+Examples
+--------
+
+    $db = $container->get('dbal.connection');
+    $model = new UserModel ($db);
+    $model->find(45345);
+
 ![Architecture](https://www.lucidchart.com/publicSegments/view/5461d17e-f5a8-4166-9e43-47200a00dd77/image.png)
 
 Data Access Objects
