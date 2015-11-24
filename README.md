@@ -1,7 +1,7 @@
 Doctrine ActiveRecord
 =====================
 
-As an alternative to Doctrine ORM, this library provides **Model** and **Database Access Object** (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.
+As an alternative to Doctrine ORM, this library provides **Business Model** and **Database Access Object** (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.
 
 ![Architecture](https://www.lucidchart.com/publicSegments/view/5461d17e-f5a8-4166-9e43-47200a00dd77/image.png)
 
@@ -95,11 +95,12 @@ Example:
         protected $_timestampEnabled = true;
     }
 
-Models
-------
-**Models** (also called "Business Models" or "Business Objects") are logically located between **Controllers** - which render views and validate user input - and **Data Access Objects** (DAOs), that are low-level interfaces to a storage backend or Web service.
+Business Models
+---------------
 
-Public interfaces of models are high-level and should reflect all use cases within their domain. There are a number of standard use-cases that are pre-implemented in the base class `Doctrine\ActiveRecord\Model`:
+**Business Models** are logically located between **Controllers** - which render views and validate user input - and **Data Access Objects** (DAOs), that are low-level interfaces to a storage backend or Web service.
+
+Public interfaces of models are high-level and should reflect all use cases within their domain. There are a number of standard use-cases that are pre-implemented in the base class `Doctrine\ActiveRecord\Model\BusinessModel`:
 - `factory($name = '', Dao $dao = null)`: Create a new model instance
 - `find($id)`: Find a record by primary key
 - `reload()`: Reload values from database
@@ -139,9 +140,9 @@ Example:
     
     namespace App\Model;
     
-    use Doctrine\ActiveRecord\Model;
+    use Doctrine\ActiveRecord\Model\BusinessModel;
     
-    class User extends Model 
+    class User extends BusinessModel
     {
       protected $_daoName = ‘User’;
       protected $_factoryNamespace = 'App\\Model';
