@@ -3,10 +3,9 @@ Doctrine ActiveRecord
 
 [![Build Status](https://travis-ci.org/lastzero/doctrine-active-record.png?branch=master)](https://travis-ci.org/lastzero/doctrine-active-record)
 [![Latest Stable Version](https://poser.pugx.org/lastzero/doctrine-active-record/v/stable.svg)](https://packagist.org/packages/lastzero/doctrine-active-record)
-[![Total Downloads](https://poser.pugx.org/lastzero/doctrine-active-record/downloads.svg)](https://packagist.org/packages/lastzero/doctrine-active-record)
 [![License](https://poser.pugx.org/lastzero/doctrine-active-record/license.svg)](https://packagist.org/packages/lastzero/doctrine-active-record)
 
-As an alternative to Doctrine ORM, this library provides **Business Model** and **Database Access Object** (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.
+As an alternative to Doctrine ORM, this library provides **Business Model** and **Database Access Object** (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases. The code is mature and actively used in several commercial projects.
 
 *Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
 
