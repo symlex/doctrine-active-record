@@ -273,3 +273,7 @@ Usage
             return $this->user->getValues();
         }
     }
+    
+See also
+--------
+* [PhpInputValidation – Reusable value container with built-in whitelist validation](https://github.com/lastzero/php-input-validation)
