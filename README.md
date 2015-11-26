@@ -34,7 +34,7 @@ Workflow
 
 Data Access Objects
 -------------------
-DAOs directly deal with **database tables** and **raw SQL**, if needed. `Doctrine\ActiveRecord\Dao\DaoAbstract` is suited to implement custom methods using raw SQL. All DAOs expose the following public methods by default:
+DAOs directly deal with **database tables** and **raw SQL**, if needed. `Doctrine\ActiveRecord\Dao\Dao` is suited to implement custom methods using raw SQL. All DAOs expose the following public methods by default:
 - `factory($name)`: Returns a new DAO instance
 - `beginTransaction()`: Start a database transaction
 - `commit()`: Commit a database transaction
@@ -133,7 +133,7 @@ Business Models
 
 **Business Models** are logically located between **Controllers** - which render views and validate user input - and **Data Access Objects** (DAOs), that are low-level interfaces to a storage backend or Web service.
 
-Public interfaces of models are high-level and should reflect all use cases within their domain. There are a number of standard use-cases that are pre-implemented in the base class `Doctrine\ActiveRecord\Model\BusinessModel`:
+Public interfaces of models are high-level and should reflect all use cases within their domain. There are a number of standard use-cases that are pre-implemented in the base class `Doctrine\ActiveRecord\Model\EntityModel`:
 - `factory($name = '', Dao $dao = null)`: Create a new model instance
 - `find($id)`: Find a record by primary key
 - `reload()`: Reload values from database
@@ -173,9 +173,9 @@ Example:
     
     namespace App\Model;
     
-    use Doctrine\ActiveRecord\Model\BusinessModel;
+    use Doctrine\ActiveRecord\Model\EntityModel;
     
-    class User extends BusinessModel
+    class User extends EntityModel
     {
       protected $_daoName = ‘User’;
       protected $_factoryNamespace = 'App\\Model';
