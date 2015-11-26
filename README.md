@@ -262,9 +262,9 @@ Usage
     
             if($this->form->hasErrors()) {
                 throw new FormInvalidException($this->form->getFirstError());
-            } else {
-                $this->user->update($this->form->getValues());
-            }
+            } 
+            
+            $this->user->update($this->form->getValues());
     
             return $this->user->getValues();
         }
@@ -275,9 +275,9 @@ Usage
     
             if($this->form->hasErrors()) {
                 throw new FormInvalidException($this->form->getFirstError());
-            } else {
-                $this->user->create($this->form->getValues());
             }
+            
+            $this->user->create($this->form->getValues());
     
             return $this->user->getValues();
         }
@@ -285,4 +285,4 @@ Usage
     
 See also
 --------
-* [PhpInputValidation – Reusable value container with built-in whitelist validation](https://github.com/lastzero/php-input-validation)
+* [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/lastzero/php-input-validation)
