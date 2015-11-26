@@ -18,6 +18,15 @@ Example
     $model->update(array('email' => 'bender@ilovebender.com'));
     $model->delete();
 
+Composer
+--------
+
+If you are using composer, simply add "lastzero/doctrine-active-record" to your composer.json file and run `composer update`:
+
+    "require": {
+        "lastzero/doctrine-active-record": "*"
+    }
+    
 Workflow
 --------
 
