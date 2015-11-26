@@ -15,7 +15,7 @@ use Doctrine\ActiveRecord\Exception\Exception;
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-abstract class DaoAbstract
+abstract class Dao
 {
     /**
      * @var Db

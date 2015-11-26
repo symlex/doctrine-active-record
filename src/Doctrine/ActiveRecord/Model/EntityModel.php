@@ -22,9 +22,8 @@ use Doctrine\ActiveRecord\Dao\EntityDao as Dao;
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-abstract class BusinessModel
+abstract class EntityModel extends Model
 {
-    private $_db; // Reference to the database connection
     protected $_daoName = ''; // Main data access object (DAO) class name (without prefix)
     protected $_dao; // Reference to DAO instance
 
@@ -40,86 +39,24 @@ abstract class BusinessModel
      */
     public function __construct(Db $db, Dao $dao = null)
     {
-        $this->_db = $db;
-
-        if (!empty($dao)) {
-            $this->_dao = $dao;
-        }
+        parent::__construct($db, $dao);
     }
 
     /**
-     * Creates a new data access object (DAO) instance
+     * Returns entity DAO
      *
-     * @param string $name Class name without prefix namespace and postfix
-     * @throws Exception
+     * @throws ModelException
      * @return Dao
      */
-    protected function daoFactory($name = '')
+    protected function getEntityDao()
     {
-        $daoName = empty($name) ? $this->_daoName : $name;
+        $dao = $this->getDao();
 
-        if (empty($daoName)) {
-            throw new Exception ('The DAO factory requires a DAO name');
+        if($dao instanceof Dao) {
+            return $dao;
         }
 
-        if (empty($this->_db)) {
-            throw new Exception ('Database instance is empty in DAO factory');
-        }
-
-        $className = $this->_daoFactoryNamespace . '\\' . $daoName . $this->_daoFactoryPostfix;
-
-        $dao = new $className ($this->_db);
-
-        return $dao;
-    }
-
-    /**
-     * Returns main DAO instance; automatically creates an instance, if $this->_dao is empty
-     *
-     * @return Dao
-     */
-    protected function getDao()
-    {
-        if (empty($this->_dao)) {
-            $this->_dao = $this->daoFactory();
-        }
-
-        return $this->_dao;
-    }
-
-    /**
-     * Resets the internal DAO reference
-     */
-    protected function resetDao()
-    {
-        $this->_dao = $this->daoFactory();
-    }
-
-    /**
-     * Create a new model instance
-     *
-     * @param string $name Optional model name (current model name if empty)
-     * @param Dao $dao DB DAO instance
-     * @throws Exception
-     * @return BusinessModel
-     */
-    public function factory($name = '', Dao $dao = null)
-    {
-        $modelName = empty($name) ? $this->getModelName() : $name;
-
-        if (empty($modelName)) {
-            throw new Exception ('The model factory requires a model name');
-        }
-
-        if (empty($this->_db)) {
-            throw new Exception ('Database instance is empty in model factory');
-        }
-
-        $className = $this->_factoryNamespace . '\\' . $modelName . $this->_factoryPostfix;
-
-        $model = new $className ($this->_db, $dao);
-
-        return $model;
+        throw new ModelException('DAO is not an EntityDao');
     }
 
     /**
@@ -130,7 +67,7 @@ abstract class BusinessModel
      */
     public function find($id)
     {
-        $this->getDao()->find($id);
+        $this->getEntityDao()->find($id);
 
         return $this;
     }
@@ -142,7 +79,7 @@ abstract class BusinessModel
      */
     public function reload()
     {
-        $this->getDao()->reload();
+        $this->getEntityDao()->reload();
 
         return $this;
     }
@@ -155,7 +92,7 @@ abstract class BusinessModel
      */
     public function findAll(array $cond = array(), $wrapResult = true)
     {
-        $result = $this->getDao()->findAll($cond, $wrapResult);
+        $result = $this->getEntityDao()->findAll($cond, $wrapResult);
 
         if (!is_array($result)) {
             throw new FindException('DAO findAll() return value is not an array');
@@ -198,7 +135,7 @@ abstract class BusinessModel
     {
         $params = $options + array('cond' => $cond);
 
-        $result = $this->getDao()->search($params);
+        $result = $this->getEntityDao()->search($params);
 
         if (!is_array($result)) {
             throw new FindException('DAO search() return value is not an array');
@@ -268,28 +205,10 @@ abstract class BusinessModel
 
         $params['ids_only'] = true;
 
-        $result = $this->getDao()->search($params);
+        $result = $this->getEntityDao()->search($params);
 
         if (!is_array($result)) {
             throw new FindException('DAO search() return value is not an array');
-        }
-
-        return $result;
-    }
-
-    /**
-     * Returns the model name without prefix and postfix
-     *
-     * @return string
-     */
-    public function getModelName()
-    {
-        $className = get_class($this);
-
-        if ($this->_factoryPostfix != '') {
-            $result = substr($className, strlen($this->_factoryNamespace) + 1, strlen($this->_factoryPostfix) * -1);
-        } else {
-            $result = substr($className, strlen($this->_factoryNamespace) + 1);
         }
 
         return $result;
@@ -302,7 +221,7 @@ abstract class BusinessModel
      */
     public function getId()
     {
-        return $this->getDao()->getId();
+        return $this->getEntityDao()->getId();
     }
 
     /**
@@ -312,7 +231,7 @@ abstract class BusinessModel
      */
     public function hasId()
     {
-        return $this->getDao()->hasId();
+        return $this->getEntityDao()->hasId();
     }
 
     /**
@@ -323,7 +242,7 @@ abstract class BusinessModel
      */
     public function getValues()
     {
-        return $this->getDao()->getValues();
+        return $this->getEntityDao()->getValues();
     }
 
     /**
@@ -381,7 +300,7 @@ abstract class BusinessModel
      */
     public function batchEdit(array $ids, array $properties)
     {
-        $this->getDao()->beginTransaction();
+        $this->getEntityDao()->beginTransaction();
 
         try {
             foreach ($ids as $id) {
@@ -394,9 +313,9 @@ abstract class BusinessModel
                 $dao->update();
             }
 
-            $this->getDao()->commit();
+            $this->getEntityDao()->commit();
         } catch (Exception $e) {
-            $this->getDao()->rollBack();
+            $this->getEntityDao()->rollBack();
 
             throw new UpdateException ('Batch edit was not successful: ' . $e->getMessage());
         }
@@ -413,7 +332,7 @@ abstract class BusinessModel
      */
     public function getTableName()
     {
-        return $this->getDao()->getTableName();
+        return $this->getEntityDao()->getTableName();
     }
 
     /**
@@ -422,7 +341,7 @@ abstract class BusinessModel
      */
     public function __get($name)
     {
-        return $this->getDao()->$name;
+        return $this->getEntityDao()->$name;
     }
 
     /**
@@ -448,7 +367,7 @@ abstract class BusinessModel
      */
     public function hasTimestampEnabled()
     {
-        return $this->getDao()->hasTimestampEnabled();
+        return $this->getEntityDao()->hasTimestampEnabled();
     }
 
     /**
@@ -456,7 +375,7 @@ abstract class BusinessModel
      */
     protected function _delete()
     {
-        $dao = $this->getDao();
+        $dao = $this->getEntityDao();
 
         // Start the database transaction
         $dao->beginTransaction();
@@ -494,7 +413,7 @@ abstract class BusinessModel
      *
      * @param array $values
      * @throws \Exception
-     * @return BusinessModel
+     * @return EntityModel
      */
     public function update(array $values)
     {
@@ -502,7 +421,7 @@ abstract class BusinessModel
             throw new UpdateException('Entity can not be updated');
         }
 
-        $dao = $this->getDao();
+        $dao = $this->getEntityDao();
 
         // Start the database transaction
         $dao->beginTransaction();
@@ -523,7 +442,7 @@ abstract class BusinessModel
 
     protected function _update(array $values)
     {
-        $dao = $this->getDao();
+        $dao = $this->getEntityDao();
 
         $dao->setValues($values);
 
@@ -535,7 +454,7 @@ abstract class BusinessModel
      *
      * @param array $values
      * @throws \Exception
-     * @return BusinessModel
+     * @return EntityModel
      */
     public function create(array $values)
     {
@@ -543,7 +462,7 @@ abstract class BusinessModel
             throw new CreateException('New entities can not be created');
         }
 
-        $dao = $this->getDao();
+        $dao = $this->getEntityDao();
 
         // Start the database transaction
         $dao->beginTransaction();
@@ -564,7 +483,7 @@ abstract class BusinessModel
 
     protected function _create(array $values)
     {
-        $dao = $this->getDao();
+        $dao = $this->getEntityDao();
 
         $dao->setValues($values);
 

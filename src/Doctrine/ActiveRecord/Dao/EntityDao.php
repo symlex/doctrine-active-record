@@ -19,7 +19,7 @@ use Doctrine\ActiveRecord\Exception\NotFoundException;
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-abstract class EntityDao extends DaoAbstract
+abstract class EntityDao extends Dao
 {
     private $_data = array(); // Property cache
     private $_originalData = array(); // Property cache (equals $_data after calling find() or update())

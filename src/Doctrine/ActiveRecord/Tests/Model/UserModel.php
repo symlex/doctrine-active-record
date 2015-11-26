@@ -2,9 +2,9 @@
 
 namespace Doctrine\ActiveRecord\Tests\Model;
 
-use Doctrine\ActiveRecord\Model\BusinessModel;
+use Doctrine\ActiveRecord\Model\EntityModel;
 
-class UserModel extends BusinessModel {
+class UserModel extends EntityModel {
     protected $_factoryNamespace = __NAMESPACE__;
     protected $_daoName = 'Doctrine\ActiveRecord\Tests\Dao\User';
 }
