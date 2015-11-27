@@ -9,14 +9,90 @@ As an alternative to Doctrine ORM, this library provides **Business Model** and 
 
 *Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
 
-Example
--------
+Basic example
+-------------
 
     $db = $container->get('dbal.connection');
-    $model = new ExampleModel ($db);
-    $model->find(123);
-    $model->update(array('email' => 'bender@ilovebender.com'));
-    $model->delete();
+    $user = new User ($db);
+    $user->find(123);
+    $user->update(array('email' => 'bender@ilovebender.com'));
+
+Example usage in REST controller context
+----------------------------------------
+
+This example shows how to work with the EntityModel in a REST controller context. Note how easy it is, to avoid deeply nested structures. User model and form are injected as dependencies.
+
+    <?php
+    
+    namespace App\Rest;
+    
+    use Symfony\Component\HttpFoundation\Request;
+    use App\Exception\FormInvalidException;
+    use App\Form\UserForm;
+    use App\Model\User;
+    
+    class UserController
+    {
+        protected $user;
+        protected $form;
+
+        public function __construct(User $user, UserForm $form)
+        {
+            $this->user = $user;
+            $this->form = $form;
+        }
+
+        public function cgetAction()
+        {
+            $users = $this->user->findAll();
+            $result = array();
+    
+            foreach($users as $user) {
+                $result[] = $user->getValues();
+            }
+    
+            return $result;
+        }
+    
+        public function getAction($id)
+        {
+            return $this->user->find($id)->getValues();
+        }
+    
+        public function deleteAction($id)
+        {
+            return $this->user->find($id)->delete();
+        }
+    
+        public function putAction($id, Request $request)
+        {
+            $this->user->find($id);
+            $this->form->setDefinedWritableValues($request->request->all())->validate();
+    
+            if($this->form->hasErrors()) {
+                throw new FormInvalidException($this->form->getFirstError());
+            } 
+            
+            $this->user->update($this->form->getValues());
+    
+            return $this->user->getValues();
+        }
+    
+        public function postAction(Request $request)
+        {
+            $this->form->setDefinedWritableValues($request->request->all())->validate();
+    
+            if($this->form->hasErrors()) {
+                throw new FormInvalidException($this->form->getFirstError());
+            }
+            
+            $this->user->create($this->form->getValues());
+    
+            return $this->user->getValues();
+        }
+    }
+    
+See also [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/lastzero/php-input-validation)
 
 Composer
 --------
@@ -29,6 +105,8 @@ If you are using composer, simply add "lastzero/doctrine-active-record" to your 
     
 Workflow
 --------
+
+This diagram illustrates how Controller, Model and DAO interact with each other:
 
 ![Architecture](https://www.lucidchart.com/publicSegments/view/5461d17e-f5a8-4166-9e43-47200a00dd77/image.png)
 
@@ -209,80 +287,3 @@ Example:
         return $result;
       }
     }
-    
-Usage
------
-
-    <?php
-    
-    namespace App\Rest;
-    
-    use Symfony\Component\HttpFoundation\Request;
-    use App\Exception\FormInvalidException;
-    use App\Form\UserForm;
-    use App\Model\User;
-    
-    class UserController
-    {
-        protected $user;
-        protected $form;
-
-        public function __construct(User $user, UserForm $form)
-        {
-            $this->user = $user;
-            $this->form = $form;
-        }
-
-        public function cgetAction()
-        {
-            $users = $this->user->findAll();
-            $result = array();
-    
-            foreach($users as $user) {
-                $result[] = $user->getValues();
-            }
-    
-            return $result;
-        }
-    
-        public function getAction($id)
-        {
-            return $this->user->find($id)->getValues();
-        }
-    
-        public function deleteAction($id)
-        {
-            return $this->user->find($id)->delete();
-        }
-    
-        public function putAction($id, Request $request)
-        {
-            $this->user->find($id);
-            $this->form->setDefinedWritableValues($request->request->all())->validate();
-    
-            if($this->form->hasErrors()) {
-                throw new FormInvalidException($this->form->getFirstError());
-            } 
-            
-            $this->user->update($this->form->getValues());
-    
-            return $this->user->getValues();
-        }
-    
-        public function postAction(Request $request)
-        {
-            $this->form->setDefinedWritableValues($request->request->all())->validate();
-    
-            if($this->form->hasErrors()) {
-                throw new FormInvalidException($this->form->getFirstError());
-            }
-            
-            $this->user->create($this->form->getValues());
-    
-            return $this->user->getValues();
-        }
-    }
-    
-See also
---------
-* [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/lastzero/php-input-validation)
