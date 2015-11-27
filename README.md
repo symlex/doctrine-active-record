@@ -17,8 +17,8 @@ Basic example
     $user->find(123);
     $user->update(array('email' => 'bender@ilovebender.com'));
 
-Example usage in REST controller context
-----------------------------------------
+Usage in REST controller context
+--------------------------------
 
 This example shows how to work with the EntityModel in a REST controller context. Note how easy it is, to avoid deeply nested structures. User model and form are injected as dependencies.
 
