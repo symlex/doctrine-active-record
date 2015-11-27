@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Doctrine ActiveRecord by lastzero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Doctrine ActiveRecord</h1>
+      <h2 class="project-tagline">Object-oriented CRUD for Doctrine DBAL</h2>
+      <a href="https://github.com/lastzero/doctrine-active-record" class="btn">View on GitHub</a>
+      <a href="https://github.com/lastzero/doctrine-active-record/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/lastzero/doctrine-active-record/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p>As a lightweight alternative to Doctrine ORM, this library provides <strong>Business Model</strong> and <strong>Database Access Object</strong> (DAO) classes that encapsulate <strong>Doctrine DBAL</strong> to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases. The code is <strong>mature</strong> and <strong>actively used</strong> in several commercial and Open Source projects.</p>
+
+<p><em>Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.</em></p>
+
+<h2>
+<a id="basic-example" class="anchor" href="#basic-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic example</h2>
+
+<pre><code>$db = $container-&gt;get('dbal.connection');
+$user = new User ($db);
+$user-&gt;find(123);
+$user-&gt;update(array('email' =&gt; 'bender@ilovebender.com'));
+</code></pre>
+
+<h2>
+<a id="example-usage-in-rest-controller-context" class="anchor" href="#example-usage-in-rest-controller-context" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example usage in REST controller context</h2>
+
+<p>This example shows how to work with the EntityModel in a REST controller context. Note how easy it is, to avoid deeply nested structures. User model and form are injected as dependencies.</p>
+
+<pre><code>&lt;?php
+
+namespace App\Rest;
+
+use Symfony\Component\HttpFoundation\Request;
+use App\Exception\FormInvalidException;
+use App\Form\UserForm;
+use App\Model\User;
+
+class UserController
+{
+    protected $user;
+    protected $form;
+
+    public function __construct(User $user, UserForm $form)
+    {
+        $this-&gt;user = $user;
+        $this-&gt;form = $form;
+    }
+
+    public function cgetAction()
+    {
+        $users = $this-&gt;user-&gt;findAll();
+        $result = array();
+
+        foreach($users as $user) {
+            $result[] = $user-&gt;getValues();
+        }
+
+        return $result;
+    }
+
+    public function getAction($id)
+    {
+        return $this-&gt;user-&gt;find($id)-&gt;getValues();
+    }
+
+    public function deleteAction($id)
+    {
+        return $this-&gt;user-&gt;find($id)-&gt;delete();
+    }
+
+    public function putAction($id, Request $request)
+    {
+        $this-&gt;user-&gt;find($id);
+        $this-&gt;form-&gt;setDefinedWritableValues($request-&gt;request-&gt;all())-&gt;validate();
+
+        if($this-&gt;form-&gt;hasErrors()) {
+            throw new FormInvalidException($this-&gt;form-&gt;getFirstError());
+        } 
+
+        $this-&gt;user-&gt;update($this-&gt;form-&gt;getValues());
+
+        return $this-&gt;user-&gt;getValues();
+    }
+
+    public function postAction(Request $request)
+    {
+        $this-&gt;form-&gt;setDefinedWritableValues($request-&gt;request-&gt;all())-&gt;validate();
+
+        if($this-&gt;form-&gt;hasErrors()) {
+            throw new FormInvalidException($this-&gt;form-&gt;getFirstError());
+        }
+
+        $this-&gt;user-&gt;create($this-&gt;form-&gt;getValues());
+
+        return $this-&gt;user-&gt;getValues();
+    }
+}
+</code></pre>
+
+<p>See also <a href="https://github.com/lastzero/php-input-validation">InputValidation for PHP – Easy &amp; secure whitelist validation for input data of any origin</a></p>
+
+<h2>
+<a id="composer" class="anchor" href="#composer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Composer</h2>
+
+<p>If you are using composer, simply add "lastzero/doctrine-active-record" to your composer.json file and run <code>composer update</code>:</p>
+
+<pre><code>"require": {
+    "lastzero/doctrine-active-record": "*"
+}
+</code></pre>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/lastzero/doctrine-active-record">Doctrine ActiveRecord</a> is maintained by <a href="https://github.com/lastzero">lastzero</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
