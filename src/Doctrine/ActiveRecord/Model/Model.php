@@ -5,6 +5,7 @@ namespace Doctrine\ActiveRecord\Model;
 use Doctrine\DBAL\Connection as Db;
 use Doctrine\ActiveRecord\Exception\Exception;
 use Doctrine\ActiveRecord\Dao\Dao as Dao;
+use Closure;
 
 /**
  * Models are logically located between the controllers, which render
@@ -28,10 +29,32 @@ abstract class Model
     protected $_daoName = ''; // Main data access object (DAO) class name (without prefix)
     protected $_dao; // Reference to DAO instance
 
+    /**
+     * Namespace used by Model instance factory method
+     *
+     * @var string
+     */
     protected $_factoryNamespace = '';
+
+    /**
+     * Class name postfix by Model instance factory method
+     *
+     * @var string
+     */
     protected $_factoryPostfix = 'Model';
 
+    /**
+     * Namespace used by DAO instance factory method
+     *
+     * @var string
+     */
     protected $_daoFactoryNamespace = '';
+
+    /**
+     * Class name postfix used by DAO instance factory method
+     *
+     * @var string
+     */
     protected $_daoFactoryPostfix = 'Dao';
 
     /**
@@ -47,11 +70,22 @@ abstract class Model
         }
     }
 
+    /**
+     * Set private Doctrine DBAL instance used by factory method
+     *
+     * @param Db $db
+     */
     private function setDb(Db $db)
     {
         $this->_db = $db;
     }
 
+    /**
+     * Returns private Doctrine DBAL instance
+     *
+     * @return \Doctrine\DBAL\Connection
+     * @throws Exception
+     */
     private function getDb()
     {
         if (empty($this->_db)) {
@@ -157,5 +191,38 @@ abstract class Model
         }
 
         return $result;
+    }
+
+    /**
+     * Executes a function in a transaction.
+     *
+     * The function gets passed this Model instance as an (optional) parameter.
+     *
+     * If an exception occurs during execution of the function or transaction commit,
+     * the transaction is rolled back and the exception re-thrown.
+     *
+     * @param \Closure $func The function to execute transactionally.
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     */
+    protected function transactional(Closure $func)
+    {
+        $dao = $this->getDao();
+
+        $dao->beginTransaction();
+
+        try {
+            $func($this);
+
+            $dao->commit();
+        } catch (\Exception $e) {
+            $dao->rollBack();
+
+            throw $e;
+        }
+
+        return $this;
     }
 }

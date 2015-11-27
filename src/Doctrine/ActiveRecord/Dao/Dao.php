@@ -5,11 +5,12 @@ namespace Doctrine\ActiveRecord\Dao;
 use Doctrine\DBAL\Connection as Db;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ActiveRecord\Exception\Exception;
+use Closure;
 
 /**
- * Data Access Object
+ * Data Access Object (DAO)
  *
- * The DAO layer encapsulates the access to a database. You should use one DAO class for each entity.
+ * The DAO layer encapsulates the access to a database. You should use one DAO class for each entity or domain.
  * DAOs should not implement business logic, which belongs to the model layer.
  *
  * @author Michael Mayer <michael@lastzero.net>
@@ -21,9 +22,26 @@ abstract class Dao
      * @var Db
      */
     private $_db;
+
+    /**
+     * DESCRIBE TABLE cache
+     *
+     * @var array
+     */
     private $_tableDescription = array();
 
+    /**
+     * Namespace used by DAO instance factory method
+     *
+     * @var string
+     */
     protected $_factoryNamespace = '';
+
+    /**
+     * Class name postfix used by DAO instance factory method
+     *
+     * @var string
+     */
     protected $_factoryPostfix = 'Dao';
 
     /**
@@ -88,6 +106,7 @@ abstract class Dao
 
     /**
      * Sets the Db instance
+     *
      * @param Db $db
      */
     protected function setDb(Db $db)
@@ -96,7 +115,9 @@ abstract class Dao
     }
 
     /**
-     * Start a database transaction
+     * Starts a transaction by suspending auto-commit mode.
+     *
+     * @return $this
      */
     public function beginTransaction()
     {
@@ -106,7 +127,12 @@ abstract class Dao
     }
 
     /**
-     * Commit a database transaction
+     * Commits the current transaction.
+     *
+     * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or
+     *                                            because the transaction was marked for rollback only.
+     *
+     * @return $this
      */
     public function commit()
     {
@@ -117,6 +143,8 @@ abstract class Dao
 
     /**
      * Roll back a database transaction
+     *
+     * @return $this
      */
     public function rollBack()
     {
@@ -126,28 +154,65 @@ abstract class Dao
     }
 
     /**
+     * Executes a function in a transaction.
+     *
+     * The function gets passed this DAO instance as an (optional) parameter.
+     *
+     * If an exception occurs during execution of the function or transaction commit,
+     * the transaction is rolled back and the exception re-thrown.
+     *
+     * @param \Closure $func The function to execute transactionally.
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     */
+    public function transactional(Closure $func)
+    {
+        $this->beginTransaction();
+
+        try {
+            $func($this);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollBack();
+
+            throw $e;
+        }
+
+        return $this;
+    }
+
+    /**
      * The fetchAll() method returns data in an array of associative arrays, using the first column as the array index.
      *
-     * @param $query
+     * @param string $statement The SQL query.
+     * @param array $params The prepared statement params.
+     * @param array $types The query parameter types.
      * @return array
+     * @throws Exception
      */
-    protected function fetchAll($query)
+    protected function fetchAll($statement, array $params = array(), $types = array())
     {
-        return $this->getDb()->fetchAll($query);
+        return $this->getDb()->fetchAll($statement, $params, $types);
     }
 
     /**
      * The fetchPairs() method returns data in an array of key-value pairs, as an associative array
      * with a single entry per row
      *
-     * @param $query
+     * @param string $statement The SQL query.
+     * @param array $params The prepared statement params.
+     * @param array $types The query parameter types.
      * @return array
+     * @throws Exception
      */
-    protected function fetchPairs($query)
+    protected function fetchPairs($statement, array $params = array(), $types = array())
     {
         $result = array();
 
-        $rows = $this->getDb()->fetchAll($query);
+        $rows = $this->getDb()->fetchAll($statement, $params, $types);
 
         foreach ($rows as $row) {
             $result[current($row)] = next($row);
@@ -157,28 +222,32 @@ abstract class Dao
     }
 
     /**
-     * Returns data only for the first row fetched from the result set, and it returns only the value of the first
-     * column in that row. Therefore it returns only a single scalar value, not an array or an object.
+     * Returns value of the first column of the first row
      *
-     * @param $query
-     * @return string
+     * @param string $statement The SQL query.
+     * @param array $params The prepared statement params.
+     * @param array $types The query parameter types.
+     * @return mixed
+     * @throws Exception
      */
-    protected function fetchOne($query)
+    protected function fetchSingleValue($statement, array $params = array(), array $types = array())
     {
-        return $this->getDb()->fetchColumn($query);
+        return $this->getDb()->fetchColumn($statement, $params, 0, $types);
     }
 
     /**
      * Returns values of the first column as array
      *
-     * @param $query
+     * @param string $statement The SQL query.
+     * @param array $params The prepared statement params.
+     * @param array $types The query parameter types.
      * @return array
      */
-    protected function fetchCol($query)
+    protected function fetchCol($statement, array $params = array(), $types = array())
     {
         $result = array();
 
-        $rows = $this->getDb()->fetchAll($query);
+        $rows = $this->getDb()->fetchAll($statement, $params, $types);
 
         foreach ($rows as $row) {
             $result[] = current($row);
@@ -200,8 +269,8 @@ abstract class Dao
         }
 
         $result = array();
-        $query = 'DESCRIBE ' . $this->getDb()->quoteIdentifier($tableName);
-        $cols = $this->fetchAll($query);
+        $statement = 'DESCRIBE ' . $this->getDb()->quoteIdentifier($tableName);
+        $cols = $this->fetchAll($statement);
 
         foreach ($cols as $col) {
             $result[$col['Field']] = $col['Type'];

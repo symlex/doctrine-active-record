@@ -69,7 +69,7 @@ class EntityTest extends UnitTestCase
     public function testSearch()
     {
         /**
-         * @var \Doctrine\ActiveRecord\Tests\UserDao
+         * @var \Doctrine\ActiveRecord\Tests\Dao\UserDao
          */
         $user = $this->dao->factory('User');
 
@@ -101,7 +101,7 @@ class EntityTest extends UnitTestCase
     public function testSearchCountTotal()
     {
         /**
-         * @var \Doctrine\ActiveRecord\Tests\UserDao
+         * @var \Doctrine\ActiveRecord\Tests\Dao\UserDao
          */
         $user = $this->dao->factory('User');
 
@@ -119,10 +119,10 @@ class EntityTest extends UnitTestCase
         $this->assertArrayHasKey('table_alias', $result);
         $this->assertEquals(20, $result['count']);
         $this->assertEquals(0, $result['offset']);
-        $this->assertEquals(1, $result['total']);
+        $this->assertEquals(2, $result['total']);
         $this->assertEquals('id', $result['table_pk']);
         $this->assertEquals('u', $result['table_alias']);
         $this->assertInternalType('array', $result['rows']);
-        $this->assertCount(1, $result['rows']);
+        $this->assertCount(2, $result['rows']);
     }
 }

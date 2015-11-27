@@ -10,11 +10,11 @@ use Doctrine\ActiveRecord\Exception\Exception;
 use Doctrine\ActiveRecord\Exception\NotFoundException;
 
 /**
- * Data Access Object for SQL database entities
+ * Data Access Object (DAO) for easy handling of database tables and rows
  *
  * DAOs directly deal with database tables and raw SQL, if needed. To implement raw SQL only,
- * you can use the basic \Doctrine\ActiveRecord\Dao class, while \Doctrine\ActiveRecord\Dao\EntityDao
- * inherits from this and adds many powerful methods to easily deal with single database tables.
+ * you can use the basic Dao class, while EntityDao inherits from this and adds many powerful
+ * methods to easily deal with single database tables and rows.
  *
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
@@ -682,7 +682,7 @@ abstract class EntityDao extends Dao
             $countSelect->from($params['table'], $params['table_alias']);
             $countSelect->select(array('COUNT(*) AS count'));
             $countSelect = (string)$this->optimizeSearchQuery($countSelect, $params);
-            $count = $this->fetchOne($countSelect);
+            $count = $this->fetchSingleValue($countSelect);
         } else {
             $count = false;
         }
@@ -691,10 +691,10 @@ abstract class EntityDao extends Dao
         if ($params['order']) {
             if (is_array($params['order'])) {
                 foreach ($params['order'] as $sortOrder) {
-                    $select->addOrderBy($this->getOrderField($sortOrder), $this->getOrderDirection($sortOrder));
+                    $select->addOrderBy($this->getOrderColumn($sortOrder), $this->getOrderDirection($sortOrder));
                 }
             } else {
-                $select->addOrderBy($this->getOrderField($params['order']), $this->getOrderDirection($params['order']));
+                $select->addOrderBy($this->getOrderColumn($params['order']), $this->getOrderDirection($params['order']));
             }
         }
 
@@ -737,13 +737,13 @@ abstract class EntityDao extends Dao
     /**
      * Override to manually optimize SQL created by Doctrine DBAL QueryBuilder
      *
-     * @param QueryBuilder $query SQL query string or Query Builder instance
+     * @param QueryBuilder $statement SQL query string or Query Builder instance
      * @param array $params Search parameters (as passed to search($params))
      * @return QueryBuilder|string
      */
-    protected function optimizeSearchQuery(QueryBuilder $query, array $params)
+    protected function optimizeSearchQuery(QueryBuilder $statement, array $params)
     {
-        return $query;
+        return $statement;
     }
 
     /**
@@ -847,6 +847,12 @@ abstract class EntityDao extends Dao
         return $order;
     }
 
+    /**
+     * Returns the sort order direction from an SQL order string (e.g. "email ASC")
+     *
+     * @param $sortOrder
+     * @return string
+     */
     protected function getOrderDirection($sortOrder)
     {
         $parts = explode(' ', $sortOrder);
@@ -860,7 +866,13 @@ abstract class EntityDao extends Dao
         return $result;
     }
 
-    protected function getOrderField($sortOrder)
+    /**
+     * Returns the sort order column from an SQL order string (e.g. "email ASC")
+     *
+     * @param $sortOrder
+     * @return string
+     */
+    protected function getOrderColumn($sortOrder)
     {
         $parts = explode(' ', $sortOrder);
         $result = $parts[0];
@@ -968,7 +980,7 @@ abstract class EntityDao extends Dao
         }
 
         if ($order) {
-            $select->orderBy($this->getOrderField($order), $this->getOrderDirection($order));
+            $select->orderBy($this->getOrderColumn($order), $this->getOrderDirection($order));
         }
 
         $result = array();
@@ -1045,6 +1057,7 @@ abstract class EntityDao extends Dao
 
     /**
      * Checks if a column is required.
+     *
      * A column is required if
      *   - it is part of the order array
      *   - it is part of the columns array

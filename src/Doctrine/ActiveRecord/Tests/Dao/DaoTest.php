@@ -57,4 +57,76 @@ class DaoTest extends UnitTestCase
 
         $this->assertInstanceOf('\Doctrine\ActiveRecord\Tests\Dao\TestDao', $result);
     }
+
+    public function testPublicFetchAll()
+    {
+        $expected = array(
+            0 =>
+                array(
+                    'id' => 1,
+                    'username' => 'Foo',
+                    'email' => 'foo@bar.com',
+                    'active' => 1,
+                    'created' => '2013-11-04 18:34:49',
+                    'updated' => '2013-11-04 19:34:49',
+                ),
+            1 =>
+                array(
+                    'id' => 2,
+                    'username' => 'Michael',
+                    'email' => 'michael@bar.com',
+                    'active' => 1,
+                    'created' => '2013-11-05 18:34:49',
+                    'updated' => '2013-11-06 18:34:49',
+                ),
+            2 =>
+                array(
+                    'id' => 3,
+                    'username' => 'Alex',
+                    'email' => 'alex@bar.com',
+                    'active' => 0,
+                    'created' => '2013-11-06 18:34:49',
+                    'updated' => '2013-11-07 18:34:49',
+                ),
+        );
+
+        $result = $this->dao->publicFetchAll('SELECT * FROM users');
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testPublicFetchPairs()
+    {
+        $expected = array(
+            1 => 'Foo',
+            2 => 'Michael',
+            3 => 'Alex',
+        );
+
+        $result = $this->dao->publicFetchPairs('SELECT * FROM users');
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testPublicFetchSingleValue()
+    {
+        $expected = 1;
+
+        $result = $this->dao->publicFetchSingleValue('SELECT * FROM users');
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testPublicFetchCol()
+    {
+        $expected = array(
+            0 => 1,
+            1 => 2,
+            2 => 3,
+        );
+
+        $result = $this->dao->publicFetchCol('SELECT * FROM users');
+
+        $this->assertEquals($expected, $result);
+    }
 }

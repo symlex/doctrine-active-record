@@ -1,1 +1,0 @@
-a:2:{s:6:"result";a:1:{i:0;a:1:{s:2:"id";i:1;}}s:4:"args";a:1:{i:0;s:88:"SELECT id FROM users u WHERE (`u`.`username` = 'Foo') AND (active = 1) LIMIT 20 OFFSET 0";}}

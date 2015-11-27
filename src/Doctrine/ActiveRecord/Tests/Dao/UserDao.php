@@ -25,8 +25,8 @@ class UserDao extends EntityDao
         'created' => Format::DATETIME
     );
 
-    protected function optimizeSearchQuery (QueryBuilder $query, array $params) {
-        $query->andWhere('active = 1');
-        return $query;
+    protected function optimizeSearchQuery (QueryBuilder $statement, array $params) {
+        $statement->andWhere('active = 1');
+        return $statement;
     }
 }

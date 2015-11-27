@@ -12,6 +12,7 @@ use Doctrine\ActiveRecord\Exception\DeleteException;
 use Doctrine\ActiveRecord\Exception\NotFoundException;
 use Doctrine\ActiveRecord\Dao\Dao;
 use Doctrine\ActiveRecord\Dao\EntityDao;
+use Closure;
 
 /**
  * EntityModel implements a large number of standard ActiveRecord use-cases that
@@ -430,21 +431,9 @@ abstract class EntityModel extends Model
             throw new UpdateException('Entity can not be updated');
         }
 
-        $dao = $this->getEntityDao();
-
-        // Start the database transaction
-        $dao->beginTransaction();
-
-        try {
-            $this->_update($values);
-
-            $dao->commit();
-        } catch (\Exception $e) {
-            // Roll back in case of ANY error and throw exception
-            $dao->rollBack();
-
-            throw $e;
-        }
+        $this->transactional(function ($model) use ($values) {
+            $model->_update($values);
+        });
 
         return $this;
     }
@@ -471,21 +460,9 @@ abstract class EntityModel extends Model
             throw new CreateException('New entities can not be created');
         }
 
-        $dao = $this->getEntityDao();
-
-        // Start the database transaction
-        $dao->beginTransaction();
-
-        try {
-            $this->_create($values);
-
-            $dao->commit();
-        } catch (\Exception $e) {
-            // Roll back in case of ANY error and throw exception
-            $dao->rollBack();
-
-            throw $e;
-        }
+        $this->transactional(function ($model) use ($values) {
+            $model->_create($values);
+        });
 
         return $this;
     }
