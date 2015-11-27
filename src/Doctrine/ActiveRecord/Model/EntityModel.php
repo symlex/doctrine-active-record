@@ -10,14 +10,12 @@ use Doctrine\ActiveRecord\Exception\CreateException;
 use Doctrine\ActiveRecord\Exception\UpdateException;
 use Doctrine\ActiveRecord\Exception\DeleteException;
 use Doctrine\ActiveRecord\Exception\NotFoundException;
-use Doctrine\ActiveRecord\Dao\EntityDao as Dao;
+use Doctrine\ActiveRecord\Dao\Dao;
+use Doctrine\ActiveRecord\Dao\EntityDao;
 
 /**
- * Business Models are logically located between the controllers, which render
- * the views and validate user input, and the DAOs, that are the low-level
- * interface to the storage backend. The public interface of models is high-level and
- * should reflect the all use cases for the business domain. There are a number of standard
- * use-cases that are pre-implemented in this base class for your convenience.
+ * EntityModel implements a large number of standard ActiveRecord use-cases that
+ * depend on Doctrine\ActiveRecord\Dao\EntiyDao instead of Doctrine\ActiveRecord\Dao\Dao
  *
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
@@ -35,9 +33,9 @@ abstract class EntityModel extends Model
 
     /**
      * @param $db Db The current database connection instance
-     * @param $dao Dao An instance of a DOA to initialize this instance (otherwise, you must call find/search)
+     * @param $dao EntityDao An instance of a DOA to initialize this instance (otherwise, you must call find/search)
      */
-    public function __construct(Db $db, Dao $dao = null)
+    public function __construct(Db $db, EntityDao $dao = null)
     {
         parent::__construct($db, $dao);
     }
@@ -46,17 +44,28 @@ abstract class EntityModel extends Model
      * Returns entity DAO
      *
      * @throws ModelException
-     * @return Dao
+     * @return EntityDao
      */
     protected function getEntityDao()
     {
         $dao = $this->getDao();
 
-        if($dao instanceof Dao) {
+        if($dao instanceof EntityDao) {
             return $dao;
         }
 
         throw new ModelException('DAO is not an EntityDao');
+    }
+
+    /**
+     * @param string $name
+     * @param Dao|null $dao
+     * @return EntityModel|Model
+     * @throws Exception
+     */
+    public function factory($name = '', Dao $dao = null)
+    {
+        return parent::factory($name, $dao);
     }
 
     /**

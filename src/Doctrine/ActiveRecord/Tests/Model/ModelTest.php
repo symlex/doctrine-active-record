@@ -11,32 +11,38 @@ use TestTools\TestCase\UnitTestCase;
 class ModelTest extends UnitTestCase
 {
     /**
-     * @var UserModel
+     * @var SimpleModel
      */
     protected $model;
 
     public function setUp()
     {
         $db = $this->get('dbal.connection');
-        $this->model = new UserModel ($db);
+        $this->model = new SimpleModel ($db);
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\NotFoundException
-     */
-    public function testFindNotFoundException()
+    public function testType()
     {
-        $this->model->find(45345);
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Model\Model', $this->model);
     }
 
-    public function testFind()
+    public function testFactory()
     {
-        $user = $this->model->factory('User');
+        $userModel = $this->model->factory('User');
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $userModel);
+    }
 
-        $user->find(1);
+    public function testGetModelName()
+    {
+        $this->assertEquals('Simple', $this->model->getModelName());
+    }
 
-        $this->assertEquals('Foo', $user->username);
-        $this->assertEquals('foo@bar.com', $user->email);
-        $this->assertEquals(true, $user->active);
+    public function testGetTables()
+    {
+        $result = $this->model->getTables();
+
+        $this->assertInternalType('array', $result);
+
+        $this->assertEquals('documents', $result[0]);
     }
 }

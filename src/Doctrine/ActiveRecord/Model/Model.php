@@ -7,11 +7,16 @@ use Doctrine\ActiveRecord\Exception\Exception;
 use Doctrine\ActiveRecord\Dao\Dao as Dao;
 
 /**
- * Business Models are logically located between the controllers, which render
+ * Models are logically located between the controllers, which render
  * the views and validate user input, and the DAOs, that are the low-level
- * interface to the storage backend. The public interface of models is high-level and
- * should reflect the all use cases for the business domain. There are a number of standard
- * use-cases that are pre-implemented in this base class for your convenience.
+ * interface to the storage backend.
+ *
+ * The public interface of models is high-level and should reflect the
+ * all use cases for the business domain.
+ *
+ * If you want to build on pre-implemented ActiveRecord functionality,
+ * use EntityModel instead of the basic Model, which only offers a number of
+ * basic factory methods.
  *
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT

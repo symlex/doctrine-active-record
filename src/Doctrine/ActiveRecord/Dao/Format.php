@@ -8,6 +8,10 @@ use Doctrine\ActiveRecord\Exception\FormatException;
 /**
  * Utility class to convert various data types from and to SQL format
  *
+ * Since SQL is a standard, for performance reasons and to enforce code portability,
+ * this class intentionally is static. It's a pure conversion tool and does not
+ * contain any state.
+ *
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */

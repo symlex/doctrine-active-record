@@ -13,7 +13,7 @@ use Doctrine\ActiveRecord\Exception\NotFoundException;
  * Data Access Object for SQL database entities
  *
  * DAOs directly deal with database tables and raw SQL, if needed. To implement raw SQL only,
- * you can use the basic \Doctrine\ActiveRecord\DaoAbstract class, while \Doctrine\ActiveRecord\EntityDao
+ * you can use the basic \Doctrine\ActiveRecord\Dao class, while \Doctrine\ActiveRecord\Dao\EntityDao
  * inherits from this and adds many powerful methods to easily deal with single database tables.
  *
  * @author Michael Mayer <michael@lastzero.net>
@@ -661,7 +661,7 @@ abstract class EntityDao extends Dao
         }
 
         if ($params['ids_only']) {
-            $select->select(array('id' => $this->_primaryKey));
+            $select->select(array('id' => $params['table_alias'] . '.' . $this->_primaryKey));
         }
 
         $select->from($params['table'], $params['table_alias']);
