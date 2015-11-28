@@ -349,7 +349,8 @@ abstract class EntityModel extends Model
      *
      * Throws exception, because Models should implement use cases and not just
      * change data based on field names. Each specific use case needs a separate
-     * function.
+     * method. Alternatively you can use update($values) and create($values), if
+     * values are coming from a trusted source, e.g. a form class.
      */
     public function __set($name, $value)
     {
@@ -371,28 +372,6 @@ abstract class EntityModel extends Model
     }
 
     /**
-     * Deletes the stored data without any checks
-     */
-    protected function _delete()
-    {
-        $dao = $this->getEntityDao();
-
-        // Start the database transaction
-        $dao->beginTransaction();
-
-        try {
-            $dao->delete();
-
-            $dao->commit();
-        } catch (Exception $e) {
-            // Roll back in case of ANY error and throw exception
-            $dao->rollBack();
-
-            throw $e;
-        }
-    }
-
-    /**
      * Permanently deletes the entity instance
      *
      * @throws DeleteException
@@ -403,19 +382,30 @@ abstract class EntityModel extends Model
             throw new DeleteException('ID not set - did you call find($id) before delete()?');
         }
 
-        if(!$this->isDeletable()) {
+        if (!$this->isDeletable()) {
             throw new DeleteException('Permission denied: Entity can not be deleted');
         }
 
-        $this->_delete();
-
-        $this->resetDao();
+        $this->transactional(function () {
+            $this->_delete();
+        });
 
         return $this;
     }
 
     /**
-     * Updates entity data
+     * Deletes the entity without transaction & permission checks
+     */
+    protected function _delete()
+    {
+        $dao = $this->getEntityDao();
+        $dao->delete();
+
+        $this->resetDao();
+    }
+
+    /**
+     * Updates the entity using the given values
      *
      * @param array $values
      * @throws UpdateException
@@ -439,6 +429,8 @@ abstract class EntityModel extends Model
     }
 
     /**
+     * Updates the entity without transaction & permission checks
+     *
      * @param array $values
      * @throws ModelException
      */
@@ -452,7 +444,7 @@ abstract class EntityModel extends Model
     }
 
     /**
-     * Permanently store entity data
+     * Creates a new entity using the given values
      *
      * @param array $values
      * @throws CreateException
@@ -472,6 +464,8 @@ abstract class EntityModel extends Model
     }
 
     /**
+     * Creates the entity without transaction & permission checks
+     *
      * @param array $values
      * @throws ModelException
      */
