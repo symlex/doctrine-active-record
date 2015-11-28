@@ -32,8 +32,7 @@ abstract class Model
     private $_factory;
 
     /**
-     * Name of related data access object (DAO) without namespace & postfix,
-     * see $_daoFactoryNamespace & $_daoFactoryPostfix
+     * Name of associated data access object (DAO) without namespace & postfix (see Factory)
      *
      * @var string
      */

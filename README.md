@@ -212,7 +212,6 @@ Example:
     
     class UserDao extends EntityDao
     {
-        protected $_factoryNamespace = 'App\\Dao';
         protected $_tableName = 'users';
         protected $_primaryKey = 'user_id';
         protected $_timestampEnabled = true;
@@ -249,13 +248,9 @@ Public interfaces of models are high-level and should reflect all use cases with
 
 **How much validation should be implemented within a model?** Wherever invalid data can lead to security issues or major inconsistencies, some core validation rules must be implemented in the model layer. Model exception messages usually don’t require translation (in multilingual applications), since invalid values should be recognized beforehand by a form class. If you expect certain exceptions, you should catch and handle them in your controllers.
 
-Similar to DAOs, models are configured using protected class properties:
+Models are associated with their respective Dao using a protected class property:
 
-    protected $_daoName = ''; // Primary DAO name (no prefix/postfix)
-    protected $_factoryNamespace = '';
-    protected $_factoryPostfix = 'Model';
-    protected $_daoFactoryNamespace = '';
-    protected $_daoFactoryPostfix = 'Dao';
+    protected $_daoName = ''; // DAO class name without namespace or postfix
 
 Example:
 
@@ -267,21 +262,18 @@ Example:
     
     class User extends EntityModel
     {
-      protected $_daoName = ‘User’;
-      protected $_factoryNamespace = 'App\\Model';
-      protected $_factoryPostfix = '';
-      protected $_daoFactoryNamespace = 'App\\Dao';
-      
+      protected $_daoName = 'User';
+
       public function delete() 
       {
-        $dao = $this->getDao();
+        $dao = $this->getEntityDao();
         $dao->is_deleted = 1;
         $dao->update();
       }
     
       public function undelete() 
       {
-        $dao = $this->getDao();
+        $dao = $this->getEntityDao();
         $dao->is_deleted = 0;
         $dao->update();
       }
