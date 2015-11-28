@@ -192,7 +192,7 @@ abstract class Dao
         $this->beginTransaction();
 
         try {
-            $func($this);
+            $func();
 
             $this->commit();
         } catch (\Exception $e) {

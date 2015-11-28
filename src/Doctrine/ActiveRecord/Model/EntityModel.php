@@ -431,8 +431,8 @@ abstract class EntityModel extends Model
             throw new UpdateException('Permission denied: Entity can not be updated');
         }
 
-        $this->transactional(function (EntityModel $model) use ($values) {
-            $model->_update($values);
+        $this->transactional(function () use ($values) {
+            $this->_update($values);
         });
 
         return $this;
@@ -464,8 +464,8 @@ abstract class EntityModel extends Model
             throw new CreateException('Permission denied: Entity can not be created');
         }
 
-        $this->transactional(function (EntityModel $model) use ($values) {
-            $model->_create($values);
+        $this->transactional(function () use ($values) {
+            $this->_create($values);
         });
 
         return $this;

@@ -21,21 +21,89 @@ use Doctrine\ActiveRecord\Exception\NotFoundException;
  */
 abstract class EntityDao extends Dao
 {
-    private $_data = array(); // Property cache
-    private $_originalData = array(); // Property cache (equals $_data after calling find() or update())
+    /**
+     * Contains current DAO properties
+     *
+     * @var array
+     */
+    private $_data = array();
 
-    protected $_tableName = ''; // Database table name
-    protected $_primaryKey = 'id'; // Name of primary key column
-    protected $_primaryKeySequence = null; // Sequence name used when inserting (null for mysql)
-    protected $_fieldMap = array(); // 'db_column' => 'object_property'
-    protected $_formatMap = array(); // 'db_column' => Format::TYPE
-    protected $_valueMap = array(); // 'object_property' => 'db_column'
+    /**
+     * Contains original DAO properties (after loading them from database)
+     *
+     * @var array
+     */
+    private $_originalData = array();
 
-    protected $_timestampEnabled = false; // Set to true to enable "updated" and "created" timestamps
+    /**
+     * Database table name
+     *
+     * @var string
+     */
+    protected $_tableName = '';
+
+    /**
+     * Name of primary key column(s)
+     *
+     * @var string|array
+     */
+    protected $_primaryKey = 'id';
+
+    /**
+     * Optional sequence name for creating primary keys (null for mysql)
+     *
+     * @var string|null
+     */
+    protected $_primaryKeySequence = null;
+
+    /**
+     * Format: 'db_column' => 'object_property'
+     *
+     * @var array
+     */
+    protected $_fieldMap = array();
+
+    /**
+     * Format: 'db_column' => Format::TYPE
+     *
+     * @var array
+     */
+    protected $_formatMap = array();
+
+    /**
+     * Format: 'object_property' => 'db_column'
+     *
+     * @var array
+     */
+    protected $_valueMap = array();
+
+    /**
+     * Set to true to enable "updated" and "created" timestamps
+     *
+     * @var bool
+     */
+    protected $_timestampEnabled = false;
+
+    /**
+     * Name of "created" timestamp column
+     *
+     * @var string
+     */
     protected $_timestampCreatedCol = 'created';
+
+    /**
+     * Name of "updated" timestamp column
+     *
+     * @var string
+     */
     protected $_timestampUpdatedCol = 'updated';
 
-    public function __construct(Db $db = null)
+    /**
+     * EntityDao constructor.
+     *
+     * @param Db $db
+     */
+    public function __construct(Db $db)
     {
         parent::__construct($db);
 

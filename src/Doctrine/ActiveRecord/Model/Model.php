@@ -271,7 +271,7 @@ abstract class Model
         $dao->beginTransaction();
 
         try {
-            $func($this);
+            $func();
 
             $dao->commit();
         } catch (\Exception $e) {
