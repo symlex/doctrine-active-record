@@ -80,6 +80,26 @@ abstract class Dao
     }
 
     /**
+     * Sets namespace used by the DAO factory method
+     *
+     * @param string $namespace
+     */
+    public function setFactoryNamespace($namespace)
+    {
+        $this->_factoryNamespace = (string)$namespace;
+    }
+
+    /**
+     * Sets class name postfix used by the DAO factory method
+     *
+     * @param string $postfix
+     */
+    public function setFactoryPostfix($postfix)
+    {
+        $this->_factoryPostfix = (string)$postfix;
+    }
+
+    /**
      * Returns the current DBAL Connection
      *
      * @throws Exception

@@ -24,10 +24,27 @@ use Closure;
  */
 abstract class Model
 {
-    private $_db; // Reference to the database connection
+    /**
+     * Private reference to the database connection (required by DAO factory)
+     *
+     * @var Db
+     */
+    private $_db;
 
-    protected $_daoName = ''; // Main data access object (DAO) class name (without prefix)
-    protected $_dao; // Reference to DAO instance
+    /**
+     * Name of related data access object (DAO) without namespace & postfix,
+     * see $_daoFactoryNamespace & $_daoFactoryPostfix
+     *
+     * @var string
+     */
+    protected $_daoName = '';
+
+    /**
+     * Reference to related DAO instance, see $_daoName
+     *
+     * @var
+     */
+    protected $_dao;
 
     /**
      * Namespace used by Model instance factory method
@@ -118,6 +135,26 @@ abstract class Model
     }
 
     /**
+     * Sets namespace used by the DAO factory method
+     *
+     * @param string $namespace
+     */
+    public function setDaoFactoryNamespace($namespace)
+    {
+        $this->_daoFactoryNamespace = (string)$namespace;
+    }
+
+    /**
+     * Sets class name postfix used by the DAO factory method
+     *
+     * @param string $postfix
+     */
+    public function setDaoFactoryPostfix($postfix)
+    {
+        $this->_daoFactoryPostfix = (string)$postfix;
+    }
+
+    /**
      * Returns main DAO instance; automatically creates an instance, if $this->_dao is empty
      *
      * @return Dao
@@ -153,7 +190,7 @@ abstract class Model
     }
 
     /**
-     * Create a new model instance
+     * Creates a new model instance
      *
      * @param string $name Optional model name (current model name if empty)
      * @param Dao $dao DB DAO instance
@@ -173,6 +210,26 @@ abstract class Model
         $model = new $className ($this->getDb(), $dao);
 
         return $model;
+    }
+
+    /**
+     * Sets namespace used by the model factory method
+     *
+     * @param string $namespace
+     */
+    public function setFactoryNamespace($namespace)
+    {
+        $this->_factoryNamespace = (string)$namespace;
+    }
+
+    /**
+     * Sets class name postfix used by the model factory method
+     *
+     * @param string $postfix
+     */
+    public function setFactoryPostfix($postfix)
+    {
+        $this->_factoryPostfix = (string)$postfix;
     }
 
     /**

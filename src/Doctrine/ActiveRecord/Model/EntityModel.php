@@ -12,7 +12,6 @@ use Doctrine\ActiveRecord\Exception\DeleteException;
 use Doctrine\ActiveRecord\Exception\NotFoundException;
 use Doctrine\ActiveRecord\Dao\Dao;
 use Doctrine\ActiveRecord\Dao\EntityDao;
-use Closure;
 
 /**
  * EntityModel implements a large number of standard ActiveRecord use-cases that
@@ -23,15 +22,6 @@ use Closure;
  */
 abstract class EntityModel extends Model
 {
-    protected $_daoName = ''; // Main data access object (DAO) class name (without prefix)
-    protected $_dao; // Reference to DAO instance
-
-    protected $_factoryNamespace = '';
-    protected $_factoryPostfix = 'Model';
-
-    protected $_daoFactoryNamespace = '';
-    protected $_daoFactoryPostfix = 'Dao';
-
     /**
      * @param $db Db The current database connection instance
      * @param $dao EntityDao An instance of a DOA to initialize this instance (otherwise, you must call find/search)
@@ -51,7 +41,7 @@ abstract class EntityModel extends Model
     {
         $dao = $this->getDao();
 
-        if($dao instanceof EntityDao) {
+        if ($dao instanceof EntityDao) {
             return $dao;
         }
 
@@ -409,12 +399,18 @@ abstract class EntityModel extends Model
      */
     public function delete()
     {
-        if (!$this->hasId() || !$this->isDeletable()) {
-            throw new DeleteException('Entity can not be deleted');
+        if (!$this->hasId()) {
+            throw new DeleteException('ID not set - did you call find($id) before delete()?');
+        }
+
+        if(!$this->isDeletable()) {
+            throw new DeleteException('Permission denied: Entity can not be deleted');
         }
 
         $this->_delete();
+
         $this->resetDao();
+
         return $this;
     }
 
@@ -422,22 +418,30 @@ abstract class EntityModel extends Model
      * Updates entity data
      *
      * @param array $values
-     * @throws \Exception
+     * @throws UpdateException
      * @return EntityModel
      */
     public function update(array $values)
     {
-        if (!$this->hasId() || !$this->isUpdatable()) {
-            throw new UpdateException('Entity can not be updated');
+        if (!$this->hasId()) {
+            throw new UpdateException('ID not set - did you call find($id) before update($values)?');
         }
 
-        $this->transactional(function ($model) use ($values) {
+        if (!$this->isUpdatable()) {
+            throw new UpdateException('Permission denied: Entity can not be updated');
+        }
+
+        $this->transactional(function (EntityModel $model) use ($values) {
             $model->_update($values);
         });
 
         return $this;
     }
 
+    /**
+     * @param array $values
+     * @throws ModelException
+     */
     protected function _update(array $values)
     {
         $dao = $this->getEntityDao();
@@ -451,22 +455,26 @@ abstract class EntityModel extends Model
      * Permanently store entity data
      *
      * @param array $values
-     * @throws \Exception
+     * @throws CreateException
      * @return EntityModel
      */
     public function create(array $values)
     {
         if (!$this->isCreatable()) {
-            throw new CreateException('New entities can not be created');
+            throw new CreateException('Permission denied: Entity can not be created');
         }
 
-        $this->transactional(function ($model) use ($values) {
+        $this->transactional(function (EntityModel $model) use ($values) {
             $model->_create($values);
         });
 
         return $this;
     }
 
+    /**
+     * @param array $values
+     * @throws ModelException
+     */
     protected function _create(array $values)
     {
         $dao = $this->getEntityDao();
