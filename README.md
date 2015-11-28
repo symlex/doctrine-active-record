@@ -39,14 +39,14 @@ This example shows how to work with the EntityModel in a REST controller context
     use Symfony\Component\HttpFoundation\Request;
     use App\Exception\FormInvalidException;
     use App\Form\UserForm;
-    use App\Model\User;
+    use App\Model\UserModel;
     
     class UserController
     {
         protected $user;
         protected $form;
 
-        public function __construct(User $user, UserForm $form)
+        public function __construct(UserModel $user, UserForm $form)
         {
             $this->user = $user;
             $this->form = $form;
