@@ -10,8 +10,6 @@ use Doctrine\ActiveRecord\Dao\Dao;
  */
 class TestDao extends Dao
 {
-    protected $_factoryNamespace = __NAMESPACE__;
-
     public function getTables()
     {
         $statement = 'SHOW TABLES';

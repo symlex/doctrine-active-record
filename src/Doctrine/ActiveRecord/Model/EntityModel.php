@@ -2,7 +2,6 @@
 
 namespace Doctrine\ActiveRecord\Model;
 
-use Doctrine\DBAL\Connection as Db;
 use Doctrine\ActiveRecord\Exception\Exception;
 use Doctrine\ActiveRecord\Exception\ModelException;
 use Doctrine\ActiveRecord\Exception\FindException;
@@ -23,12 +22,12 @@ use Doctrine\ActiveRecord\Dao\EntityDao;
 abstract class EntityModel extends Model
 {
     /**
-     * @param $db Db The current database connection instance
-     * @param $dao EntityDao An instance of a DOA to initialize this instance (otherwise, you must call find/search)
+     * @param Factory $factory Model factory instance
+     * @param EntityDao $dao An instance of a DOA to initialize this instance (otherwise, you must call find/search)
      */
-    public function __construct(Db $db, EntityDao $dao = null)
+    public function __construct(Factory $factory, EntityDao $dao = null)
     {
-        parent::__construct($db, $dao);
+        parent::__construct($factory, $dao);
     }
 
     /**

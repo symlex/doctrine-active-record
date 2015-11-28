@@ -19,9 +19,9 @@ use Closure;
 abstract class Dao
 {
     /**
-     * @var Db
+     * @var Factory
      */
-    private $_db;
+    private $_factory;
 
     /**
      * DESCRIBE TABLE cache
@@ -47,11 +47,11 @@ abstract class Dao
     /**
      * Constructor
      *
-     * @param Db $db Database connection (Doctrine DBAL)
+     * @param Factory $factory DAO factory instance
      */
-    public function __construct(Db $db)
+    public function __construct(Factory $factory)
     {
-        $this->setDb($db);
+        $this->setFactory($factory);
 
         $this->init();
     }
@@ -65,6 +65,24 @@ abstract class Dao
     }
 
     /**
+     * Sets factory instance
+     *
+     * @param Factory $factory
+     */
+    private function setFactory (Factory $factory) {
+        $this->_factory = $factory;
+    }
+
+    /**
+     * Returns factory instance
+     *
+     * @return Factory
+     */
+    protected function getFactory () {
+        return $this->_factory;
+    }
+
+    /**
      * Returns a new DAO instance
      *
      * @param string $name Class name without namespace prefix and postfix
@@ -72,31 +90,9 @@ abstract class Dao
      */
     public function factory($name)
     {
-        $className = $this->_factoryNamespace . '\\' . $name . $this->_factoryPostfix;
+        $result = $this->getFactory()->getDao($name);
 
-        $dao = new $className ($this->getDb());
-
-        return $dao;
-    }
-
-    /**
-     * Sets namespace used by the DAO factory method
-     *
-     * @param string $namespace
-     */
-    public function setFactoryNamespace($namespace)
-    {
-        $this->_factoryNamespace = (string)$namespace;
-    }
-
-    /**
-     * Sets class name postfix used by the DAO factory method
-     *
-     * @param string $postfix
-     */
-    public function setFactoryPostfix($postfix)
-    {
-        $this->_factoryPostfix = (string)$postfix;
+        return $result;
     }
 
     /**
@@ -107,11 +103,7 @@ abstract class Dao
      */
     protected function getDb()
     {
-        if (empty($this->_db)) {
-            throw new Exception ('No database adapter set');
-        }
-
-        return $this->_db;
+        return $this->getFactory()->getDb();
     }
 
     /**
@@ -122,16 +114,6 @@ abstract class Dao
     protected function createQueryBuilder()
     {
         return $this->getDb()->createQueryBuilder();
-    }
-
-    /**
-     * Sets the Db instance
-     *
-     * @param Db $db
-     */
-    protected function setDb(Db $db)
-    {
-        $this->_db = $db;
     }
 
     /**

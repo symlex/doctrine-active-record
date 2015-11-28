@@ -17,8 +17,8 @@ class ModelTest extends UnitTestCase
 
     public function setUp()
     {
-        $db = $this->get('dbal.connection');
-        $this->model = new SimpleModel ($db);
+        $factory = $this->get('model.factory');
+        $this->model = new SimpleModel ($factory);
     }
 
     public function testType()

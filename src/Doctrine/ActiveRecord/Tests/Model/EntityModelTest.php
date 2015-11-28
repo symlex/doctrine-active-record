@@ -17,8 +17,11 @@ class EntityModelTest extends UnitTestCase
 
     public function setUp()
     {
-        $db = $this->get('dbal.connection');
-        $this->model = new UserModel ($db);
+        /**
+         * @var \Doctrine\ActiveRecord\Model\Factory
+         */
+        $factory = $this->get('model.factory');
+        $this->model = $factory->getModel('User');
     }
 
     public function testFactory()
@@ -168,7 +171,7 @@ class EntityModelTest extends UnitTestCase
     {
         $this->model->find(1);
         $result = $this->model->getEntityTitle();
-        $expected = 'Doctrine\ActiveRecord\Tests\Dao\User 1';
+        $expected = 'User 1';
         $this->assertEquals($expected, $result);
     }
 

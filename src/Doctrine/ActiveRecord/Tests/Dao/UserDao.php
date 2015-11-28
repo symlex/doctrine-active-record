@@ -12,7 +12,6 @@ use Doctrine\ActiveRecord\Dao\Format;
  */
 class UserDao extends EntityDao
 {
-    protected $_factoryNamespace = __NAMESPACE__;
     protected $_tableName = 'users';
     protected $_primaryKey = 'id';
     protected $_timestampEnabled = true;

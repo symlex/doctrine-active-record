@@ -2,7 +2,7 @@
 
 namespace Doctrine\ActiveRecord\Model;
 
-use Doctrine\DBAL\Connection as Db;
+use Doctrine\ActiveRecord\Exception\ModelException;
 use Doctrine\ActiveRecord\Exception\Exception;
 use Doctrine\ActiveRecord\Dao\Dao as Dao;
 use Closure;
@@ -25,11 +25,11 @@ use Closure;
 abstract class Model
 {
     /**
-     * Private reference to the database connection (required by DAO factory)
+     * Reference to the model factory
      *
-     * @var Db
+     * @var Factory
      */
-    private $_db;
+    private $_factory;
 
     /**
      * Name of related data access object (DAO) without namespace & postfix,
@@ -47,40 +47,12 @@ abstract class Model
     protected $_dao;
 
     /**
-     * Namespace used by Model instance factory method
-     *
-     * @var string
+     * @param Factory $factory Model factory instance
+     * @param Dao $dao An instance of a DOA to initialize this instance (otherwise, you must call find/search)
      */
-    protected $_factoryNamespace = '';
-
-    /**
-     * Class name postfix by Model instance factory method
-     *
-     * @var string
-     */
-    protected $_factoryPostfix = 'Model';
-
-    /**
-     * Namespace used by DAO instance factory method
-     *
-     * @var string
-     */
-    protected $_daoFactoryNamespace = '';
-
-    /**
-     * Class name postfix used by DAO instance factory method
-     *
-     * @var string
-     */
-    protected $_daoFactoryPostfix = 'Dao';
-
-    /**
-     * @param $db Db The current database connection instance
-     * @param $dao Dao An instance of a DOA to initialize this instance (otherwise, you must call find/search)
-     */
-    public function __construct(Db $db, Dao $dao = null)
+    public function __construct(Factory $factory, Dao $dao = null)
     {
-        $this->setDb($db);
+        $this->setFactory($factory);
 
         if (!empty($dao)) {
             $this->setDao($dao);
@@ -88,28 +60,45 @@ abstract class Model
     }
 
     /**
-     * Set private Doctrine DBAL instance used by factory method
+     * Creates a new model instance
      *
-     * @param Db $db
+     * @param string $name Optional model name (current model name if empty)
+     * @param Dao $dao DB DAO instance
+     * @throws Exception
+     * @return Model
      */
-    private function setDb(Db $db)
+    public function factory($name = '', Dao $dao = null)
     {
-        $this->_db = $db;
+        $modelName = empty($name) ? $this->getModelName() : $name;
+
+        $model = $this->getFactory()->getModel($modelName, $dao);
+
+        return $model;
     }
 
     /**
-     * Returns private Doctrine DBAL instance
+     * Set factory instance
      *
-     * @return \Doctrine\DBAL\Connection
-     * @throws Exception
+     * @param Factory $factory
      */
-    private function getDb()
+    protected function setFactory(Factory $factory)
     {
-        if (empty($this->_db)) {
-            throw new Exception ('Doctrine\DBAL\Connection instance not set');
+        $this->_factory = $factory;
+    }
+
+    /**
+     * Returns factory instance
+     *
+     * @return Factory
+     * @throws ModelException
+     */
+    private function getFactory()
+    {
+        if (empty($this->_factory)) {
+            throw new ModelException ('Factory instance not set');
         }
 
-        return $this->_db;
+        return $this->_factory;
     }
 
     /**
@@ -121,37 +110,40 @@ abstract class Model
      */
     protected function daoFactory($name = '')
     {
-        $daoName = empty($name) ? $this->_daoName : $name;
+        $daoName = empty($name) ? $this->getDaoName() : $name;
 
-        if (empty($daoName)) {
-            throw new Exception ('The DAO factory requires a DAO name');
-        }
-
-        $className = $this->_daoFactoryNamespace . '\\' . $daoName . $this->_daoFactoryPostfix;
-
-        $dao = new $className ($this->getDb());
+        $dao = $this->getFactory()->getDao($daoName);
 
         return $dao;
     }
 
     /**
-     * Sets namespace used by the DAO factory method
+     * Set related DaoEntity name (only possible once)
      *
-     * @param string $namespace
+     * @param string $name DAO entity name for factory
+     * @throws ModelException
      */
-    public function setDaoFactoryNamespace($namespace)
+    public function setDaoName($name)
     {
-        $this->_daoFactoryNamespace = (string)$namespace;
+        if (empty($name)) {
+            throw new ModelException ('DAO name was empty');
+        }
+
+        if (!empty($this->_daoName)) {
+            throw new ModelException ('DAO name already set');
+        }
+
+        $this->_daoName = $name;
     }
 
     /**
-     * Sets class name postfix used by the DAO factory method
+     * Returns related DaoEntity name
      *
-     * @param string $postfix
+     * @return string
      */
-    public function setDaoFactoryPostfix($postfix)
+    public function getDaoName()
     {
-        $this->_daoFactoryPostfix = (string)$postfix;
+        return $this->_daoName;
     }
 
     /**
@@ -190,49 +182,6 @@ abstract class Model
     }
 
     /**
-     * Creates a new model instance
-     *
-     * @param string $name Optional model name (current model name if empty)
-     * @param Dao $dao DB DAO instance
-     * @throws Exception
-     * @return Model
-     */
-    public function factory($name = '', Dao $dao = null)
-    {
-        $modelName = empty($name) ? $this->getModelName() : $name;
-
-        if (empty($modelName)) {
-            throw new Exception ('The model factory requires a model name');
-        }
-
-        $className = $this->_factoryNamespace . '\\' . $modelName . $this->_factoryPostfix;
-
-        $model = new $className ($this->getDb(), $dao);
-
-        return $model;
-    }
-
-    /**
-     * Sets namespace used by the model factory method
-     *
-     * @param string $namespace
-     */
-    public function setFactoryNamespace($namespace)
-    {
-        $this->_factoryNamespace = (string)$namespace;
-    }
-
-    /**
-     * Sets class name postfix used by the model factory method
-     *
-     * @param string $postfix
-     */
-    public function setFactoryPostfix($postfix)
-    {
-        $this->_factoryPostfix = (string)$postfix;
-    }
-
-    /**
      * Returns the model name without prefix and postfix
      *
      * @return string
@@ -241,10 +190,13 @@ abstract class Model
     {
         $className = get_class($this);
 
-        if ($this->_factoryPostfix != '') {
-            $result = substr($className, strlen($this->_factoryNamespace) + 1, strlen($this->_factoryPostfix) * -1);
+        $postfix = $this->getFactory()->getFactoryPostfix();
+        $namespace = $this->getFactory()->getFactoryNamespace();
+
+        if ($postfix != '') {
+            $result = substr($className, strlen($namespace), strlen($postfix) * -1);
         } else {
-            $result = substr($className, strlen($this->_factoryNamespace) + 1);
+            $result = substr($className, strlen($namespace));
         }
 
         return $result;

@@ -2,6 +2,7 @@
 
 namespace Doctrine\ActiveRecord\Tests\Dao;
 
+use Doctrine\ActiveRecord\Dao\Factory;
 use TestTools\TestCase\UnitTestCase;
 
 /**
@@ -17,8 +18,8 @@ class EntityTest extends UnitTestCase
 
     public function setUp()
     {
-        $db = $this->get('dbal.connection');
-        $this->dao = new UserDao ($db);
+        $factory = $this->get('dao.factory');
+        $this->dao = new UserDao ($factory);
     }
 
     /**
@@ -48,7 +49,9 @@ class EntityTest extends UnitTestCase
             ->getMock();
         $db->method('lastInsertId')->with(null);
 
-        $dao = new UserDao ($db);
+        $factory = new Factory($db);
+
+        $dao = new UserDao ($factory);
         $dao->setData(["username" => "seq"]);
         $dao->insert();
     }
@@ -61,7 +64,9 @@ class EntityTest extends UnitTestCase
             ->getMock();
         $db->method('lastInsertId')->with("test_seq");
 
-        $dao = new UserSequenceDao ($db);
+        $factory = new Factory($db);
+
+        $dao = new UserSequenceDao ($factory);
         $dao->setData(["username" => "seq"]);
         $dao->insert();
     }

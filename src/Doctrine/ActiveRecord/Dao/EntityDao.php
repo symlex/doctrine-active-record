@@ -99,17 +99,24 @@ abstract class EntityDao extends Dao
     protected $_timestampUpdatedCol = 'updated';
 
     /**
-     * EntityDao constructor.
-     *
-     * @param Db $db
+     * Init method called by __construct
      */
-    public function __construct(Db $db)
+    public function init()
     {
-        parent::__construct($db);
-
         if (empty($this->_valueMap)) {
             $this->_valueMap = array_flip($this->_fieldMap);
         }
+    }
+
+    /**
+     * Returns a new Dao or EntityDao instance
+     *
+     * @param string $name Class name without namespace prefix and postfix
+     * @return Dao|EntityDao
+     */
+    public function factory($name)
+    {
+        return parent::factory($name);
     }
 
     /**
@@ -822,11 +829,11 @@ abstract class EntityDao extends Dao
      */
     public function wrapAll(array $rows)
     {
-        $class = get_class($this);
+        $className = get_class($this);
         $result = array();
 
         foreach ($rows as $row) {
-            $dao = new $class($this->getDb());
+            $dao = new $className ($this->getFactory());
             $dao->setData($row);
             $result[] = $dao;
         }

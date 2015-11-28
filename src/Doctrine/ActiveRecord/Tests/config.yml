@@ -20,3 +20,19 @@ services:
         calls:
             - [setFixturePrefix, ['sql']]
             - [useFixtures, ["%fixture.path%"]]
+
+    dao.factory:
+        class: Doctrine\ActiveRecord\Dao\Factory
+        arguments:
+            - @dbal.connection
+        calls:
+            - [ setFactoryNamespace, ['\Doctrine\ActiveRecord\Tests\Dao' ] ]
+            - [ setFactoryPostfix, ['Dao'] ]
+
+    model.factory:
+        class: Doctrine\ActiveRecord\Model\Factory
+        arguments:
+            - @dao.factory
+        calls:
+            - [ setFactoryNamespace, ['\Doctrine\ActiveRecord\Tests\Model' ] ]
+            - [ setFactoryPostfix, ['Model'] ]
