@@ -12,10 +12,22 @@ As a lightweight alternative to Doctrine ORM, this library provides **Business M
 Basic example
 -------------
 
-    $db = $container->get('dbal.connection');
-    $user = new User ($db);
+    use Doctrine\ActiveRecord\Dao\Factory as DaoFactory;
+    use Doctrine\ActiveRecord\Model\Factory;
+
+    $daoFactory = new DaoFactory($db); // $db is a Doctrine\DBAL\Connection
+
+    $factory = new Factory($daoFactory);
+    $factory->setFactoryNamespace('App\Model');
+    $factory->setFactoryPostfix('Model');
+
+    $user = $factory->getModel('User'); // Returns instance of App\Model\UserModel
+
     $user->find(123);
+
     $user->update(array('email' => 'bender@ilovebender.com'));
+
+    $group = $user->factory('Group'); // Returns instance of App\Model\GroupModel
 
 Usage in REST controller context
 --------------------------------
