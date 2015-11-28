@@ -19,17 +19,29 @@
     </section>
 
     <section class="main-content">
-      <p>As a lightweight alternative to Doctrine ORM, this library provides <strong>Business Model</strong> and <strong>Database Access Object</strong> (DAO) classes that encapsulate <strong>Doctrine DBAL</strong> to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases. The code is <strong>mature</strong> and <strong>actively used</strong> in several commercial and Open Source projects.</p>
-
-<p><em>Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.</em></p>
+      <p>As a lightweight alternative to Doctrine ORM, this library provides <strong>Business Model</strong> and <strong>Database Access Object</strong> (DAO) classes that encapsulate <strong>Doctrine DBAL</strong> to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.</p>
 
 <h2>
 <a id="basic-example" class="anchor" href="#basic-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic example</h2>
 
-<pre><code>$db = $container-&gt;get('dbal.connection');
-$user = new User ($db);
-$user-&gt;find(123);
-$user-&gt;update(array('email' =&gt; 'bender@ilovebender.com'));
+<pre><code>use Doctrine\ActiveRecord\Dao\Factory as DaoFactory;
+use Doctrine\ActiveRecord\Model\Factory;
+
+$daoFactory = new DaoFactory($db); // $db is a Doctrine\DBAL\Connection
+
+$factory = new Factory($daoFactory);
+$factory-&gt;setFactoryNamespace('App\Model');
+$factory-&gt;setFactoryPostfix('Model');
+
+$user = $factory-&gt;getModel('User'); // Returns instance of App\Model\UserModel
+
+$user-&gt;find(123); // Throws exception, if not found
+
+if ($user-&gt;email == '') {
+    $user-&gt;update(array('email' =&gt; 'bender@ilovebender.com')); // Update email
+}
+
+$group = $user-&gt;factory('Group'); // Returns instance of App\Model\GroupModel
 </code></pre>
 
 <h2>
@@ -119,6 +131,8 @@ class UserController
     "lastzero/doctrine-active-record": "*"
 }
 </code></pre>
+
+<p><em>Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.</em></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/lastzero/doctrine-active-record">Doctrine ActiveRecord</a> is maintained by <a href="https://github.com/lastzero">lastzero</a>.</span>
