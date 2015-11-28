@@ -95,6 +95,20 @@ class Factory
             throw new FactoryException ('Model class "' . $className . '" does not exist');
         }
 
+        $result = $this->createModelInstance($className, $dao);
+
+        return $result;
+    }
+
+    /**
+     * Returns new model instance of $className
+     *
+     * @param string $className
+     * @param Dao $dao
+     * @return Model
+     */
+    protected function createModelInstance($className, $dao)
+    {
         $result = new $className ($this, $dao);
 
         return $result;
@@ -105,7 +119,8 @@ class Factory
      *
      * @param string $namespace
      */
-    public function setFactoryNamespace($namespace)
+    public
+    function setFactoryNamespace($namespace)
     {
         $this->_factoryNamespace = (string)$namespace;
     }
@@ -115,7 +130,8 @@ class Factory
      *
      * @param string $postfix
      */
-    public function setFactoryPostfix($postfix)
+    public
+    function setFactoryPostfix($postfix)
     {
         $this->_factoryPostfix = (string)$postfix;
     }
@@ -125,7 +141,8 @@ class Factory
      *
      * @return string
      */
-    public function getFactoryNamespace()
+    public
+    function getFactoryNamespace()
     {
         $result = $this->_factoryNamespace;
 
@@ -141,7 +158,8 @@ class Factory
      *
      * @return string
      */
-    public function getFactoryPostfix()
+    public
+    function getFactoryPostfix()
     {
         return $this->_factoryPostfix;
     }

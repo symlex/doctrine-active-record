@@ -55,10 +55,23 @@ class Factory
 
         $className = $this->getFactoryNamespace() . '\\' . $name . $this->getFactoryPostfix();
 
-        if(!class_exists($className)) {
+        if (!class_exists($className)) {
             throw new FactoryException ('DAO class "' . $className . '" does not exist');
         }
 
+        $result = $this->createDaoInstance($className);
+
+        return $result;
+    }
+
+    /**
+     * Returns new DAO instance of $className
+     *
+     * @param string $className
+     * @return Dao
+     */
+    protected function createDaoInstance($className)
+    {
         $result = new $className ($this);
 
         return $result;
