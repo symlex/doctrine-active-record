@@ -7,8 +7,6 @@ Doctrine ActiveRecord
 
 As a lightweight alternative to Doctrine ORM, this library provides **Business Model** and **Database Access Object** (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases.
 
-*Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
-
 Basic example
 -------------
 
@@ -36,8 +34,6 @@ Usage in REST controller context
 
 This example shows how to work with the EntityModel in a REST controller context. Note how easy it is, to avoid deeply nested structures. User model and form are injected as dependencies.
 
-    <?php
-    
     namespace App\Rest;
     
     use Symfony\Component\HttpFoundation\Request;
@@ -117,6 +113,8 @@ If you are using composer, simply add "lastzero/doctrine-active-record" to your 
         "lastzero/doctrine-active-record": "*"
     }
     
+*Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
+
 Workflow
 --------
 
