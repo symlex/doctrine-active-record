@@ -253,33 +253,15 @@ abstract class Model
     /**
      * Executes a function in a transaction.
      *
-     * The function gets passed this Model instance as an (optional) parameter.
-     *
      * If an exception occurs during execution of the function or transaction commit,
      * the transaction is rolled back and the exception re-thrown.
      *
      * @param \Closure $func The function to execute transactionally.
      *
-     * @return $this
-     *
      * @throws \Exception
      */
-    protected function transactional(Closure $func)
+    public function transactional(Closure $func)
     {
-        $dao = $this->getDao();
-
-        $dao->beginTransaction();
-
-        try {
-            $func();
-
-            $dao->commit();
-        } catch (\Exception $e) {
-            $dao->rollBack();
-
-            throw $e;
-        }
-
-        return $this;
+        $this->getDao()->transactional($func);
     }
 }

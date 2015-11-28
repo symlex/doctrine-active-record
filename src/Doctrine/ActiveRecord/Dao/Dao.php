@@ -176,14 +176,10 @@ abstract class Dao
     /**
      * Executes a function in a transaction.
      *
-     * The function gets passed this DAO instance as an (optional) parameter.
-     *
      * If an exception occurs during execution of the function or transaction commit,
      * the transaction is rolled back and the exception re-thrown.
      *
      * @param \Closure $func The function to execute transactionally.
-     *
-     * @return $this
      *
      * @throws \Exception
      */
@@ -200,8 +196,6 @@ abstract class Dao
 
             throw $e;
         }
-
-        return $this;
     }
 
     /**

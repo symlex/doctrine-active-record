@@ -375,6 +375,7 @@ abstract class EntityModel extends Model
      * Permanently deletes the entity instance
      *
      * @throws DeleteException
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function delete()
     {
@@ -387,7 +388,7 @@ abstract class EntityModel extends Model
         }
 
         $this->transactional(function () {
-            $this->_delete();
+            $this->forceDelete();
         });
 
         return $this;
@@ -395,10 +396,13 @@ abstract class EntityModel extends Model
 
     /**
      * Deletes the entity without transaction & permission checks
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function _delete()
+    public function forceDelete()
     {
         $dao = $this->getEntityDao();
+
         $dao->delete();
 
         $this->resetDao();
@@ -409,7 +413,8 @@ abstract class EntityModel extends Model
      *
      * @param array $values
      * @throws UpdateException
-     * @return EntityModel
+     * @throws \Doctrine\DBAL\DBALException
+     * @return $this
      */
     public function update(array $values)
     {
@@ -422,7 +427,7 @@ abstract class EntityModel extends Model
         }
 
         $this->transactional(function () use ($values) {
-            $this->_update($values);
+            $this->forceUpdate($values);
         });
 
         return $this;
@@ -432,9 +437,9 @@ abstract class EntityModel extends Model
      * Updates the entity without transaction & permission checks
      *
      * @param array $values
-     * @throws ModelException
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function _update(array $values)
+    public function forceUpdate(array $values)
     {
         $dao = $this->getEntityDao();
 
@@ -448,7 +453,8 @@ abstract class EntityModel extends Model
      *
      * @param array $values
      * @throws CreateException
-     * @return EntityModel
+     * @throws \Doctrine\DBAL\DBALException
+     * @return $this
      */
     public function create(array $values)
     {
@@ -457,7 +463,7 @@ abstract class EntityModel extends Model
         }
 
         $this->transactional(function () use ($values) {
-            $this->_create($values);
+            $this->forceCreate($values);
         });
 
         return $this;
@@ -467,9 +473,9 @@ abstract class EntityModel extends Model
      * Creates the entity without transaction & permission checks
      *
      * @param array $values
-     * @throws ModelException
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function _create(array $values)
+    public function forceCreate(array $values)
     {
         $dao = $this->getEntityDao();
 
