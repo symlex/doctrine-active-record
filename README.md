@@ -32,7 +32,7 @@ Basic example
 Usage in REST controller context
 --------------------------------
 
-This example shows how to work with the EntityModel in a REST controller context. Note how easy it is, to avoid deeply nested structures. User model and form are injected as dependencies.
+This example shows how to work with the EntityModel in a REST controller context. Note, how easy it is to avoid deeply nested structures. User model and form are injected as dependencies.
 
     namespace App\Rest;
     
