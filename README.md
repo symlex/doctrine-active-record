@@ -24,7 +24,10 @@ Basic example
     $user = $factory->getModel('User'); // Returns instance of App\Model\UserModel
 
     $user->find(123); // Throws exception, if not found
-    $user->update(array('email' => 'bender@ilovebender.com')); // Update email
+
+    if ($user->email == '') {
+        $user->update(array('email' => 'bender@ilovebender.com')); // Update email
+    }
 
     $group = $user->factory('Group'); // Returns instance of App\Model\GroupModel
 
