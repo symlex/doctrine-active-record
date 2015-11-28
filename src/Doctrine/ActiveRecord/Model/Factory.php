@@ -91,7 +91,7 @@ class Factory
 
         $className = $this->getFactoryNamespace() . '\\' . $name . $this->getFactoryPostfix();
 
-        if(!class_exists($className)) {
+        if (!class_exists($className)) {
             throw new FactoryException ('Model class "' . $className . '" does not exist');
         }
 
