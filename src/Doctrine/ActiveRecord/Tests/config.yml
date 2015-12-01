@@ -16,7 +16,7 @@ services:
         class: TestTools\Doctrine\DBAL\Connection
         arguments:
             - %dbal.params%
-            - @dbal.driver
+            - "@dbal.driver"
         calls:
             - [setFixturePrefix, ['sql']]
             - [useFixtures, ["%fixture.path%"]]
@@ -24,7 +24,7 @@ services:
     dao.factory:
         class: Doctrine\ActiveRecord\Dao\Factory
         arguments:
-            - @dbal.connection
+            - "@dbal.connection"
         calls:
             - [ setFactoryNamespace, ['\Doctrine\ActiveRecord\Tests\Dao' ] ]
             - [ setFactoryPostfix, ['Dao'] ]
@@ -32,7 +32,7 @@ services:
     model.factory:
         class: Doctrine\ActiveRecord\Model\Factory
         arguments:
-            - @dao.factory
+            - "@dao.factory"
         calls:
             - [ setFactoryNamespace, ['\Doctrine\ActiveRecord\Tests\Model' ] ]
             - [ setFactoryPostfix, ['Model'] ]
