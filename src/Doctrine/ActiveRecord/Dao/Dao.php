@@ -31,20 +31,6 @@ abstract class Dao
     private $_tableDescription = array();
 
     /**
-     * Namespace used by DAO instance factory method
-     *
-     * @var string
-     */
-    protected $_factoryNamespace = '';
-
-    /**
-     * Class name postfix used by DAO instance factory method
-     *
-     * @var string
-     */
-    protected $_factoryPostfix = 'Dao';
-
-    /**
      * Constructor
      *
      * @param Factory $factory DAO factory instance
