@@ -54,11 +54,7 @@ class Factory extends FactoryAbstract
             throw new FactoryException ('getDao() requires a DAO name as first argument');
         }
 
-        $className = $this->getFactoryNamespace() . '\\' . $name . $this->getFactoryPostfix();
-
-        if (!class_exists($className)) {
-            throw new FactoryException ('DAO class "' . $className . '" does not exist');
-        }
+        $className = $this->getClassName($name);
 
         $result = $this->createDaoInstance($className);
 

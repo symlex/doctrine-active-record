@@ -90,11 +90,7 @@ class Factory extends FactoryAbstract
             throw new FactoryException ('getModel() requires a model name as first argument');
         }
 
-        $className = $this->getFactoryNamespace() . '\\' . $name . $this->getFactoryPostfix();
-
-        if (!class_exists($className)) {
-            throw new FactoryException ('Model class "' . $className . '" does not exist');
-        }
+        $className = $this->getClassName($name);
 
         $result = $this->createModelInstance($className, $dao);
 
