@@ -397,6 +397,7 @@ abstract class EntityModel extends Model
      * Deletes the entity without transaction & permission checks
      *
      * @throws \Doctrine\DBAL\DBALException
+     * @return $this
      */
     public function forceDelete()
     {
@@ -405,6 +406,8 @@ abstract class EntityModel extends Model
         $dao->delete();
 
         $this->resetDao();
+
+        return $this;
     }
 
     /**
@@ -437,6 +440,7 @@ abstract class EntityModel extends Model
      *
      * @param array $values
      * @throws \Doctrine\DBAL\DBALException
+     * @return $this
      */
     public function forceUpdate(array $values)
     {
@@ -445,6 +449,8 @@ abstract class EntityModel extends Model
         $dao->setValues($values);
 
         $dao->update();
+
+        return $this;
     }
 
     /**
@@ -473,6 +479,7 @@ abstract class EntityModel extends Model
      *
      * @param array $values
      * @throws \Doctrine\DBAL\DBALException
+     * @return $this
      */
     public function forceCreate(array $values)
     {
@@ -483,5 +490,7 @@ abstract class EntityModel extends Model
         $dao->insert();
 
         $dao->reload();
+
+        return $this;
     }
 }
