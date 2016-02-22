@@ -5,12 +5,13 @@ namespace Doctrine\ActiveRecord\Model;
 use Doctrine\ActiveRecord\Exception\FactoryException;
 use Doctrine\ActiveRecord\Dao\Dao as Dao;
 use Doctrine\ActiveRecord\Dao\Factory as DaoFactory;
+use Doctrine\ActiveRecord\Factory\FactoryAbstract;
 
 /**
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-class Factory
+class Factory extends FactoryAbstract
 {
     /**
      * Private reference to the DAO factory
@@ -112,55 +113,5 @@ class Factory
         $result = new $className ($this, $dao);
 
         return $result;
-    }
-
-    /**
-     * Sets namespace used by the model factory
-     *
-     * @param string $namespace
-     */
-    public
-    function setFactoryNamespace($namespace)
-    {
-        $this->_factoryNamespace = (string)$namespace;
-    }
-
-    /**
-     * Sets class name postfix used by the model factory
-     *
-     * @param string $postfix
-     */
-    public
-    function setFactoryPostfix($postfix)
-    {
-        $this->_factoryPostfix = (string)$postfix;
-    }
-
-    /**
-     * Returns absolute namespace used by the model factory
-     *
-     * @return string
-     */
-    public
-    function getFactoryNamespace()
-    {
-        $result = $this->_factoryNamespace;
-
-        if ($result && strpos($result, '\\') !== 0) {
-            $result = '\\' . $result;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Sets class name postfix used by the model factory
-     *
-     * @return string
-     */
-    public
-    function getFactoryPostfix()
-    {
-        return $this->_factoryPostfix;
     }
 }

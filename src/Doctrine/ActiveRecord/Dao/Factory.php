@@ -2,6 +2,7 @@
 
 namespace Doctrine\ActiveRecord\Dao;
 
+use Doctrine\ActiveRecord\Factory\FactoryAbstract;
 use Doctrine\DBAL\Connection as Db;
 use Doctrine\ActiveRecord\Exception\FactoryException;
 
@@ -9,7 +10,7 @@ use Doctrine\ActiveRecord\Exception\FactoryException;
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-class Factory
+class Factory extends FactoryAbstract
 {
     /**
      * @var Db
@@ -75,52 +76,6 @@ class Factory
         $result = new $className ($this);
 
         return $result;
-    }
-
-    /**
-     * Sets namespace used by the DAO factory method
-     *
-     * @param string $namespace
-     */
-    public function setFactoryNamespace($namespace)
-    {
-        $this->_factoryNamespace = (string)$namespace;
-    }
-
-    /**
-     * Sets class name postfix used by the DAO factory method
-     *
-     * @param string $postfix
-     */
-    public function setFactoryPostfix($postfix)
-    {
-        $this->_factoryPostfix = (string)$postfix;
-    }
-
-    /**
-     * Returns absolute namespace used by the DAO factory method
-     *
-     * @return string
-     */
-    public function getFactoryNamespace()
-    {
-        $result = $this->_factoryNamespace;
-
-        if ($result && strpos($result, '\\') !== 0) {
-            $result = '\\' . $result;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Returns class name postfix used by the DAO factory method
-     *
-     * @return string
-     */
-    public function getFactoryPostfix()
-    {
-        return $this->_factoryPostfix;
     }
 
     /**
