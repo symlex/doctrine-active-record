@@ -50,10 +50,6 @@ class Factory extends FactoryAbstract
      */
     public function getDao($name)
     {
-        if (empty($name)) {
-            throw new FactoryException ('getDao() requires a DAO name as first argument');
-        }
-
         $className = $this->getClassName($name);
 
         $result = $this->createDaoInstance($className);

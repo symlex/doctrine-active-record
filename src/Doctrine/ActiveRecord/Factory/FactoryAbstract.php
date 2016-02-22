@@ -78,6 +78,10 @@ class FactoryAbstract implements FactoryInterface
      * @throws FactoryException
      */
     protected function getClassName($name) {
+        if (empty($name)) {
+            throw new FactoryException ('$name must not be empty');
+        }
+
         $result = $this->getFactoryNamespace() . '\\' . $name . $this->getFactoryPostfix();
 
         if (!class_exists($result)) {

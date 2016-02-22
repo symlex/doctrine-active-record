@@ -86,10 +86,6 @@ class Factory extends FactoryAbstract
      */
     public function getModel($name, Dao $dao = null)
     {
-        if (empty($name)) {
-            throw new FactoryException ('getModel() requires a model name as first argument');
-        }
-
         $className = $this->getClassName($name);
 
         $result = $this->createModelInstance($className, $dao);
