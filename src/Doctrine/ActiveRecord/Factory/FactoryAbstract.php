@@ -25,6 +25,13 @@ class FactoryAbstract implements FactoryInterface
     protected $_factoryPostfix = '';
 
     /**
+     * Factory exception class name
+     *
+     * @var string
+     */
+    protected $_factoryExceptionClassName = '\Doctrine\ActiveRecord\Exception\FactoryException';
+
+    /**
      * Sets namespace used by the DAO factory method
      *
      * @param string $namespace
@@ -79,13 +86,13 @@ class FactoryAbstract implements FactoryInterface
      */
     protected function getClassName($name) {
         if (empty($name)) {
-            throw new FactoryException ('$name must not be empty');
+            throw new $this->_factoryExceptionClassName ('$name must not be empty');
         }
 
         $result = $this->getFactoryNamespace() . '\\' . $name . $this->getFactoryPostfix();
 
         if (!class_exists($result)) {
-            throw new FactoryException ('Class "' . $result . '" does not exist');
+            throw new $this->_factoryExceptionClassName ('Class "' . $result . '" does not exist');
         }
 
         return $result;
