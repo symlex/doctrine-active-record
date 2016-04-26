@@ -688,7 +688,6 @@ abstract class EntityDao extends Dao
         if (count($params['id_filter']) > 0) {
             $select->andWhere($this->getQuotedKey($this->_primaryKey, $params['table_alias'])
                 . ' IN (' . $this->sqlImplode($params['id_filter']) . ')');
-            //$select->setParameter(':id_filter', $params['id_filter']);
         }
 
         // Optional grouping
