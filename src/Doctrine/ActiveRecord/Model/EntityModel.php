@@ -342,6 +342,17 @@ abstract class EntityModel extends Model
     {
         return $this->getEntityDao()->$name;
     }
+    
+    /**
+     * Check if the data value is set
+     *
+     * @param string $name
+     * @return boolean
+     */
+    public function __isset($name)
+    {
+        return isset($this->getEntityDao()->$name);
+    }
 
     /**
      * Magic setter
