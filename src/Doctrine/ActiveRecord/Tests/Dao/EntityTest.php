@@ -41,6 +41,22 @@ class EntityTest extends UnitTestCase
         $this->assertEquals(true, $user->active);
     }
 
+    public function testIsset()
+    {
+        $user = $this->dao->factory('User');
+
+        $user->find(1);
+
+        $this->assertTrue(isset($user->username));
+        $this->assertTrue(isset($user->email));
+        $this->assertTrue(isset($user->active));
+        $this->assertFalse(isset($user->foobar));
+
+        $this->assertEquals('Foo', $user->username);
+        $this->assertEquals('foo@bar.com', $user->email);
+        $this->assertEquals(true, $user->active);
+    }
+
     public function testSequenceDefaultsNull()
     {
         // Create a stub for the SomeClass class.

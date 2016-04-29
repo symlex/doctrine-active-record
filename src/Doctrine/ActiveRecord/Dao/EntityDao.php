@@ -163,6 +163,38 @@ abstract class EntityDao extends Dao
     }
 
     /**
+     * Magic function that returns true, if a property exists
+     *
+     * @param $name string Name of the property
+     * @return mixed
+     */
+    public function __isset($name)
+    {
+        if (isset($this->_valueMap[$name])) {
+            $key = $this->_valueMap[$name];
+        } else {
+            $key = $name;
+        }
+
+        if (!array_key_exists($key, $this->_data)) {
+            // Is there a public getter function for this value?
+            $functionName = $this->composeGetterName($key);
+
+            if (method_exists($this, $functionName)) {
+                $reflection = new \ReflectionMethod($this, $functionName);
+
+                if ($reflection->isPublic()) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
      * Magic function to set a data value
      *
      * @param $name string Name of the property to be set/updated
