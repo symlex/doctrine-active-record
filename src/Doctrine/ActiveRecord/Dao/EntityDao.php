@@ -166,7 +166,7 @@ abstract class EntityDao extends Dao
      * Magic function that returns true, if a property exists
      *
      * @param $name string Name of the property
-     * @return mixed
+     * @return boolean
      */
     public function __isset($name)
     {
