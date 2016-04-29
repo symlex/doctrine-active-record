@@ -120,6 +120,17 @@ abstract class EntityDao extends Dao
     }
 
     /**
+     * Magic function to check for data value
+     *
+     * @param $name string Name of the property to be checked
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->_valueMap[$name]));
+    }
+    
+    /**
      * Magic function to read a data value
      *
      * @param $name string Name of the property to be returned
