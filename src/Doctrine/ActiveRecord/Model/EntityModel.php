@@ -11,6 +11,7 @@ use Doctrine\ActiveRecord\Exception\DeleteException;
 use Doctrine\ActiveRecord\Exception\NotFoundException;
 use Doctrine\ActiveRecord\Dao\Dao;
 use Doctrine\ActiveRecord\Dao\EntityDao;
+use Doctrine\ActiveRecord\Search\SearchResult;
 
 /**
  * EntityModel implements a large number of standard ActiveRecord use-cases that
@@ -128,7 +129,7 @@ abstract class EntityModel extends Model
      * @param array $cond The search conditions as array
      * @param array $options The optional search options as array
      * @throws FindException
-     * @return array
+     * @return SearchResult
      */
     public function search(array $cond, array $options = array())
     {
@@ -136,8 +137,8 @@ abstract class EntityModel extends Model
 
         $result = $this->getEntityDao()->search($params);
 
-        if (!is_array($result)) {
-            throw new FindException('DAO search() return value is not an array');
+        if (!$result instanceof SearchResult) {
+            throw new FindException('Data Access Object did not return a search result');
         }
 
         if (!isset($options['ids_only']) || $options['ids_only'] == false) {
@@ -164,7 +165,7 @@ abstract class EntityModel extends Model
 
         $result = $this->search($cond, $options);
 
-        return $result['rows'];
+        return $result->getAllResults();
     }
 
     /**
@@ -187,7 +188,7 @@ abstract class EntityModel extends Model
             throw new NotFoundException($result['total'] . ' matching items found');
         }
 
-        return $result['rows'][0];
+        return $result->getFirstResult();
     }
 
     /**
@@ -196,7 +197,7 @@ abstract class EntityModel extends Model
      * @param array $cond
      * @param array $options
      * @throws FindException
-     * @return array
+     * @return SearchResult
      */
     public function searchIds(array $cond, array $options = array())
     {
@@ -206,8 +207,8 @@ abstract class EntityModel extends Model
 
         $result = $this->getEntityDao()->search($params);
 
-        if (!is_array($result)) {
-            throw new FindException('DAO search() return value is not an array');
+        if (!$result instanceof SearchResult) {
+            throw new FindException('Data Access Object did not return a search result');
         }
 
         return $result;

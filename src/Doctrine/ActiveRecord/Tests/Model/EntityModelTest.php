@@ -95,11 +95,15 @@ class EntityModelTest extends UnitTestCase
     {
         $result = $this->model->search(array('username' => 'Foo'), array());
 
-        $this->assertInternalType('array', $result);
+        $this->assertInstanceOf('\Doctrine\ActiveRecord\Search\SearchResult', $result);
         $this->assertEquals(false, $result['order']);
         $this->assertEquals(20, $result['count']);
         $this->assertEquals(0, $result['offset']);
         $this->assertEquals(1, $result['total']);
+        $this->assertEquals(false, $result->getSortOrder());
+        $this->assertEquals(20, $result->getSearchCount());
+        $this->assertEquals(0, $result->getSearchOffset());
+        $this->assertEquals(1, $result->getTotalCount());
         $this->assertEquals("SELECT u.* FROM users u WHERE `u`.`username` = 'Foo'", $result['filter_sql']);
         $this->assertEquals("SELECT u.* FROM users u WHERE (`u`.`username` = 'Foo') AND (active = 1) LIMIT 20 OFFSET 0", $result['sql']);
         $this->assertEquals('id', $result['table_pk']);
@@ -125,13 +129,17 @@ class EntityModelTest extends UnitTestCase
     {
         $result = $this->model->searchIds(array('username' => 'Foo'));
 
-        $this->assertInternalType('array', $result);
+        $this->assertInstanceOf('\Doctrine\ActiveRecord\Search\SearchResult', $result);
         $this->assertCount(1, $result['rows']);
         $this->assertEquals(1, $result['rows'][0]);
         $this->assertEquals(false, $result['order']);
         $this->assertEquals(20, $result['count']);
         $this->assertEquals(0, $result['offset']);
         $this->assertEquals(1, $result['total']);
+        $this->assertEquals(false, $result->getSortOrder());
+        $this->assertEquals(20, $result->getSearchCount());
+        $this->assertEquals(0, $result->getSearchOffset());
+        $this->assertEquals(1, $result->getTotalCount());
         $this->assertEquals("SELECT u.id FROM users u WHERE `u`.`username` = 'Foo'", $result['filter_sql']);
         $this->assertEquals("SELECT u.id FROM users u WHERE (`u`.`username` = 'Foo') AND (active = 1) LIMIT 20 OFFSET 0", $result['sql']);
         $this->assertEquals('id', $result['table_pk']);

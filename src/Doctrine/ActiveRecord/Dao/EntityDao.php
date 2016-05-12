@@ -2,12 +2,12 @@
 
 namespace Doctrine\ActiveRecord\Dao;
 
-use Doctrine\DBAL\Connection as Db;
 use DateTime;
 use InvalidArgumentException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ActiveRecord\Exception\Exception;
 use Doctrine\ActiveRecord\Exception\NotFoundException;
+use Doctrine\ActiveRecord\Search\SearchResult;
 
 /**
  * Data Access Object (DAO) for easy handling of database tables and rows
@@ -664,7 +664,7 @@ abstract class EntityDao extends Dao
      * More powerful alternative to findAll() to search the database incl. count, offset, order etc.
      *
      * @param array $params The search parameter (see beginning of function for supported options)
-     * @return array
+     * @return SearchResult
      */
     public function search(array $params)
     {
@@ -825,7 +825,7 @@ abstract class EntityDao extends Dao
         }
 
         // Build result array that additionally contains the different query parameters and the matching row count
-        $result = array(
+        $result = new SearchResult(array(
             'rows' => $rows,
             'order' => $params['order'],
             'count' => $params['count'],
@@ -835,7 +835,7 @@ abstract class EntityDao extends Dao
             'sql' => $select,
             'table_pk' => $primaryKey,
             'table_alias' => $params['table_alias']
-        );
+        ));
 
         return $result;
     }
