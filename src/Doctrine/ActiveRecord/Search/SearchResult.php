@@ -3,6 +3,7 @@
 namespace Doctrine\ActiveRecord\Search;
 
 use Doctrine\ActiveRecord\Exception\NotFoundException;
+use Doctrine\ActiveRecord\Model\EntityModel;
 
 /**
  * Search result object
@@ -25,6 +26,11 @@ class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
         $this->result = $searchResult + $this->result;
     }
 
+    /**
+     * Returns PHP serialized data
+     *
+     * @return string
+     */
     public function serialize()
     {
         return serialize($this->result);
@@ -35,46 +41,111 @@ class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
         $this->result = unserialize($data);
     }
 
+    /**
+     * @return \ArrayIterator
+     */
     public function getIterator()
     {
         return new \ArrayIterator($this->result);
     }
 
+    /**
+     * Returns search result as array
+     *
+     * @return array
+     */
     public function getAsArray()
     {
         return $this->result;
     }
 
+    /**
+     * Returns sort order as string
+     *
+     * @return string
+     */
     public function getSortOrder()
     {
         return $this->result['order'];
     }
 
+    /**
+     * Returns search count as integer
+     *
+     * @return integer
+     */
     public function getSearchCount()
     {
-        return $this->result['count'];
+        return (int)$this->result['count'];
     }
 
+    /**
+     * Returns search offset as integer
+     *
+     * @return integer
+     */
     public function getSearchOffset()
     {
-        return $this->result['offset'];
+        return (int)$this->result['offset'];
     }
 
+    /**
+     * @return integer
+     */
     public function getResultCount()
     {
         return count($this->result['rows']);
     }
 
+    /**
+     * Returns actual result count as integer
+     *
+     * @return integer
+     */
     public function getTotalCount()
     {
-        return $this->result['total'];
+        return (int)$this->result['total'];
     }
 
+    /**
+     * Returns all results as array of objects
+     *
+     * @return EntityModel[]
+     */
     public function getAllResults()
     {
         return $this->result['rows'];
     }
 
+    /**
+     * Returns all results as nested array
+     *
+     * @return array
+     */
+    public function getAllResultsAsArray()
+    {
+        $result = array();
+
+        $entities = $this->getAllResults();
+
+        // Convert search results to array
+        foreach ($entities as $entity) {
+            if (is_object($entity) && method_exists($entity, 'getValues')) {
+                $result[] = $entity->getValues();
+            } else {
+                $result[] = (array)$entity;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns first result object or throws an exception
+     *
+     * @return EntityModel
+     * @throws NotFoundException
+     */
     public function getFirstResult()
     {
         if ($this->getResultCount() == 0) {

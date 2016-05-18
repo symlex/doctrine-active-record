@@ -110,6 +110,7 @@ class EntityModelTest extends UnitTestCase
         $this->assertEquals('u', $result['table_alias']);
         $this->assertContainsOnlyInstancesOf('\Doctrine\ActiveRecord\Tests\Model\UserModel', $result['rows']);
         $this->assertCount(1, $result['rows']);
+        $this->assertInternalType('array', $result->getAllResultsAsArray()[0]);
     }
 
     public function searchAll()
