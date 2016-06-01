@@ -141,7 +141,10 @@ abstract class EntityModel extends Model
             throw new FindException('Data Access Object did not return a search result');
         }
 
-        if (!isset($options['ids_only']) || $options['ids_only'] == false) {
+        $wrapResult = (!isset($options['wrap']) || $options['wrap'] == true)
+            && (!isset($options['ids_only']) || $options['ids_only'] == false);
+
+        if ($wrapResult) {
             $result['rows'] = $this->wrapAll($result['rows']);
         }
 
