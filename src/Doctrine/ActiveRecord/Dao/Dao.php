@@ -31,6 +31,13 @@ abstract class Dao
     private $_tableDescription = array();
 
     /**
+     * DateTime class name (can be changed for testing)
+     *
+     * @var string
+     */
+    protected static $_dateTimeClassName = '\DateTime';
+
+    /**
      * Constructor
      *
      * @param Factory $factory DAO factory instance
@@ -55,7 +62,8 @@ abstract class Dao
      *
      * @param Factory $factory
      */
-    private function setFactory (Factory $factory) {
+    private function setFactory(Factory $factory)
+    {
         $this->_factory = $factory;
     }
 
@@ -64,7 +72,8 @@ abstract class Dao
      *
      * @return Factory
      */
-    protected function getFactory () {
+    protected function getFactory()
+    {
         return $this->_factory;
     }
 
@@ -90,6 +99,35 @@ abstract class Dao
     protected function getDb()
     {
         return $this->getFactory()->getDb();
+    }
+
+    /**
+     * Returns the current DateTime class name (can be changed for testing)
+     *
+     * @param string $className
+     * @return string
+     */
+    public static function setDateTimeClassName($className)
+    {
+        if(!class_exists($className)) {
+            throw new \InvalidArgumentException($className . ' does not exist');
+        }
+
+        self::$_dateTimeClassName = $className;
+    }
+
+    /**
+     * Returns a new DateTime instance
+     *
+     * @param string $time
+     * @param \DateTimeZone|NULL $timezone
+     * @return \DateTime
+     */
+    protected function getDateTimeInstance($time = "now", \DateTimeZone $timezone = null)
+    {
+        $result = new self::$_dateTimeClassName($time, $timezone);
+
+        return $result;
     }
 
     /**

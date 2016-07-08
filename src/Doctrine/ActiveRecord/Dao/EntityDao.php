@@ -2,7 +2,6 @@
 
 namespace Doctrine\ActiveRecord\Dao;
 
-use DateTime;
 use InvalidArgumentException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ActiveRecord\Exception\Exception;
@@ -381,11 +380,16 @@ abstract class EntityDao extends Dao
      */
     public function insert()
     {
+        if(func_num_args() > 0) {
+            throw new InvalidArgumentException('insert() does not accept any arguments');
+        }
+
         $insertFields = $this->_data;
         $db = $this->getDb();
 
         if ($this->_timestampEnabled) {
-            $now = new \DateTime;
+            $now = $this->getDateTimeInstance();
+            
             $insertFields[$this->_timestampCreatedCol] = $now->format(Format::DATETIME);
             $insertFields[$this->_timestampUpdatedCol] = $now->format(Format::DATETIME);
         }
@@ -406,6 +410,10 @@ abstract class EntityDao extends Dao
      */
     public function update()
     {
+        if(func_num_args() > 0) {
+            throw new InvalidArgumentException('update() does not accept any arguments');
+        }
+
         $fields = array();
         $db = $this->getDb();
 
@@ -429,7 +437,7 @@ abstract class EntityDao extends Dao
         }
 
         if ($this->_timestampEnabled) {
-            $now = new \DateTime;
+            $now = $this->getDateTimeInstance();
             $fields[$this->_timestampUpdatedCol] = $now->format(Format::DATETIME);
         }
 

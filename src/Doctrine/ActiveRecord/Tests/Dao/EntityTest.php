@@ -18,6 +18,7 @@ class EntityTest extends UnitTestCase
 
     public function setUp()
     {
+        UserDao::setDateTimeClassName('\TestTools\Util\FixedDateTime');
         $factory = $this->get('dao.factory');
         $this->dao = new UserDao ($factory);
     }
@@ -145,5 +146,33 @@ class EntityTest extends UnitTestCase
         $this->assertEquals('u', $result['table_alias']);
         $this->assertInternalType('array', $result['rows']);
         $this->assertCount(2, $result['rows']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInsertInvalidArguments()
+    {
+        $user = $this->dao->factory('User');
+        $user->insert('foo');
+    }
+
+    public function testInsert()
+    {
+        $user = $this->dao->factory('User');
+
+        $user->username = 'foobar123';
+        $user->insert();
+    }
+
+    public function testUpdate()
+    {
+        $user = $this->dao->factory('User');
+
+        $user->find(array('username' => 'Foo'));
+        $user->active = false;
+        $user->update();
+        $user->active = true;
+        $user->update();
     }
 }
