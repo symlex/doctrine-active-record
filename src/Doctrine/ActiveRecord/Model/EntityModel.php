@@ -60,9 +60,11 @@ abstract class EntityModel extends Model
     }
 
     /**
-     * Find a record by primary key
+     * Load single record by (primary) key
+     * Throws exception if nothing was found
      *
-     * @param int $id
+     * @param mixed $id
+     * @throws NotFoundException
      * @return $this
      */
     public function find($id)

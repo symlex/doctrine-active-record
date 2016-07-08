@@ -279,9 +279,9 @@ abstract class EntityDao extends Dao
     }
 
     /**
-     * Load row with given id from database
+     * Load single record by (primary) key
      *
-     * @param mixed $id Primary Key
+     * @param mixed $id
      * @throws NotFoundException
      * @throws InvalidArgumentException
      * @return $this
