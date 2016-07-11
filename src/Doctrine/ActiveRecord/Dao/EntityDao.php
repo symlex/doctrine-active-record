@@ -2,6 +2,8 @@
 
 namespace Doctrine\ActiveRecord\Dao;
 
+use Doctrine\DBAL\Platforms\MySQL57Platform;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use InvalidArgumentException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ActiveRecord\Exception\Exception;
@@ -189,7 +191,7 @@ abstract class EntityDao extends Dao
 
             return false;
         }
-        
+
         return true;
     }
 
@@ -380,7 +382,7 @@ abstract class EntityDao extends Dao
      */
     public function insert()
     {
-        if(func_num_args() > 0) {
+        if (func_num_args() > 0) {
             throw new InvalidArgumentException('insert() does not accept any arguments');
         }
 
@@ -389,7 +391,7 @@ abstract class EntityDao extends Dao
 
         if ($this->_timestampEnabled) {
             $now = $this->getDateTimeInstance();
-            
+
             $insertFields[$this->_timestampCreatedCol] = $now->format(Format::DATETIME);
             $insertFields[$this->_timestampUpdatedCol] = $now->format(Format::DATETIME);
         }
@@ -410,7 +412,7 @@ abstract class EntityDao extends Dao
      */
     public function update()
     {
-        if(func_num_args() > 0) {
+        if (func_num_args() > 0) {
             throw new InvalidArgumentException('update() does not accept any arguments');
         }
 
@@ -704,6 +706,10 @@ abstract class EntityDao extends Dao
 
         $db = $this->getDb();
 
+        $platform = $db->getDatabasePlatform();
+
+        $isMysql = ($platform instanceof MySqlPlatform || $platform instanceof MySQL57Platform);
+
         /**
          * @var QueryBuilder
          */
@@ -792,15 +798,6 @@ abstract class EntityDao extends Dao
             $select->setMaxResults($params['count'])->setFirstResult($params['offset']);
         }
 
-        if ($params['count_total']) {
-            $countSelect->from($params['table'], $params['table_alias']);
-            $countSelect->select(array('COUNT(*) AS count'));
-            $countSelect = (string)$this->optimizeSearchQuery($countSelect, $params);
-            $count = $this->fetchSingleValue($countSelect);
-        } else {
-            $count = false;
-        }
-
         // Optional ordering of results
         if ($params['order']) {
             if (is_array($params['order'])) {
@@ -814,6 +811,19 @@ abstract class EntityDao extends Dao
 
         $select = (string)$this->optimizeSearchQuery($select, $params);
 
+        if ($params['count_total']) {
+            if ($isMysql) {
+                $select = substr_replace($select, 'SELECT SQL_CALC_FOUND_ROWS', 0, 6);
+            } else {
+                $countSelect->from($params['table'], $params['table_alias']);
+                $countSelect->select(array('COUNT(1) AS count'));
+                $countSelect = (string)$this->optimizeSearchQuery($countSelect, $params);
+                $count = $this->fetchSingleValue($countSelect);
+            }
+        } else {
+            $count = false;
+        }
+
         if ($params['ids_only']) {
             // Fetch all result ids from the first column of the result set
             $rows = $this->fetchCol($select);
@@ -824,6 +834,10 @@ abstract class EntityDao extends Dao
             if ($params['wrap']) {
                 $rows = $this->wrapAll($rows);
             }
+        }
+
+        if ($params['count_total'] && $isMysql) {
+            $count = $this->fetchSingleValue('SELECT FOUND_ROWS()');
         }
 
         try {
