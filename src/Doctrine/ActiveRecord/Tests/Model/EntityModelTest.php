@@ -105,7 +105,7 @@ class EntityModelTest extends UnitTestCase
         $this->assertEquals(0, $result->getSearchOffset());
         $this->assertEquals(1, $result->getTotalCount());
         $this->assertEquals("SELECT u.* FROM users u WHERE `u`.`username` = 'Foo'", $result['filter_sql']);
-        $this->assertEquals("SELECT SQL_CALC_FOUND_ROWS u.* FROM users u WHERE (`u`.`username` = 'Foo') AND (active = 1) LIMIT 20 OFFSET 0", $result['sql']);
+        $this->assertEquals("SELECT u.* FROM users u WHERE (`u`.`username` = 'Foo') AND (active = 1) LIMIT 20 OFFSET 0", $result['sql']);
         $this->assertEquals('id', $result['table_pk']);
         $this->assertEquals('u', $result['table_alias']);
         $this->assertContainsOnlyInstancesOf('\Doctrine\ActiveRecord\Tests\Model\UserModel', $result['rows']);
@@ -142,7 +142,7 @@ class EntityModelTest extends UnitTestCase
         $this->assertEquals(0, $result->getSearchOffset());
         $this->assertEquals(1, $result->getTotalCount());
         $this->assertEquals("SELECT u.id FROM users u WHERE `u`.`username` = 'Foo'", $result['filter_sql']);
-        $this->assertEquals("SELECT SQL_CALC_FOUND_ROWS u.id FROM users u WHERE (`u`.`username` = 'Foo') AND (active = 1) LIMIT 20 OFFSET 0", $result['sql']);
+        $this->assertEquals("SELECT u.id FROM users u WHERE (`u`.`username` = 'Foo') AND (active = 1) LIMIT 20 OFFSET 0", $result['sql']);
         $this->assertEquals('id', $result['table_pk']);
         $this->assertEquals('u', $result['table_alias']);
     }

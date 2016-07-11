@@ -811,17 +811,8 @@ abstract class EntityDao extends Dao
 
         $select = (string)$this->optimizeSearchQuery($select, $params);
 
-        if ($params['count_total']) {
-            if ($isMysql) {
-                $select = substr_replace($select, 'SELECT SQL_CALC_FOUND_ROWS', 0, 6);
-            } else {
-                $countSelect->from($params['table'], $params['table_alias']);
-                $countSelect->select(array('COUNT(1) AS count'));
-                $countSelect = (string)$this->optimizeSearchQuery($countSelect, $params);
-                $count = $this->fetchSingleValue($countSelect);
-            }
-        } else {
-            $count = false;
+        if ($params['count_total'] && $params['group'] && $isMysql) {
+            $select = substr_replace($select, 'SELECT SQL_CALC_FOUND_ROWS', 0, 6);
         }
 
         if ($params['ids_only']) {
@@ -836,8 +827,19 @@ abstract class EntityDao extends Dao
             }
         }
 
-        if ($params['count_total'] && $isMysql) {
-            $count = $this->fetchSingleValue('SELECT FOUND_ROWS()');
+        if ($params['count_total']) {
+            if (count($rows) < $params['count'] && $params['offset'] == 0) {
+                $count = count($rows);
+            } elseif ($params['group'] && $isMysql) {
+                $count = (int)$this->fetchSingleValue('SELECT FOUND_ROWS()');
+            } else {
+                $countSelect->from($params['table'], $params['table_alias']);
+                $countSelect->select(array('COUNT(1) AS count'));
+                $countSelect = (string)$this->optimizeSearchQuery($countSelect, $params);
+                $count = (int)$this->fetchSingleValue($countSelect);
+            }
+        } else {
+            $count = false;
         }
 
         try {
