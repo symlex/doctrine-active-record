@@ -392,8 +392,13 @@ abstract class EntityDao extends Dao
         if ($this->_timestampEnabled) {
             $now = $this->getDateTimeInstance();
 
-            $insertFields[$this->_timestampCreatedCol] = $now->format(Format::DATETIME);
-            $insertFields[$this->_timestampUpdatedCol] = $now->format(Format::DATETIME);
+            if(empty($insertFields[$this->_timestampCreatedCol])) {
+                $insertFields[$this->_timestampCreatedCol] = $now->format(Format::DATETIME);
+            }
+
+            if(empty($insertFields[$this->_timestampUpdatedCol])) {
+                $insertFields[$this->_timestampUpdatedCol] = $now->format(Format::DATETIME);
+            }
         }
 
         $db->insert($this->_tableName, $insertFields);

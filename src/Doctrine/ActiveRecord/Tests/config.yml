@@ -5,8 +5,8 @@ parameters:
         port:           3306
         dbname:         doctrine-active-record
         charset:        utf8
-        user:           doctrine-active-record
-        password:       doctrine-active-record
+        user:           doctrine
+        password:       doctrine
 
 services:
     dbal.driver:

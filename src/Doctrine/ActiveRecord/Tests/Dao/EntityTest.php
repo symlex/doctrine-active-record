@@ -141,11 +141,11 @@ class EntityTest extends UnitTestCase
         $this->assertArrayHasKey('table_alias', $result);
         $this->assertEquals(20, $result['count']);
         $this->assertEquals(0, $result['offset']);
-        $this->assertEquals(2, $result['total']);
+        $this->assertGreaterThanOrEqual(2, $result['total']);
         $this->assertEquals('id', $result['table_pk']);
         $this->assertEquals('u', $result['table_alias']);
         $this->assertInternalType('array', $result['rows']);
-        $this->assertCount(2, $result['rows']);
+        $this->assertGreaterThanOrEqual(2, $result['rows']);
     }
 
     /**
@@ -162,6 +162,15 @@ class EntityTest extends UnitTestCase
         $user = $this->dao->factory('User');
 
         $user->username = 'foobar123';
+        $user->insert();
+    }
+
+    public function testInsertTimestamp()
+    {
+        $user = $this->dao->factory('User');
+
+        $user->username = 'foobar234';
+        $user->created = new \DateTime('2016-07-13T18:30:08Z');
         $user->insert();
     }
 
