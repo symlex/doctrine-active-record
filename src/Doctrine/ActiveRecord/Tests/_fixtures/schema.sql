@@ -53,3 +53,6 @@ CREATE TABLE `userDocuments` (
 INSERT INTO `users` VALUES (1,'Foo','foo@bar.com',1,'2013-11-04 18:34:49','2013-11-04 19:34:49');
 INSERT INTO `users` VALUES (2,'Michael','michael@bar.com',1,'2013-11-05 18:34:49','2013-11-06 18:34:49');
 INSERT INTO `users` VALUES (3,'Alex','alex@bar.com',0,'2013-11-06 18:34:49','2013-11-07 18:34:49');
+
+ALTER TABLE `documents`
+ADD COLUMN `unique` TINYINT(1) UNSIGNED NULL DEFAULT 1 AFTER `filename`;

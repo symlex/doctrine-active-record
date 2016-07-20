@@ -377,6 +377,17 @@ abstract class EntityDao extends Dao
         return is_array($data);
     }
 
+    protected function quoteKeys(array $fields) {
+        $result = array();
+        $db = $this->getDb();
+
+        foreach($fields as $key => $value) {
+            $result[$db->quoteIdentifier($key)] = $value;
+        }
+
+        return $result;
+    }
+
     /**
      * Create a new database entry (only if no ID was set)
      */
@@ -401,7 +412,7 @@ abstract class EntityDao extends Dao
             }
         }
 
-        $db->insert($this->_tableName, $insertFields);
+        $db->insert($this->_tableName, $this->quoteKeys($insertFields));
 
         if (!is_array($this->_primaryKey) && !isset($this->_data[$this->_primaryKey])) {
             // Entity has no primary key yet and primary key is not a compound key (must be manually set)
@@ -450,7 +461,7 @@ abstract class EntityDao extends Dao
 
         $db->update(
             $this->_tableName,
-            $fields,
+            $this->quoteKeys($fields),
             $this->getWhereAsArray()
         );
 

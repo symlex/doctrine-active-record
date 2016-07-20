@@ -1,0 +1,1 @@
+a:2:{s:6:"result";i:1;s:4:"args";a:3:{i:0;s:69:"INSERT INTO users (`username`, `created`, `updated`) VALUES (?, ?, ?)";i:1;a:3:{i:0;s:9:"foobar123";i:1;s:19:"2016-01-22 23:42:05";i:2;s:19:"2016-01-22 23:42:05";}i:2;a:0:{}}}

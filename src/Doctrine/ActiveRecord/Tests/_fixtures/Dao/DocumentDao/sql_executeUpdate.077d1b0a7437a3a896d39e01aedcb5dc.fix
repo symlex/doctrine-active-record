@@ -1,0 +1,1 @@
+a:2:{s:6:"result";i:1;s:4:"args";a:3:{i:0;s:99:"INSERT INTO documents (`title`, `filename`, `unique`, `created`, `modified`) VALUES (?, ?, ?, ?, ?)";i:1;a:5:{i:0;s:3:"Foo";i:1;s:7:"foo.txt";i:2;i:0;i:3;s:19:"2016-01-22 23:42:05";i:4;s:19:"2016-01-22 23:42:05";}i:2;a:0:{}}}
