@@ -113,10 +113,10 @@ Composer
 
 If you are using composer, simply add "lastzero/doctrine-active-record" to your composer.json file and run `composer update`:
 
-```php
-    "require": {
-        "lastzero/doctrine-active-record": "*"
-    }
+```
+"require": {
+    "lastzero/doctrine-active-record": "*"
+}
 ```
     
 *Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
@@ -262,7 +262,9 @@ Public interfaces of models are high-level and should reflect all use cases with
 
 Models are associated with their respective Dao using a protected class property:
 
-    protected $_daoName = ''; // DAO class name without namespace or postfix
+```
+protected $_daoName = ''; // DAO class name without namespace or postfix
+```
 
 Example:
 
