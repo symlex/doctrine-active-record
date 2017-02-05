@@ -11,18 +11,18 @@
          syntaxCheck="false"
          bootstrap="vendor/autoload.php"
         >
+
     <testsuites>
-        <testsuite name="Doctrine Active Record Test Suite">
-            <directory>./src/*/*/Tests</directory>
+        <testsuite>
+            <directory>src/Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./</directory>
+            <directory>src</directory>
             <exclude>
-                <directory>./src/*/*/Tests</directory>
-                <directory>./vendor</directory>
+                <directory>src/Tests</directory>
             </exclude>
         </whitelist>
     </filter>

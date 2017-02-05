@@ -10,98 +10,102 @@ As a lightweight alternative to Doctrine ORM, this library provides **Business M
 Basic example
 -------------
 
-    use Doctrine\ActiveRecord\Dao\Factory as DaoFactory;
-    use Doctrine\ActiveRecord\Model\Factory;
+```php
+use Doctrine\ActiveRecord\Dao\Factory as DaoFactory;
+use Doctrine\ActiveRecord\Model\Factory;
 
-    $daoFactory = new DaoFactory($db); // $db is a Doctrine\DBAL\Connection
+$daoFactory = new DaoFactory($db); // $db is a Doctrine\DBAL\Connection
 
-    $factory = new Factory($daoFactory);
-    $factory->setFactoryNamespace('App\Model');
-    $factory->setFactoryPostfix('Model');
+$factory = new Factory($daoFactory);
+$factory->setFactoryNamespace('App\Model');
+$factory->setFactoryPostfix('Model');
 
-    $user = $factory->getModel('User'); // Returns instance of App\Model\UserModel
+$user = $factory->getModel('User'); // Returns instance of App\Model\UserModel
 
-    $user->find(123); // Throws exception, if not found
+$user->find(123); // Throws exception, if not found
 
-    if ($user->email == '') {
-        $user->update(array('email' => 'bender@ilovebender.com')); // Update email
-    }
+if ($user->email == '') {
+    $user->update(array('email' => 'bender@ilovebender.com')); // Update email
+}
 
-    $group = $user->factory('Group'); // Returns instance of App\Model\GroupModel
+$group = $user->factory('Group'); // Returns instance of App\Model\GroupModel
+```
 
 Usage in REST controller context
 --------------------------------
 
 This example shows how to work with the EntityModel in a REST controller context. Note, how easy it is to avoid deeply nested structures. User model and form are injected as dependencies.
 
-    namespace App\Rest;
-    
-    use Symfony\Component\HttpFoundation\Request;
-    use App\Exception\FormInvalidException;
-    use App\Form\UserForm;
-    use App\Model\UserModel;
-    
-    class UserController
+```php
+namespace App\Rest;
+
+use Symfony\Component\HttpFoundation\Request;
+use App\Exception\FormInvalidException;
+use App\Form\UserForm;
+use App\Model\UserModel;
+
+class UserController
+{
+    protected $user;
+    protected $form;
+
+    public function __construct(UserModel $user, UserForm $form)
     {
-        protected $user;
-        protected $form;
-
-        public function __construct(UserModel $user, UserForm $form)
-        {
-            $this->user = $user;
-            $this->form = $form;
-        }
-
-        public function cgetAction()
-        {
-            $users = $this->user->findAll();
-            $result = array();
-    
-            foreach($users as $user) {
-                $result[] = $user->getValues();
-            }
-    
-            return $result;
-        }
-    
-        public function getAction($id)
-        {
-            return $this->user->find($id)->getValues();
-        }
-    
-        public function deleteAction($id)
-        {
-            return $this->user->find($id)->delete();
-        }
-    
-        public function putAction($id, Request $request)
-        {
-            $this->user->find($id);
-            $this->form->setDefinedWritableValues($request->request->all())->validate();
-    
-            if($this->form->hasErrors()) {
-                throw new FormInvalidException($this->form->getFirstError());
-            } 
-            
-            $this->user->update($this->form->getValues());
-    
-            return $this->user->getValues();
-        }
-    
-        public function postAction(Request $request)
-        {
-            $this->form->setDefinedWritableValues($request->request->all())->validate();
-    
-            if($this->form->hasErrors()) {
-                throw new FormInvalidException($this->form->getFirstError());
-            }
-            
-            $this->user->create($this->form->getValues());
-    
-            return $this->user->getValues();
-        }
+        $this->user = $user;
+        $this->form = $form;
     }
-    
+
+    public function cgetAction()
+    {
+        $users = $this->user->findAll();
+        $result = array();
+
+        foreach($users as $user) {
+            $result[] = $user->getValues();
+        }
+
+        return $result;
+    }
+
+    public function getAction($id)
+    {
+        return $this->user->find($id)->getValues();
+    }
+
+    public function deleteAction($id)
+    {
+        return $this->user->find($id)->delete();
+    }
+
+    public function putAction($id, Request $request)
+    {
+        $this->user->find($id);
+        $this->form->setDefinedWritableValues($request->request->all())->validate();
+
+        if($this->form->hasErrors()) {
+            throw new FormInvalidException($this->form->getFirstError());
+        } 
+        
+        $this->user->update($this->form->getValues());
+
+        return $this->user->getValues();
+    }
+
+    public function postAction(Request $request)
+    {
+        $this->form->setDefinedWritableValues($request->request->all())->validate();
+
+        if($this->form->hasErrors()) {
+            throw new FormInvalidException($this->form->getFirstError());
+        }
+        
+        $this->user->create($this->form->getValues());
+
+        return $this->user->getValues();
+    }
+}
+```
+
 See also [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/lastzero/php-input-validation)
 
 Composer
@@ -109,9 +113,11 @@ Composer
 
 If you are using composer, simply add "lastzero/doctrine-active-record" to your composer.json file and run `composer update`:
 
+```php
     "require": {
         "lastzero/doctrine-active-record": "*"
     }
+```
     
 *Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
 
@@ -172,50 +178,56 @@ search() accepts the following optional parameters to limit, filter and sort sea
 
 DAO entities are configured using protected class properties:
 
-    protected $_tableName = ''; // Database table name
-    protected $_primaryKey = 'id'; // Name or array of primary key(s)
-    protected $_fieldMap = array(); // 'db_column' => 'object_property'
-    protected $_formatMap = array(); // 'db_column' => Format::TYPE
-    protected $_valueMap = array(); // 'object_property' => 'db_column'
-    protected $_timestampEnabled = false; // Automatically update timestamps?
-    protected $_timestampCreatedCol = 'created';
-    protected $_timestampUpdatedCol = 'updated';
+```php
+protected $_tableName = ''; // Database table name
+protected $_primaryKey = 'id'; // Name or array of primary key(s)
+protected $_fieldMap = array(); // 'db_column' => 'object_property'
+protected $_formatMap = array(); // 'db_column' => Format::TYPE
+protected $_valueMap = array(); // 'object_property' => 'db_column'
+protected $_timestampEnabled = false; // Automatically update timestamps?
+protected $_timestampCreatedCol = 'created';
+protected $_timestampUpdatedCol = 'updated';
+```
 
 Possible values for $_formatMap are defined as constants in `Doctrine\ActiveRecord\Dao\Format`:
 
-    const NONE = '';
-    const INT = 'int';
-    const FLOAT = 'float';
-    const STRING = 'string';
-    const ALPHANUMERIC = 'alphanumeric';
-    const SERIALIZED = 'serialized';
-    const JSON = 'json';
-    const BOOL = 'bool';
-    const TIME = 'H:i:s';
-    const TIMEU = 'H:i:s.u'; // Support for microseconds (up to six digits)
-    const TIMETZ = 'H:i:sO'; // Support for timezone (e.g. "+0230")
-    const TIMEUTZ = 'H:i:s.uO'; // Support for microseconds & timezone
-    const DATE = 'Y-m-d';
-    const DATETIME = 'Y-m-d H:i:s';
-    const DATETIMEU = 'Y-m-d H:i:s.u'; // Support for microseconds (up to six digits)
-    const DATETIMETZ = 'Y-m-d H:i:sO'; // Support for timezone (e.g. "+0230")
-    const DATETIMEUTZ = 'Y-m-d H:i:s.uO'; // Support for microseconds & timezone
-    const TIMESTAMP = 'U';
+```php
+const NONE = '';
+const INT = 'int';
+const FLOAT = 'float';
+const STRING = 'string';
+const ALPHANUMERIC = 'alphanumeric';
+const SERIALIZED = 'serialized';
+const JSON = 'json';
+const BOOL = 'bool';
+const TIME = 'H:i:s';
+const TIMEU = 'H:i:s.u'; // Support for microseconds (up to six digits)
+const TIMETZ = 'H:i:sO'; // Support for timezone (e.g. "+0230")
+const TIMEUTZ = 'H:i:s.uO'; // Support for microseconds & timezone
+const DATE = 'Y-m-d';
+const DATETIME = 'Y-m-d H:i:s';
+const DATETIMEU = 'Y-m-d H:i:s.u'; // Support for microseconds (up to six digits)
+const DATETIMETZ = 'Y-m-d H:i:sO'; // Support for timezone (e.g. "+0230")
+const DATETIMEUTZ = 'Y-m-d H:i:s.uO'; // Support for microseconds & timezone
+const TIMESTAMP = 'U';
+```
 
 Example:
-    
-    <?php
-    
-    namespace App\Dao;
-    
-    use Doctrine\ActiveRecord\Dao\EntityDao;
-    
-    class UserDao extends EntityDao
-    {
-        protected $_tableName = 'users';
-        protected $_primaryKey = 'user_id';
-        protected $_timestampEnabled = true;
-    }
+
+```php    
+<?php
+
+namespace App\Dao;
+
+use Doctrine\ActiveRecord\Dao\EntityDao;
+
+class UserDao extends EntityDao
+{
+    protected $_tableName = 'users';
+    protected $_primaryKey = 'user_id';
+    protected $_timestampEnabled = true;
+}
+```
 
 Business Models
 ---------------
@@ -254,40 +266,42 @@ Models are associated with their respective Dao using a protected class property
 
 Example:
 
-    <?php
-    
-    namespace App\Model;
-    
-    use Doctrine\ActiveRecord\Model\EntityModel;
-    
-    class User extends EntityModel
-    {
-      protected $_daoName = 'User';
+```php
+<?php
 
-      public function delete() 
-      {
-        $dao = $this->getEntityDao();
-        $dao->is_deleted = 1;
-        $dao->update();
-      }
-    
-      public function undelete() 
-      {
-        $dao = $this->getEntityDao();
-        $dao->is_deleted = 0;
-        $dao->update();
-      }
-    
-      public function search(array $cond, array $options = array()) 
-      {
-        $cond[‘is_deleted’] = 0;
-        return parent::search($cond, $options);
-      }
-      
-      public function getValues()
-      {
-        $result = parent::getValues();
-        unset($result['password']);
-        return $result;
-      }
-    }
+namespace App\Model;
+
+use Doctrine\ActiveRecord\Model\EntityModel;
+
+class User extends EntityModel
+{
+  protected $_daoName = 'User';
+
+  public function delete() 
+  {
+    $dao = $this->getEntityDao();
+    $dao->is_deleted = 1;
+    $dao->update();
+  }
+
+  public function undelete() 
+  {
+    $dao = $this->getEntityDao();
+    $dao->is_deleted = 0;
+    $dao->update();
+  }
+
+  public function search(array $cond, array $options = array()) 
+  {
+    $cond['is_deleted'] = 0;
+    return parent::search($cond, $options);
+  }
+  
+  public function getValues()
+  {
+    $result = parent::getValues();
+    unset($result['password']);
+    return $result;
+  }
+}
+```

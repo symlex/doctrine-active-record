@@ -29,6 +29,7 @@ class EntityTest extends UnitTestCase
     public function testFindNotFoundException()
     {
         $this->dao->find(45345);
+        $this->assertTrue(true);
     }
 
     public function testFind()
@@ -71,6 +72,7 @@ class EntityTest extends UnitTestCase
         $dao = new UserDao ($factory);
         $dao->setData(["username" => "seq"]);
         $dao->insert();
+        $this->assertTrue(true);
     }
 
     public function testSequenceName()
@@ -86,6 +88,7 @@ class EntityTest extends UnitTestCase
         $dao = new UserSequenceDao ($factory);
         $dao->setData(["username" => "seq"]);
         $dao->insert();
+        $this->assertTrue(true);
     }
 
     public function testSearch()
@@ -163,6 +166,7 @@ class EntityTest extends UnitTestCase
 
         $user->username = 'foobar123';
         $user->insert();
+        $this->assertTrue(true);
     }
 
     public function testInsertTimestamp()
@@ -172,6 +176,7 @@ class EntityTest extends UnitTestCase
         $user->username = 'foobar234';
         $user->created = new \DateTime('2016-07-13T18:30:08Z');
         $user->insert();
+        $this->assertTrue(true);
     }
 
     public function testUpdate()
@@ -183,5 +188,6 @@ class EntityTest extends UnitTestCase
         $user->update();
         $user->active = true;
         $user->update();
+        $this->assertTrue(true);
     }
 }
