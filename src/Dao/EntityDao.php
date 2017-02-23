@@ -65,6 +65,15 @@ abstract class EntityDao extends Dao
     protected $_fieldMap = array();
 
     /**
+     * The fields that should be hidden for getValues(), e.g. 'password'
+     *
+     * See getValues()
+     *
+     * @var array
+     */
+    protected $_hiddenFields = array();
+
+    /**
      * Format: 'db_column' => Format::TYPE
      *
      * @var array
@@ -269,6 +278,10 @@ abstract class EntityDao extends Dao
 
             }
 
+            if (in_array($name, $this->_hiddenFields)) {
+                continue;
+            }
+
             if (isset($this->_formatMap[$name])) {
                 $value = Format::fromSql($this->_formatMap[$name], $value);
             }
@@ -377,11 +390,12 @@ abstract class EntityDao extends Dao
         return is_array($data);
     }
 
-    protected function quoteKeys(array $fields) {
+    protected function quoteKeys(array $fields)
+    {
         $result = array();
         $db = $this->getDb();
 
-        foreach($fields as $key => $value) {
+        foreach ($fields as $key => $value) {
             $result[$db->quoteIdentifier($key)] = $value;
         }
 
@@ -403,11 +417,11 @@ abstract class EntityDao extends Dao
         if ($this->_timestampEnabled) {
             $now = $this->getDateTimeInstance();
 
-            if(empty($insertFields[$this->_timestampCreatedCol])) {
+            if (empty($insertFields[$this->_timestampCreatedCol])) {
                 $insertFields[$this->_timestampCreatedCol] = $now->format(Format::DATETIME);
             }
 
-            if(empty($insertFields[$this->_timestampUpdatedCol])) {
+            if (empty($insertFields[$this->_timestampUpdatedCol])) {
                 $insertFields[$this->_timestampUpdatedCol] = $now->format(Format::DATETIME);
             }
         }

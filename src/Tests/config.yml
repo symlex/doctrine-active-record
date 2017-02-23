@@ -1,7 +1,6 @@
 parameters:
     dbal.params:
-        driver:         mysqli
-        host:           localhost
+        host:           127.0.0.1
         port:           3306
         dbname:         doctrine-active-record
         charset:        utf8
@@ -10,7 +9,7 @@ parameters:
 
 services:
     dbal.driver:
-        class: Doctrine\DBAL\Driver\Mysqli\Driver
+        class: Doctrine\DBAL\Driver\PDOMySql\Driver
 
     dbal.connection:
         class: TestTools\Doctrine\DBAL\Connection

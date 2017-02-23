@@ -41,6 +41,7 @@ class DaoTest extends UnitTestCase
             'id' => 'int(11)',
             'username' => 'varchar(45)',
             'email' => 'varchar(120)',
+            'password' => 'varchar(255)',
             'active' => 'tinyint(4)',
             'created' => 'datetime',
             'updated' => 'datetime',
@@ -63,28 +64,31 @@ class DaoTest extends UnitTestCase
         $expected = array(
             0 =>
                 array(
-                    'id' => 1,
+                    'id' => '1',
                     'username' => 'Foo',
                     'email' => 'foo@bar.com',
-                    'active' => 1,
+                    'password' => 'abc',
+                    'active' => '1',
                     'created' => '2013-11-04 18:34:49',
                     'updated' => '2013-11-04 19:34:49',
                 ),
             1 =>
                 array(
-                    'id' => 2,
+                    'id' => '2',
                     'username' => 'Michael',
                     'email' => 'michael@bar.com',
-                    'active' => 1,
+                    'password' => 'abc',
+                    'active' => '1',
                     'created' => '2013-11-05 18:34:49',
                     'updated' => '2013-11-06 18:34:49',
                 ),
             2 =>
                 array(
-                    'id' => 3,
+                    'id' => '3',
                     'username' => 'Alex',
                     'email' => 'alex@bar.com',
-                    'active' => 0,
+                    'password' => 'abc',
+                    'active' => '0',
                     'created' => '2013-11-06 18:34:49',
                     'updated' => '2013-11-07 18:34:49',
                 ),

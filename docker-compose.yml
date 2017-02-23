@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+    mysql:
+        image: mysql
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./:/share
+        environment:
+            MYSQL_ROOT_PASSWORD: doctrine
+            MYSQL_USER: doctrine
+            MYSQL_PASSWORD: doctrine
+            MYSQL_DATABASE: doctrine-active-record

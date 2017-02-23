@@ -15,6 +15,11 @@ class UserDao extends EntityDao
     protected $_tableName = 'users';
     protected $_primaryKey = 'id';
     protected $_timestampEnabled = true;
+
+    protected $_hiddenFields = array(
+        'password'
+    );
+
     protected $_formatMap = array(
         'id' => Format::INT,
         'username' => Format::STRING,

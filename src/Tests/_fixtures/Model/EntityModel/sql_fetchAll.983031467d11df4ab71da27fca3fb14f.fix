@@ -1,1 +1,0 @@
-a:2:{s:6:"result";a:1:{i:0;a:1:{s:2:"id";i:1;}}s:4:"args";a:3:{i:0;s:110:"SELECT SQL_CALC_FOUND_ROWS u.id FROM users u WHERE (`u`.`username` = 'Foo') AND (active = 1) LIMIT 20 OFFSET 0";i:1;a:0:{}i:2;a:0:{}}}

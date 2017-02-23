@@ -83,7 +83,7 @@ class EntityModelTest extends UnitTestCase
         $usersArray = $this->model->findAll(array(), false);
 
         $this->assertInternalType('array', $usersArray);
-        $this->assertCount(3, $usersArray);
+        $this->assertCount(5, $usersArray);
 
         $emptyUsersArray = $this->model->findAll(array('username' => 'XXX'), false);
 
@@ -166,6 +166,7 @@ class EntityModelTest extends UnitTestCase
         $values = $this->model->getValues();
 
         $this->assertInternalType('array', $values);
+        $this->assertArrayNotHasKey('password', $values);
         $this->assertEquals(1, $values['id']);
         $this->assertEquals('Foo', $values['username']);
         $this->assertEquals('foo@bar.com', $values['email']);
@@ -173,7 +174,7 @@ class EntityModelTest extends UnitTestCase
         $this->assertInstanceOf('DateTime', $values['created']);
         $this->assertInstanceOf('DateTime', $values['updated']);
         $this->assertEquals('2013-11-04', $values['created']->format('Y-m-d'));
-        $this->assertEquals('2013-11-04 19:11:34', $values['updated']->format('Y-m-d H:m:i'));
+        $this->assertEquals('2016-01-22 23:01:42', $values['updated']->format('Y-m-d H:m:i'));
     }
 
     public function testGetEntityTitle()
