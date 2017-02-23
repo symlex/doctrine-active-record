@@ -184,7 +184,7 @@ DAO entities are configured using protected class properties:
 protected $_tableName = ''; // Database table name
 protected $_primaryKey = 'id'; // Name or array of primary key(s)
 protected $_fieldMap = array(); // 'db_column' => 'object_property'
-protected $_hiddenFields = array(); // Dields that should be hidden for getValues(), e.g. 'password'
+protected $_hiddenFields = array(); // Fields that should be hidden for getValues(), e.g. 'password'
 protected $_formatMap = array(); // 'db_column' => Format::TYPE
 protected $_valueMap = array(); // 'object_property' => 'db_column'
 protected $_timestampEnabled = false; // Automatically update timestamps?
