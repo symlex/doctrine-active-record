@@ -34,7 +34,7 @@ $group = $user->factory('Group'); // Returns instance of App\Model\GroupModel
 Usage in REST controller context
 --------------------------------
 
-This library is perfectly suited for building high-performance REST services.
+Doctrine ActiveRecord is perfectly suited for building high-performance REST services.
 
 This example shows how to work with the EntityModel in a REST controller context. Note, how easy it is to avoid deeply nested structures. User model and form are injected as dependencies.
 
