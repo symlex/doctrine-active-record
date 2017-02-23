@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection as Db;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ActiveRecord\Exception\Exception;
 use Closure;
+use DateTime;
 
 /**
  * Data Access Object (DAO)
@@ -83,7 +84,7 @@ abstract class Dao
      * @param string $name Class name without namespace prefix and postfix
      * @return Dao
      */
-    public function factory($name)
+    public function factory(string $name)
     {
         $result = $this->getFactory()->getDao($name);
 
@@ -96,7 +97,7 @@ abstract class Dao
      * @throws Exception
      * @return Db
      */
-    protected function getDb()
+    protected function getDb(): Db
     {
         return $this->getFactory()->getDb();
     }
@@ -107,7 +108,7 @@ abstract class Dao
      * @param string $className
      * @return string
      */
-    public static function setDateTimeClassName($className)
+    public static function setDateTimeClassName(string $className)
     {
         if(!class_exists($className)) {
             throw new \InvalidArgumentException($className . ' does not exist');
@@ -121,9 +122,9 @@ abstract class Dao
      *
      * @param string $time
      * @param \DateTimeZone|NULL $timezone
-     * @return \DateTime
+     * @return DateTime
      */
-    protected function getDateTimeInstance($time = "now", \DateTimeZone $timezone = null)
+    protected function getDateTimeInstance(string $time = "now", \DateTimeZone $timezone = null): DateTime
     {
         $result = new self::$_dateTimeClassName($time, $timezone);
 
@@ -135,7 +136,7 @@ abstract class Dao
      *
      * @return QueryBuilder
      */
-    protected function createQueryBuilder()
+    protected function createQueryBuilder(): QueryBuilder
     {
         return $this->getDb()->createQueryBuilder();
     }
@@ -213,7 +214,7 @@ abstract class Dao
      * @return array
      * @throws Exception
      */
-    protected function fetchAll($statement, array $params = array(), $types = array())
+    protected function fetchAll($statement, array $params = array(), array $types = array()): array
     {
         return $this->getDb()->fetchAll($statement, $params, $types);
     }
@@ -228,7 +229,7 @@ abstract class Dao
      * @return array
      * @throws Exception
      */
-    protected function fetchPairs($statement, array $params = array(), $types = array())
+    protected function fetchPairs($statement, array $params = array(), array $types = array()): array
     {
         $result = array();
 
@@ -263,7 +264,7 @@ abstract class Dao
      * @param array $types The query parameter types.
      * @return array
      */
-    protected function fetchCol($statement, array $params = array(), $types = array())
+    protected function fetchCol($statement, array $params = array(), array $types = array()): array
     {
         $result = array();
 
@@ -282,7 +283,7 @@ abstract class Dao
      * @param string $tableName
      * @return array
      */
-    protected function describeTable($tableName)
+    protected function describeTable(string $tableName): array
     {
         if (isset($this->_tableDescription[$tableName])) {
             return $this->_tableDescription[$tableName];

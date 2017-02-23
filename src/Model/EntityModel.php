@@ -54,7 +54,7 @@ abstract class EntityModel extends Model
      * @return EntityModel|Model
      * @throws Exception
      */
-    public function factory($name = '', Dao $dao = null)
+    public function factory(string $name = '', Dao $dao = null)
     {
         return parent::factory($name, $dao);
     }
@@ -245,7 +245,7 @@ abstract class EntityModel extends Model
      *
      * @return array Model property values
      */
-    public function getValues()
+    public function getValues(): array
     {
         return $this->getEntityDao()->getValues();
     }

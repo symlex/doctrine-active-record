@@ -124,7 +124,7 @@ abstract class EntityDao extends Dao
      * @param string $name Class name without namespace prefix and postfix
      * @return Dao|EntityDao
      */
-    public function factory($name)
+    public function factory(string $name)
     {
         return parent::factory($name);
     }
@@ -132,11 +132,11 @@ abstract class EntityDao extends Dao
     /**
      * Magic function to read a data value
      *
-     * @param $name string Name of the property to be returned
+     * @param string $name Name of the property to be returned
      * @throws Exception
      * @return mixed
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         if (isset($this->_valueMap[$name])) {
             $key = $this->_valueMap[$name];
@@ -175,10 +175,10 @@ abstract class EntityDao extends Dao
     /**
      * Magic function that returns true, if a property exists
      *
-     * @param $name string Name of the property
+     * @param string $name Name of the property
      * @return boolean
      */
-    public function __isset($name)
+    public function __isset(string $name)
     {
         if (isset($this->_valueMap[$name])) {
             $key = $this->_valueMap[$name];
@@ -207,11 +207,11 @@ abstract class EntityDao extends Dao
     /**
      * Magic function to set a data value
      *
-     * @param $name string Name of the property to be set/updated
-     * @param $value string Values of the property to be set/updated
+     * @param string $name string Name of the property to be set/updated
+     * @param string $value Values of the property to be set/updated
      * @return void
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         if (isset($this->_valueMap[$name])) {
             $key = $this->_valueMap[$name];
@@ -268,7 +268,7 @@ abstract class EntityDao extends Dao
      *
      * @return array
      */
-    public function getValues()
+    public function getValues(): array
     {
         $result = array();
 
@@ -363,7 +363,7 @@ abstract class EntityDao extends Dao
      * @param mixed $id The primary key or an array (key/value)
      * @return bool
      */
-    public function exists($id)
+    public function exists($id): bool
     {
         $db = $this->getDb();
         $select = $this->createQueryBuilder();
@@ -529,7 +529,7 @@ abstract class EntityDao extends Dao
      *
      * @return array
      */
-    protected function getWhereAsArray()
+    protected function getWhereAsArray(): array
     {
         $where = array();
 
@@ -622,7 +622,7 @@ abstract class EntityDao extends Dao
      * @param boolean $wrapResult Create a new object for each result? If false, the function returns raw data.
      * @return array
      */
-    public function findAll(array $cond = array(), $wrapResult = true)
+    public function findAll(array $cond = array(), bool $wrapResult = true): array
     {
         $select = $this->createQueryBuilder();
         $alias = $this->getDefaultTableAlias();
@@ -667,11 +667,11 @@ abstract class EntityDao extends Dao
     /**
      * Quotes a column name incl table prefix
      *
-     * @param $key string Column name
-     * @param $tableAlias string Prefix
+     * @param string $key Column name
+     * @param string $tableAlias Prefix
      * @return string
      */
-    private function getQuotedKey($key, $tableAlias)
+    private function getQuotedKey(string $key, string $tableAlias): string
     {
         $parts = explode('.', $key);
 
@@ -691,7 +691,7 @@ abstract class EntityDao extends Dao
      * @param string $tableName Optional table name (if different from the default)
      * @return string The default table alias (first character of the table name)
      */
-    protected function getDefaultTableAlias($tableName = '')
+    protected function getDefaultTableAlias(string $tableName = '')
     {
         if ($tableName == '') {
             $tableName = $this->_tableName;
@@ -706,7 +706,7 @@ abstract class EntityDao extends Dao
      * @param array $params The search parameter (see beginning of function for supported options)
      * @return SearchResult
      */
-    public function search(array $params)
+    public function search(array $params): SearchResult
     {
         // Default values for all possible input parameters
         $defaults = array(
@@ -912,7 +912,7 @@ abstract class EntityDao extends Dao
      * @param array $rows The db result set
      * @return array
      */
-    public function wrapAll(array $rows)
+    public function wrapAll(array $rows): array
     {
         $className = get_class($this);
         $result = array();
@@ -929,10 +929,10 @@ abstract class EntityDao extends Dao
     /**
      * Converts a string from under_score to CamelCase
      *
-     * @param $str
+     * @param string $str
      * @return string
      */
-    protected function underscoreToCamelCase($str)
+    protected function underscoreToCamelCase(string $str): string
     {
         $result = '';
 
@@ -961,7 +961,7 @@ abstract class EntityDao extends Dao
     /**
      * Adds SQL quotes to all values in an array (useful for "value IN (...)" queries)
      */
-    private function quoteArray(array $input)
+    private function quoteArray(array $input): array
     {
         $result = array();
 
@@ -978,7 +978,7 @@ abstract class EntityDao extends Dao
      * @param array $input The array that should be imploded
      * @return string
      */
-    protected function sqlImplode(array $input)
+    protected function sqlImplode(array $input): string
     {
         return implode(',', $this->quoteArray($input));
     }
@@ -987,10 +987,10 @@ abstract class EntityDao extends Dao
      * Helper function that makes sure sorting is case-insensitive and does not
      * contain invalid search directions (ASC and DESC are allowed)
      *
-     * @param $rawOrder string
+     * @param string $rawOrder
      * @return string
      */
-    protected function composeOrderArgument($rawOrder)
+    protected function composeOrderArgument(string $rawOrder): string
     {
         if (empty($rawOrder)) {
             return $rawOrder;
@@ -1010,10 +1010,10 @@ abstract class EntityDao extends Dao
     /**
      * Returns the sort order direction from an SQL order string (e.g. "email ASC")
      *
-     * @param $sortOrder
+     * @param string $sortOrder
      * @return string
      */
-    protected function getOrderDirection($sortOrder)
+    protected function getOrderDirection(string $sortOrder): string
     {
         $parts = explode(' ', $sortOrder);
 
@@ -1029,10 +1029,10 @@ abstract class EntityDao extends Dao
     /**
      * Returns the sort order column from an SQL order string (e.g. "email ASC")
      *
-     * @param $sortOrder
+     * @param string $sortOrder
      * @return string
      */
-    protected function getOrderColumn($sortOrder)
+    protected function getOrderColumn(string $sortOrder): string
     {
         $parts = explode(' ', $sortOrder);
         $result = $parts[0];
@@ -1047,7 +1047,7 @@ abstract class EntityDao extends Dao
      * @param array $keys The fields that should be searched
      * @return string
      */
-    protected function getFulltextCondition($value, array $keys)
+    protected function getFulltextCondition(string $value, array $keys): string
     {
         $result = array();
 
@@ -1076,13 +1076,13 @@ abstract class EntityDao extends Dao
     /**
      * Helper function to update n-to-m relationship tables
      *
-     * @param $relationTable string The table to be updated
-     * @param $primaryKeyName string The name of the column, this entity is referenced with in the relationship table
-     * @param $foreignKeyName string The name of the column, the other entity is referenced with
-     * @param $existing array List of current relationships (how it is now)
-     * @param $updated array List of new relationships (how it should be, after calling this method)
+     * @param string $relationTable The table to be updated
+     * @param string $primaryKeyName The name of the column, this entity is referenced with in the relationship table
+     * @param string $foreignKeyName The name of the column, the other entity is referenced with
+     * @param array $existing List of current relationships (how it is now)
+     * @param array $updated List of new relationships (how it should be, after calling this method)
      */
-    public function updateRelationTable($relationTable, $primaryKeyName, $foreignKeyName, array $existing, array $updated)
+    public function updateRelationTable(string $relationTable, string $primaryKeyName, string $foreignKeyName, array $existing, array $updated)
     {
         $db = $this->getDb();
 
@@ -1122,7 +1122,7 @@ abstract class EntityDao extends Dao
      * @param string $indexName Optional key name (default is the primary key)
      * @return array
      */
-    public function findList($colName, $order = '', $where = '', $indexName = '')
+    public function findList(string $colName, string $order = '', string $where = '', string $indexName = ''): array
     {
         $db = $this->getDb();
 
@@ -1159,7 +1159,7 @@ abstract class EntityDao extends Dao
      * @throws Exception
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         if (empty($this->_tableName)) {
             throw new Exception ('Table name is not set');
@@ -1188,7 +1188,7 @@ abstract class EntityDao extends Dao
      * @return string
      * @throws Exception
      */
-    public function getPrimaryKeyName()
+    public function getPrimaryKeyName(): string
     {
         if (is_array($this->_primaryKey)) {
             throw new Exception ('Primary key is an array');
@@ -1227,7 +1227,7 @@ abstract class EntityDao extends Dao
      * @param string $column
      * @return bool
      */
-    protected function columnIsRequired(array $searchParams, $column)
+    protected function columnIsRequired(array $searchParams, string $column): bool
     {
         $result = false;
 

@@ -44,7 +44,7 @@ class Format
      * @throws FormatException
      * @return mixed
      */
-    public static function fromSql($format, $data = null)
+    public static function fromSql(string $format, $data = null)
     {
         if ($data === null) {
             return null;
@@ -101,7 +101,7 @@ class Format
      * @throws FormatException
      * @return mixed
      */
-    public static function toSql($format, $data = null)
+    public static function toSql(string $format, $data = null)
     {
         if ($data === null) {
             return null;

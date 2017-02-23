@@ -66,7 +66,7 @@ abstract class Model
      * @throws Exception
      * @return Model
      */
-    public function factory($name = '', Dao $dao = null)
+    public function factory(string $name = '', Dao $dao = null)
     {
         $modelName = empty($name) ? $this->getModelName() : $name;
 
@@ -107,7 +107,7 @@ abstract class Model
      * @throws Exception
      * @return Dao
      */
-    protected function daoFactory($name = '')
+    protected function daoFactory(string $name = '')
     {
         $daoName = empty($name) ? $this->getDaoName() : $name;
 
@@ -122,7 +122,7 @@ abstract class Model
      * @param string $name DAO entity name for factory
      * @throws ModelException
      */
-    public function setDaoName($name)
+    public function setDaoName(string $name)
     {
         if (empty($name)) {
             throw new ModelException ('DAO name was empty');
@@ -140,7 +140,7 @@ abstract class Model
      *
      * @return string
      */
-    public function getDaoName()
+    public function getDaoName(): string
     {
         return $this->_daoName;
     }
@@ -185,7 +185,7 @@ abstract class Model
      *
      * @return string
      */
-    public function getModelName()
+    public function getModelName(): string
     {
         $className = get_class($this);
 
