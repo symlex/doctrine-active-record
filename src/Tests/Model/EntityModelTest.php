@@ -21,7 +21,7 @@ class EntityModelTest extends UnitTestCase
          * @var \Doctrine\ActiveRecord\Model\Factory
          */
         $factory = $this->get('model.factory');
-        $this->model = $factory->createModel('User');
+        $this->model = $factory->create('User');
     }
 
     public function testFactory()

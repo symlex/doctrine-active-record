@@ -48,11 +48,11 @@ class Factory extends FactoryAbstract
      * @throws FactoryException
      * @return Dao
      */
-    public function createDao($name)
+    public function create($name)
     {
         $className = $this->getClassName($name);
 
-        $result = $this->createDaoInstance($className);
+        $result = $this->createInstance($className);
 
         return $result;
     }
@@ -63,7 +63,7 @@ class Factory extends FactoryAbstract
      * @param string $className
      * @return Dao
      */
-    protected function createDaoInstance($className)
+    protected function createInstance($className)
     {
         $result = new $className ($this);
 

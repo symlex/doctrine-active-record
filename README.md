@@ -20,7 +20,7 @@ $factory = new Factory($daoFactory);
 $factory->setFactoryNamespace('App\Model');
 $factory->setFactoryPostfix('Model');
 
-$user = $factory->createModel('User'); // Returns instance of App\Model\UserModel
+$user = $factory->create('User'); // Returns instance of App\Model\UserModel
 
 $user->find(123); // Throws exception, if not found
 

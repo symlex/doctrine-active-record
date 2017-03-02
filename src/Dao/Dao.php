@@ -86,7 +86,7 @@ abstract class Dao
      */
     public function factory(string $name): Dao
     {
-        $result = $this->getFactory()->createDao($name);
+        $result = $this->getFactory()->create($name);
 
         return $result;
     }

@@ -52,19 +52,19 @@ class FactoryTest extends UnitTestCase
     {
         $this->factory->setFactoryNamespace('');
         $this->factory->setFactoryPostfix('');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->createModel('Doctrine\ActiveRecord\Tests\Model\UserModel'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->create('Doctrine\ActiveRecord\Tests\Model\UserModel'));
 
         $this->factory->setFactoryNamespace('');
         $this->factory->setFactoryPostfix('Model');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->createModel('Doctrine\ActiveRecord\Tests\Model\User'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->create('Doctrine\ActiveRecord\Tests\Model\User'));
 
         $this->factory->setFactoryNamespace('Doctrine\ActiveRecord\Tests\Model');
         $this->factory->setFactoryPostfix('Model');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->createModel('User'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->create('User'));
 
         $this->factory->setFactoryNamespace('Doctrine\ActiveRecord\Tests\Model');
         $this->factory->setFactoryPostfix('');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->createModel('UserModel'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->create('UserModel'));
     }
 
     public function testGetFactoryNamespace()
@@ -94,6 +94,6 @@ class FactoryTest extends UnitTestCase
      */
     public function testCreateModelException()
     {
-        $this->factory->createModel('FooBar');
+        $this->factory->create('FooBar');
     }
 }

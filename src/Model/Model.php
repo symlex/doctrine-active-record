@@ -70,7 +70,7 @@ abstract class Model
     {
         $modelName = empty($name) ? $this->getModelName() : $name;
 
-        $model = $this->getFactory()->createModel($modelName, $dao);
+        $model = $this->getFactory()->create($modelName, $dao);
 
         return $model;
     }

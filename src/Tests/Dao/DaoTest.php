@@ -18,7 +18,7 @@ class DaoTest extends UnitTestCase
     public function setUp()
     {
         $factory = $this->get('dao.factory');
-        $this->dao = $factory->createDao('Test');
+        $this->dao = $factory->create('Test');
     }
 
     public function testGetTables()

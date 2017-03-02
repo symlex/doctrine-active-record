@@ -67,11 +67,7 @@ class Factory extends FactoryAbstract
      */
     public function createDao($name = ''): Dao
     {
-        if (empty($name)) {
-            throw new FactoryException ('The DAO factory requires a DAO name');
-        }
-
-        $result = $this->getDaoFactory()->createDao($name);
+        $result = $this->getDaoFactory()->create($name);
 
         return $result;
     }
@@ -84,11 +80,11 @@ class Factory extends FactoryAbstract
      * @throws FactoryException
      * @return Model
      */
-    public function createModel($name, Dao $dao = null): Model
+    public function create($name, Dao $dao = null): Model
     {
         $className = $this->getClassName($name);
 
-        $result = $this->createModelInstance($className, $dao);
+        $result = $this->createInstance($className, $dao);
 
         return $result;
     }
@@ -100,7 +96,7 @@ class Factory extends FactoryAbstract
      * @param Dao $dao
      * @return Model
      */
-    protected function createModelInstance($className, $dao): Model
+    protected function createInstance($className, $dao): Model
     {
         $result = new $className ($this, $dao);
 
