@@ -124,7 +124,7 @@ abstract class EntityDao extends Dao
      * @param string $name Class name without namespace prefix and postfix
      * @return Dao|EntityDao
      */
-    public function factory(string $name)
+    public function factory(string $name): Dao
     {
         return parent::factory($name);
     }
@@ -405,7 +405,7 @@ abstract class EntityDao extends Dao
     /**
      * Create a new database entry (only if no ID was set)
      */
-    public function insert()
+    public function save()
     {
         if (func_num_args() > 0) {
             throw new InvalidArgumentException('insert() does not accept any arguments');

@@ -21,7 +21,7 @@ class EntityModelTest extends UnitTestCase
          * @var \Doctrine\ActiveRecord\Model\Factory
          */
         $factory = $this->get('model.factory');
-        $this->model = $factory->getModel('User');
+        $this->model = $factory->createModel('User');
     }
 
     public function testFactory()
@@ -193,7 +193,7 @@ class EntityModelTest extends UnitTestCase
 
     public function testIsCreatable()
     {
-        $result = $this->model->isCreatable();
+        $result = $this->model->isSavable();
         $this->assertTrue($result);
     }
 

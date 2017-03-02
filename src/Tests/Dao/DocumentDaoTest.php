@@ -27,7 +27,7 @@ class DocumentDaoTest extends UnitTestCase
         $this->dao->title = 'Foo';
         $this->dao->filename = 'foo.txt';
         $this->dao->unique = 0;
-        $this->dao->insert();
+        $this->dao->save();
         $this->assertTrue(true);
     }
 }

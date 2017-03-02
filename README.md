@@ -20,7 +20,7 @@ $factory = new Factory($daoFactory);
 $factory->setFactoryNamespace('App\Model');
 $factory->setFactoryPostfix('Model');
 
-$user = $factory->getModel('User'); // Returns instance of App\Model\UserModel
+$user = $factory->createModel('User'); // Returns instance of App\Model\UserModel
 
 $user->find(123); // Throws exception, if not found
 
@@ -101,7 +101,7 @@ class UserController
             throw new FormInvalidException($this->form->getFirstError());
         }
         
-        $this->user->create($this->form->getValues());
+        $this->user->save($this->form->getValues());
 
         return $this->user->getValues();
     }
@@ -147,7 +147,7 @@ In addition, `Doctrine\ActiveRecord\Dao\EntityDao` offers many powerful methods 
 - `reload()`: Reload row values from database
 - `getValues()`: Returns all values as associative array
 - `exists($id)`: Returns true, if a row with the given primary key exists
-- `insert()`: Insert a new row
+- `save()`: Insert a new row
 - `update()`: Updates changed values in the database
 - `delete()`: Delete entity from database
 - `getId()`: Returns the ID of the currently loaded record (throws exception, if empty)
@@ -258,7 +258,7 @@ Public interfaces of models are high-level and should reflect all use cases with
 - `getTableName()`: Returns the name of the associated main database table
 - `hasTimestampEnabled()`: Returns true, if timestamps are enabled for the associated DAO
 - `delete()`: Permanently delete the entity record from the database
-- `create(array $values)`: Create a new record using the values provided
+- `save(array $values)`: Create a new record using the values provided
 - `update(array $values)`: Update model instance database record; before assigning multiple values to a model instance, data should be validated using a form class
 
 **How much validation should be implemented within a model?** Wherever invalid data can lead to security issues or major inconsistencies, some core validation rules must be implemented in the model layer. Model exception messages usually don’t require translation (in multilingual applications), since invalid values should be recognized beforehand by a form class. If you expect certain exceptions, you should catch and handle them in your controllers.

@@ -73,7 +73,7 @@ abstract class Dao
      *
      * @return Factory
      */
-    protected function getFactory()
+    protected function getFactory(): Factory
     {
         return $this->_factory;
     }
@@ -84,9 +84,9 @@ abstract class Dao
      * @param string $name Class name without namespace prefix and postfix
      * @return Dao
      */
-    public function factory(string $name)
+    public function factory(string $name): Dao
     {
-        $result = $this->getFactory()->getDao($name);
+        $result = $this->getFactory()->createDao($name);
 
         return $result;
     }

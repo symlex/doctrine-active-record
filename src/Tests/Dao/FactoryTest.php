@@ -27,23 +27,23 @@ class FactoryTest extends UnitTestCase
         $this->assertInstanceOf('Doctrine\DBAL\Connection', $this->factory->getDb());
     }
 
-    public function testGetDao()
+    public function testCreateDao()
     {
         $this->factory->setFactoryNamespace('');
         $this->factory->setFactoryPostfix('');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->getDao('Doctrine\ActiveRecord\Tests\Dao\TestDao'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->createDao('Doctrine\ActiveRecord\Tests\Dao\TestDao'));
 
         $this->factory->setFactoryNamespace('');
         $this->factory->setFactoryPostfix('Dao');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->getDao('Doctrine\ActiveRecord\Tests\Dao\Test'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->createDao('Doctrine\ActiveRecord\Tests\Dao\Test'));
 
         $this->factory->setFactoryNamespace('Doctrine\ActiveRecord\Tests\Dao');
         $this->factory->setFactoryPostfix('Dao');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->getDao('Test'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->createDao('Test'));
 
         $this->factory->setFactoryNamespace('Doctrine\ActiveRecord\Tests\Dao');
         $this->factory->setFactoryPostfix('');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->getDao('TestDao'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->createDao('TestDao'));
     }
 
     public function testGetFactoryNamespace()
@@ -65,6 +65,6 @@ class FactoryTest extends UnitTestCase
      */
     public function testGetDaoException()
     {
-        $this->factory->getDao('FooBar');
+        $this->factory->createDao('FooBar');
     }
 }

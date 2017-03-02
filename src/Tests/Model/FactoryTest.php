@@ -29,42 +29,42 @@ class FactoryTest extends UnitTestCase
         $this->factory = new Factory ($this->daoFactory);
     }
 
-    public function testGetDao()
+    public function testCreateDao()
     {
         $this->daoFactory->setFactoryNamespace('');
         $this->daoFactory->setFactoryPostfix('');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->getDao('Doctrine\ActiveRecord\Tests\Dao\TestDao'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->createDao('Doctrine\ActiveRecord\Tests\Dao\TestDao'));
 
         $this->daoFactory->setFactoryNamespace('');
         $this->daoFactory->setFactoryPostfix('Dao');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->getDao('Doctrine\ActiveRecord\Tests\Dao\Test'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->createDao('Doctrine\ActiveRecord\Tests\Dao\Test'));
 
         $this->daoFactory->setFactoryNamespace('Doctrine\ActiveRecord\Tests\Dao');
         $this->daoFactory->setFactoryPostfix('Dao');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->getDao('Test'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->createDao('Test'));
 
         $this->daoFactory->setFactoryNamespace('Doctrine\ActiveRecord\Tests\Dao');
         $this->daoFactory->setFactoryPostfix('');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->getDao('TestDao'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Dao\TestDao', $this->factory->createDao('TestDao'));
     }
 
-    public function testGetModel()
+    public function testCreateModel()
     {
         $this->factory->setFactoryNamespace('');
         $this->factory->setFactoryPostfix('');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->getModel('Doctrine\ActiveRecord\Tests\Model\UserModel'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->createModel('Doctrine\ActiveRecord\Tests\Model\UserModel'));
 
         $this->factory->setFactoryNamespace('');
         $this->factory->setFactoryPostfix('Model');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->getModel('Doctrine\ActiveRecord\Tests\Model\User'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->createModel('Doctrine\ActiveRecord\Tests\Model\User'));
 
         $this->factory->setFactoryNamespace('Doctrine\ActiveRecord\Tests\Model');
         $this->factory->setFactoryPostfix('Model');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->getModel('User'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->createModel('User'));
 
         $this->factory->setFactoryNamespace('Doctrine\ActiveRecord\Tests\Model');
         $this->factory->setFactoryPostfix('');
-        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->getModel('UserModel'));
+        $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $this->factory->createModel('UserModel'));
     }
 
     public function testGetFactoryNamespace()
@@ -84,16 +84,16 @@ class FactoryTest extends UnitTestCase
     /**
      * @expectedException \Doctrine\ActiveRecord\Exception\FactoryException
      */
-    public function testGetDaoException()
+    public function testCreateDaoException()
     {
-        $this->factory->getDao('FooBar');
+        $this->factory->createDao('FooBar');
     }
 
     /**
      * @expectedException \Doctrine\ActiveRecord\Exception\FactoryException
      */
-    public function testGetModelException()
+    public function testCreateModelException()
     {
-        $this->factory->getModel('FooBar');
+        $this->factory->createModel('FooBar');
     }
 }

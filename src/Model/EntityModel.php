@@ -54,7 +54,7 @@ abstract class EntityModel extends Model
      * @return EntityModel|Model
      * @throws Exception
      */
-    public function factory(string $name = '', Dao $dao = null)
+    public function factory(string $name = '', Dao $dao = null): Model
     {
         return parent::factory($name, $dao);
     }
@@ -178,7 +178,7 @@ abstract class EntityModel extends Model
      *
      * @param array $cond The search conditions as array
      * @throws NotFoundException
-     * @return array
+     * @return EntityModel
      */
     public function searchOne(array $cond = array())
     {
@@ -290,7 +290,7 @@ abstract class EntityModel extends Model
      *
      * @return bool
      */
-    public function isCreatable()
+    public function isSavable()
     {
         return true;
     }
@@ -309,7 +309,7 @@ abstract class EntityModel extends Model
 
         try {
             foreach ($ids as $id) {
-                $dao = $this->daoFactory()->find($id);
+                $dao = $this->createDao()->find($id);
 
                 foreach ($properties as $key => $value) {
                     $dao->$key = $value;
@@ -471,21 +471,21 @@ abstract class EntityModel extends Model
     }
 
     /**
-     * Creates a new entity using the given values
+     * Save a new entity using the given values
      *
      * @param array $values
      * @throws CreateException
      * @throws \Doctrine\DBAL\DBALException
-     * @return $this
+     * @return EntityModel
      */
-    public function create(array $values)
+    public function save(array $values): EntityModel
     {
-        if (!$this->isCreatable()) {
-            throw new CreateException('Permission denied: Entity can not be created');
+        if (!$this->isSavable()) {
+            throw new CreateException('Permission denied: Entity can not be saved');
         }
 
         $this->transactional(function () use ($values) {
-            $this->forceCreate($values);
+            $this->forceSave($values);
         });
 
         return $this;
@@ -498,13 +498,13 @@ abstract class EntityModel extends Model
      * @throws \Doctrine\DBAL\DBALException
      * @return $this
      */
-    public function forceCreate(array $values)
+    public function forceSave(array $values)
     {
         $dao = $this->getEntityDao();
 
         $dao->setValues($values);
 
-        $dao->insert();
+        $dao->save();
 
         $dao->reload();
 

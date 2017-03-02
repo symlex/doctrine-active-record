@@ -64,13 +64,13 @@ abstract class Model
      * @param string $name Optional model name (current model name if empty)
      * @param Dao $dao DB DAO instance
      * @throws Exception
-     * @return Model
+     * @return Model|EntityModel
      */
-    public function factory(string $name = '', Dao $dao = null)
+    public function factory(string $name = '', Dao $dao = null): Model
     {
         $modelName = empty($name) ? $this->getModelName() : $name;
 
-        $model = $this->getFactory()->getModel($modelName, $dao);
+        $model = $this->getFactory()->createModel($modelName, $dao);
 
         return $model;
     }
@@ -91,7 +91,7 @@ abstract class Model
      * @return Factory
      * @throws ModelException
      */
-    private function getFactory()
+    private function getFactory(): Factory
     {
         if (empty($this->_factory)) {
             throw new ModelException ('Factory instance not set');
@@ -107,11 +107,11 @@ abstract class Model
      * @throws Exception
      * @return Dao
      */
-    protected function daoFactory(string $name = '')
+    protected function createDao(string $name = ''): Dao
     {
         $daoName = empty($name) ? $this->getDaoName() : $name;
 
-        $dao = $this->getFactory()->getDao($daoName);
+        $dao = $this->getFactory()->createDao($daoName);
 
         return $dao;
     }
@@ -150,10 +150,10 @@ abstract class Model
      *
      * @return Dao
      */
-    protected function getDao()
+    protected function getDao(): Dao
     {
         if (empty($this->_dao)) {
-            $this->setDao($this->daoFactory());
+            $this->setDao($this->createDao());
         }
 
         return $this->_dao;
@@ -177,7 +177,7 @@ abstract class Model
      */
     protected function resetDao()
     {
-        $this->_dao = $this->daoFactory();
+        $this->_dao = $this->createDao();
     }
 
     /**

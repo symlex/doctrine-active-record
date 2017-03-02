@@ -71,7 +71,7 @@ class EntityTest extends UnitTestCase
 
         $dao = new UserDao ($factory);
         $dao->setData(["username" => "seq"]);
-        $dao->insert();
+        $dao->save();
         $this->assertTrue(true);
     }
 
@@ -87,7 +87,7 @@ class EntityTest extends UnitTestCase
 
         $dao = new UserSequenceDao ($factory);
         $dao->setData(["username" => "seq"]);
-        $dao->insert();
+        $dao->save();
         $this->assertTrue(true);
     }
 
@@ -157,7 +157,7 @@ class EntityTest extends UnitTestCase
     public function testInsertInvalidArguments()
     {
         $user = $this->dao->factory('User');
-        $user->insert('foo');
+        $user->save('foo');
     }
 
     public function testInsert()
@@ -165,7 +165,7 @@ class EntityTest extends UnitTestCase
         $user = $this->dao->factory('User');
 
         $user->username = 'foobar123';
-        $user->insert();
+        $user->save();
         $this->assertTrue(true);
     }
 
@@ -175,7 +175,7 @@ class EntityTest extends UnitTestCase
 
         $user->username = 'foobar234';
         $user->created = new \DateTime('2016-07-13T18:30:08Z');
-        $user->insert();
+        $user->save();
         $this->assertTrue(true);
     }
 
