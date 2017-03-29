@@ -65,7 +65,7 @@ class Factory extends FactoryAbstract
      * @throws FactoryException
      * @return Dao
      */
-    public function createDao($name = ''): Dao
+    public function createDao($name = '')
     {
         $result = $this->getDaoFactory()->create($name);
 
@@ -80,7 +80,7 @@ class Factory extends FactoryAbstract
      * @throws FactoryException
      * @return Model
      */
-    public function create($name, Dao $dao = null): Model
+    public function create($name, Dao $dao = null)
     {
         $className = $this->getClassName($name);
 

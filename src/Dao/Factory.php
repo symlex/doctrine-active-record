@@ -76,7 +76,7 @@ class Factory extends FactoryAbstract
      * @throws FactoryException
      * @return Db
      */
-    public function getDb()
+    public function getDb(): Db
     {
         if (empty($this->_db)) {
             throw new FactoryException ('No database adapter set');
