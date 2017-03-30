@@ -16,11 +16,11 @@ use Doctrine\ActiveRecord\Model\Factory;
 
 $daoFactory = new DaoFactory($db); // $db is a Doctrine\DBAL\Connection
 
-$factory = new Factory($daoFactory);
-$factory->setFactoryNamespace('App\Model');
-$factory->setFactoryPostfix('Model');
+$modelFactory = new Factory($daoFactory);
+$modelFactory->setFactoryNamespace('App\Model');
+$modelFactory->setFactoryPostfix('Model');
 
-$user = $factory->create('User'); // Returns instance of App\Model\UserModel
+$user = $modelFactory->create('User'); // Returns instance of App\Model\UserModel
 
 $user->find(123); // Throws exception, if not found
 
@@ -28,7 +28,7 @@ if ($user->email == '') {
     $user->update(array('email' => 'bender@ilovebender.com')); // Update email
 }
 
-$group = $user->factory('Group'); // Returns instance of App\Model\GroupModel
+$group = $user->createModel('Group'); // Returns instance of App\Model\GroupModel
 ```
 
 Usage in REST controller context
@@ -133,7 +133,7 @@ This diagram illustrates how Controller, Model and DAO interact with each other:
 Data Access Objects
 -------------------
 DAOs directly deal with **database tables** and **raw SQL**, if needed. `Doctrine\ActiveRecord\Dao\Dao` is suited to implement custom methods using raw SQL. All DAOs expose the following public methods by default:
-- `factory($name)`: Returns a new DAO instance
+- `createDao(string $name)`: Returns a new DAO instance
 - `beginTransaction()`: Start a database transaction
 - `commit()`: Commit a database transaction
 - `rollBack()`: Roll back a database transaction
@@ -156,9 +156,9 @@ In addition, `Doctrine\ActiveRecord\Dao\EntityDao` offers many powerful methods 
 - `findAll(array $cond = array(), $wrapResult = true)`: Returns all instances that match $cond (use search() or searchAll(), if you want to limit or sort the result set)
 - `search(array $params)`: Powerful alternative to findAll() to search the database incl. count, offset and order
 - `wrapAll(array $rows)`: Create and return a new DAO for each array element
-- `updateRelationTable($relationTable, $primaryKeyName, $foreignKeyName, array $existing, array $updated)`: Helper function to update n-to-m relationship tables
+- `updateRelationTable(string $relationTable, string $primaryKeyName, string $foreignKeyName, array $existing, array $updated)`: Helper function to update n-to-m relationship tables
 - `hasTimestampEnabled()`: Returns true, if this DAO automatically adds timestamps when creating and updating rows
-- `findList($colName, $order = '', $where = '', $indexName = '')`: Returns a key/value array (list) of all matching rows
+- `findList(string $colName, string $order = '', string $where = '', string $indexName = '')`: Returns a key/value array (list) of all matching rows
 - `getTableName()`: Returns the name of the underlying database table
 - `getPrimaryKeyName()`: Returns the name of the primary key column (throws an exception, if primary key is an array)
 
@@ -238,7 +238,7 @@ Business Models
 **Business Models** are logically located between **Controllers** - which render views and validate user input - and **Data Access Objects** (DAOs), that are low-level interfaces to a storage backend or Web service.
 
 Public interfaces of models are high-level and should reflect all use cases within their domain. There are a number of standard use-cases that are pre-implemented in the base class `Doctrine\ActiveRecord\Model\EntityModel`:
-- `factory($name = '', Dao $dao = null)`: Create a new model instance
+- `createModel(string $name = '', Dao $dao = null)`: Create a new model instance
 - `find($id)`: Find a record by primary key
 - `reload()`: Reload values from database
 - `findAll(array $cond = array(), $wrapResult = true)`: Find multiple records; if `$wrapResult` is false, plain DAOs are returned instead of model instances

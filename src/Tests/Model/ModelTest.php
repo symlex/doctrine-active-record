@@ -28,7 +28,7 @@ class ModelTest extends UnitTestCase
 
     public function testFactory()
     {
-        $userModel = $this->model->factory('User');
+        $userModel = $this->model->createModel('User');
         $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $userModel);
     }
 

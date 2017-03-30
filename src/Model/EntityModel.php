@@ -49,17 +49,6 @@ abstract class EntityModel extends Model
     }
 
     /**
-     * @param string $name
-     * @param Dao|null $dao
-     * @return EntityModel|Model
-     * @throws Exception
-     */
-    public function factory(string $name = '', Dao $dao = null): Model
-    {
-        return parent::factory($name, $dao);
-    }
-
-    /**
      * Load single record by (primary) key
      * Throws exception if nothing was found
      *
@@ -92,7 +81,7 @@ abstract class EntityModel extends Model
      * @throws FindException
      * @return array
      */
-    public function findAll(array $cond = array(), $wrapResult = true)
+    public function findAll(array $cond = array(), bool $wrapResult = true): array
     {
         $result = $this->getEntityDao()->findAll($cond, $wrapResult);
 
@@ -113,12 +102,12 @@ abstract class EntityModel extends Model
      * @param array $result
      * @return array
      */
-    protected function wrapAll(array $result)
+    protected function wrapAll(array $result): array
     {
         $modelName = $this->getModelName();
 
         foreach ($result as &$entity) {
-            $entity = $this->factory($modelName, $entity);
+            $entity = $this->createModel($modelName, $entity);
         }
 
         return $result;
@@ -133,7 +122,7 @@ abstract class EntityModel extends Model
      * @throws FindException
      * @return SearchResult
      */
-    public function search(array $cond, array $options = array())
+    public function search(array $cond, array $options = array()): SearchResult
     {
         $params = $options + array('cond' => $cond);
 
@@ -160,7 +149,7 @@ abstract class EntityModel extends Model
      * @param mixed $order The sort order (use an array for multiple columns)
      * @return array
      */
-    public function searchAll(array $cond = array(), $order = false)
+    public function searchAll(array $cond = array(), $order = false): array
     {
         $options = array(
             'order' => $order,
@@ -204,7 +193,7 @@ abstract class EntityModel extends Model
      * @throws FindException
      * @return SearchResult
      */
-    public function searchIds(array $cond, array $options = array())
+    public function searchIds(array $cond, array $options = array()): SearchResult
     {
         $params = $options + array('cond' => $cond);
 
@@ -234,7 +223,7 @@ abstract class EntityModel extends Model
      *
      * @return bool
      */
-    public function hasId()
+    public function hasId(): bool
     {
         return $this->getEntityDao()->hasId();
     }
@@ -257,7 +246,7 @@ abstract class EntityModel extends Model
      *
      * @return string
      */
-    public function getEntityTitle()
+    public function getEntityTitle(): string
     {
         return $this->_daoName . ' ' . $this->getId();
     }
@@ -268,7 +257,7 @@ abstract class EntityModel extends Model
      *
      * @return bool
      */
-    public function isDeletable()
+    public function isDeletable(): bool
     {
         return true;
     }
@@ -279,7 +268,7 @@ abstract class EntityModel extends Model
      *
      * @return bool
      */
-    public function isUpdatable()
+    public function isUpdatable(): bool
     {
         return true;
     }
@@ -290,7 +279,7 @@ abstract class EntityModel extends Model
      *
      * @return bool
      */
-    public function isSavable()
+    public function isSavable(): bool
     {
         return true;
     }
@@ -309,7 +298,9 @@ abstract class EntityModel extends Model
 
         try {
             foreach ($ids as $id) {
-                $dao = $this->createDao()->find($id);
+                /** @var EntityDao $dao */
+                $dao = $this->createDao();
+                $dao->find($id);
 
                 foreach ($properties as $key => $value) {
                     $dao->$key = $value;
@@ -335,7 +326,7 @@ abstract class EntityModel extends Model
      *
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return $this->getEntityDao()->getTableName();
     }
@@ -343,8 +334,10 @@ abstract class EntityModel extends Model
     /**
      * Magic getter
      *
+     * @param string $name
+     * @return mixed
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         return $this->getEntityDao()->$name;
     }
@@ -355,7 +348,7 @@ abstract class EntityModel extends Model
      * @param string $name
      * @return boolean
      */
-    public function __isset($name)
+    public function __isset(string $name): bool
     {
         return isset($this->getEntityDao()->$name);
     }
@@ -368,7 +361,7 @@ abstract class EntityModel extends Model
      * method. Alternatively you can use update($values) and create($values), if
      * values are coming from a trusted source, e.g. a form class.
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         throw new ModelException (
             'A use case specific method must be implemented to change any ' .
@@ -382,7 +375,7 @@ abstract class EntityModel extends Model
      *
      * @return bool
      */
-    public function hasTimestampEnabled()
+    public function hasTimestampEnabled(): bool
     {
         return $this->getEntityDao()->hasTimestampEnabled();
     }
@@ -392,6 +385,7 @@ abstract class EntityModel extends Model
      *
      * @throws DeleteException
      * @throws \Doctrine\DBAL\DBALException
+     * @return $this
      */
     public function delete()
     {
@@ -476,9 +470,9 @@ abstract class EntityModel extends Model
      * @param array $values
      * @throws CreateException
      * @throws \Doctrine\DBAL\DBALException
-     * @return EntityModel
+     * @return $this
      */
-    public function save(array $values): EntityModel
+    public function save(array $values)
     {
         if (!$this->isSavable()) {
             throw new CreateException('Permission denied: Entity can not be saved');

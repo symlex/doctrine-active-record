@@ -82,9 +82,9 @@ abstract class Dao
      * Returns a new DAO instance
      *
      * @param string $name Class name without namespace prefix and postfix
-     * @return Dao
+     * @return Dao|EntityDao
      */
-    public function factory(string $name): Dao
+    public function createDao(string $name)
     {
         $result = $this->getFactory()->create($name);
 

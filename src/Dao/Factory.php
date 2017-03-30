@@ -46,9 +46,9 @@ class Factory extends FactoryAbstract
      *
      * @param string $name Class name without namespace prefix and postfix
      * @throws FactoryException
-     * @return Dao
+     * @return Dao|EntityDao
      */
-    public function create($name)
+    public function create(string $name)
     {
         $className = $this->getClassName($name);
 
@@ -61,9 +61,9 @@ class Factory extends FactoryAbstract
      * Returns new DAO instance of $className
      *
      * @param string $className
-     * @return Dao
+     * @return Dao|EntityDao
      */
-    protected function createInstance($className)
+    protected function createInstance(string $className)
     {
         $result = new $className ($this);
 

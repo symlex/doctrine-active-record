@@ -34,7 +34,7 @@ class EntityTest extends UnitTestCase
 
     public function testFind()
     {
-        $user = $this->dao->factory('User');
+        $user = $this->dao->createDao('User');
 
         $user->find(1);
 
@@ -45,7 +45,7 @@ class EntityTest extends UnitTestCase
 
     public function testIsset()
     {
-        $user = $this->dao->factory('User');
+        $user = $this->dao->createDao('User');
 
         $user->find(1);
 
@@ -96,7 +96,7 @@ class EntityTest extends UnitTestCase
         /**
          * @var \Doctrine\ActiveRecord\Tests\Dao\UserDao
          */
-        $user = $this->dao->factory('User');
+        $user = $this->dao->createDao('User');
 
         $params = array('cond' => array('username' => 'Foo'));
 
@@ -128,7 +128,7 @@ class EntityTest extends UnitTestCase
         /**
          * @var \Doctrine\ActiveRecord\Tests\Dao\UserDao
          */
-        $user = $this->dao->factory('User');
+        $user = $this->dao->createDao('User');
 
         $params = array('cond' => array(), 'count_total' => false);
 
@@ -156,13 +156,13 @@ class EntityTest extends UnitTestCase
      */
     public function testInsertInvalidArguments()
     {
-        $user = $this->dao->factory('User');
+        $user = $this->dao->createDao('User');
         $user->save('foo');
     }
 
     public function testInsert()
     {
-        $user = $this->dao->factory('User');
+        $user = $this->dao->createDao('User');
 
         $user->username = 'foobar123';
         $user->save();
@@ -171,7 +171,7 @@ class EntityTest extends UnitTestCase
 
     public function testInsertTimestamp()
     {
-        $user = $this->dao->factory('User');
+        $user = $this->dao->createDao('User');
 
         $user->username = 'foobar234';
         $user->created = new \DateTime('2016-07-13T18:30:08Z');
@@ -181,7 +181,7 @@ class EntityTest extends UnitTestCase
 
     public function testUpdate()
     {
-        $user = $this->dao->factory('User');
+        $user = $this->dao->createDao('User');
 
         $user->find(array('username' => 'Foo'));
         $user->active = false;

@@ -119,17 +119,6 @@ abstract class EntityDao extends Dao
     }
 
     /**
-     * Returns a new Dao or EntityDao instance
-     *
-     * @param string $name Class name without namespace prefix and postfix
-     * @return Dao|EntityDao
-     */
-    public function factory(string $name): Dao
-    {
-        return parent::factory($name);
-    }
-
-    /**
      * Magic function to read a data value
      *
      * @param string $name Name of the property to be returned
@@ -178,7 +167,7 @@ abstract class EntityDao extends Dao
      * @param string $name Name of the property
      * @return boolean
      */
-    public function __isset(string $name)
+    public function __isset(string $name): bool
     {
         if (isset($this->_valueMap[$name])) {
             $key = $this->_valueMap[$name];
@@ -232,25 +221,38 @@ abstract class EntityDao extends Dao
 
     /**
      * Set raw data
+     *
+     * @param array $data
+     * @return $this
      */
     public function setData(array $data)
     {
         $this->_data = $data;
         $this->_originalData = $data;
+
+        return $this;
     }
 
     /**
      * Set multiple values at once
+     *
+     * @param array $values
+     * @return $this
      */
-    public function setValues(array $data)
+    public function setValues(array $values)
     {
-        foreach ($data as $name => $value) {
+        foreach ($values as $name => $value) {
             $this->$name = $value;
         }
+
+        return $this;
     }
 
     /**
      * Sets values that exist in the table schema only
+     *
+     * @param array $data
+     * @return $this
      */
     public function setDefinedValues(array $data)
     {
@@ -261,6 +263,8 @@ abstract class EntityDao extends Dao
                 $this->$key = $data[$key];
             }
         }
+
+        return $this;
     }
 
     /**
@@ -435,6 +439,8 @@ abstract class EntityDao extends Dao
 
         $this->_data = $insertFields;
         $this->_originalData = $insertFields;
+
+        return $this;
     }
 
     /**
@@ -577,7 +583,7 @@ abstract class EntityDao extends Dao
      *
      * @return bool
      */
-    public function hasId()
+    public function hasId(): bool
     {
         try {
             $this->getId();
@@ -592,7 +598,7 @@ abstract class EntityDao extends Dao
      *
      * @param mixed $id
      * @throws Exception
-     * @return void
+     * @return $this
      */
     public function setId($id)
     {
@@ -609,6 +615,8 @@ abstract class EntityDao extends Dao
         } else {
             throw new Exception('Can not set Primary ID again');
         }
+
+        return $this;
     }
 
     /**
@@ -951,7 +959,7 @@ abstract class EntityDao extends Dao
      * @param string $columnName
      * @return string
      */
-    protected function composeGetterName($columnName)
+    protected function composeGetterName(string $columnName): string
     {
         $result = 'get' . $this->underscoreToCamelCase($columnName);
 
@@ -960,6 +968,9 @@ abstract class EntityDao extends Dao
 
     /**
      * Adds SQL quotes to all values in an array (useful for "value IN (...)" queries)
+     *
+     * @param array $input
+     * @return array
      */
     private function quoteArray(array $input): array
     {
@@ -1069,7 +1080,9 @@ abstract class EntityDao extends Dao
     protected function extractValueFromArray(array &$array, $valueName)
     {
         $result = @$array[$valueName];
+
         unset($array[$valueName]);
+
         return $result;
     }
 
@@ -1081,6 +1094,7 @@ abstract class EntityDao extends Dao
      * @param string $foreignKeyName The name of the column, the other entity is referenced with
      * @param array $existing List of current relationships (how it is now)
      * @param array $updated List of new relationships (how it should be, after calling this method)
+     * @return $this
      */
     public function updateRelationTable(string $relationTable, string $primaryKeyName, string $foreignKeyName, array $existing, array $updated)
     {
@@ -1101,6 +1115,8 @@ abstract class EntityDao extends Dao
                 $this->getDb()->delete($relationTable, $whereArray);
             }
         }
+
+        return $this;
     }
 
     /**
@@ -1108,7 +1124,7 @@ abstract class EntityDao extends Dao
      *
      * @return bool
      */
-    public function hasTimestampEnabled()
+    public function hasTimestampEnabled(): bool
     {
         return ($this->_timestampEnabled == true);
     }
@@ -1174,7 +1190,7 @@ abstract class EntityDao extends Dao
      * @param string $tableName
      * @return $this
      */
-    protected function setTableName($tableName)
+    protected function setTableName(string $tableName)
     {
         $this->_tableName = $tableName;
 

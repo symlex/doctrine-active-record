@@ -54,7 +54,7 @@ class DaoTest extends UnitTestCase
 
     public function testFactory()
     {
-        $result = $this->dao->factory('Test');
+        $result = $this->dao->createDao('Test');
 
         $this->assertInstanceOf('\Doctrine\ActiveRecord\Tests\Dao\TestDao', $result);
     }

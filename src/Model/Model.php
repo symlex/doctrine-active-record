@@ -66,7 +66,7 @@ abstract class Model
      * @throws Exception
      * @return Model|EntityModel
      */
-    public function factory(string $name = '', Dao $dao = null): Model
+    public function createModel(string $name = '', Dao $dao = null)
     {
         $modelName = empty($name) ? $this->getModelName() : $name;
 
@@ -76,13 +76,32 @@ abstract class Model
     }
 
     /**
+     * Creates a new data access object (DAO) instance
+     *
+     * @param string $name Class name without prefix namespace and postfix
+     * @throws Exception
+     * @return Dao
+     */
+    protected function createDao(string $name = '')
+    {
+        $daoName = empty($name) ? $this->getDaoName() : $name;
+
+        $dao = $this->getFactory()->createDao($daoName);
+
+        return $dao;
+    }
+
+    /**
      * Set factory instance
      *
      * @param Factory $factory
+     * @return $this
      */
     protected function setFactory(Factory $factory)
     {
         $this->_factory = $factory;
+
+        return $this;
     }
 
     /**
@@ -101,26 +120,11 @@ abstract class Model
     }
 
     /**
-     * Creates a new data access object (DAO) instance
-     *
-     * @param string $name Class name without prefix namespace and postfix
-     * @throws Exception
-     * @return Dao
-     */
-    protected function createDao(string $name = ''): Dao
-    {
-        $daoName = empty($name) ? $this->getDaoName() : $name;
-
-        $dao = $this->getFactory()->createDao($daoName);
-
-        return $dao;
-    }
-
-    /**
      * Set related DaoEntity name (only possible once)
      *
      * @param string $name DAO entity name for factory
      * @throws ModelException
+     * @return $this
      */
     public function setDaoName(string $name)
     {
@@ -133,6 +137,8 @@ abstract class Model
         }
 
         $this->_daoName = $name;
+
+        return $this;
     }
 
     /**

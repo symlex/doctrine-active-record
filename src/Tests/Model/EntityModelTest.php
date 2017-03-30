@@ -26,10 +26,10 @@ class EntityModelTest extends UnitTestCase
 
     public function testFactory()
     {
-        $userModel = $this->model->factory('User');
+        $userModel = $this->model->createModel('User');
         $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\UserModel', $userModel);
 
-        $simpleModel = $this->model->factory('Simple');
+        $simpleModel = $this->model->createModel('Simple');
         $this->assertInstanceOf('Doctrine\ActiveRecord\Tests\Model\SimpleModel', $simpleModel);
     }
 
@@ -48,7 +48,7 @@ class EntityModelTest extends UnitTestCase
 
     public function testFind()
     {
-        $user = $this->model->factory('User');
+        $user = $this->model->createModel('User');
 
         $user->find(1);
 
