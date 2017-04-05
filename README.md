@@ -1,10 +1,10 @@
 Doctrine ActiveRecord
 =====================
 
-[![Build Status](https://travis-ci.org/lastzero/doctrine-active-record.png?branch=master)](https://travis-ci.org/lastzero/doctrine-active-record)
-[![Latest Stable Version](https://poser.pugx.org/lastzero/doctrine-active-record/v/stable.svg)](https://packagist.org/packages/lastzero/doctrine-active-record)
-[![Total Downloads](https://poser.pugx.org/lastzero/doctrine-active-record/downloads.svg)](https://packagist.org/packages/lastzero/doctrine-active-record)
-[![License](https://poser.pugx.org/lastzero/doctrine-active-record/license.svg)](https://packagist.org/packages/lastzero/doctrine-active-record)
+[![Build Status](https://travis-ci.org/symlex/doctrine-active-record.png?branch=master)](https://travis-ci.org/symlex/doctrine-active-record)
+[![Latest Stable Version](https://poser.pugx.org/symlex/doctrine-active-record/v/stable.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
+[![Total Downloads](https://poser.pugx.org/lastzero/doctrine-active-record/downloads.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
+[![License](https://poser.pugx.org/symlex/doctrine-active-record/license.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
 
 As a lightweight alternative to Doctrine ORM, this library provides Business Model and Database Access Object (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases. It is a lot faster and less complex than Datamapper ORM implementations.
 
@@ -109,16 +109,16 @@ class UserController
 }
 ```
 
-See also [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/lastzero/php-input-validation)
+See also [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/symlex/input-validation)
 
 Composer
 --------
 
-If you are using composer, simply add "lastzero/doctrine-active-record" to your composer.json file and run `composer update`:
+If you are using composer, simply add "symlex/doctrine-active-record" to your composer.json file and run `composer update`:
 
 ```
 "require": {
-    "lastzero/doctrine-active-record": "*"
+    "symlex/doctrine-active-record": "*"
 }
 ```
     
@@ -281,33 +281,33 @@ use Doctrine\ActiveRecord\Model\EntityModel;
 
 class User extends EntityModel
 {
-  protected $_daoName = 'User';
+    protected $_daoName = 'User';
 
-  public function delete() 
-  {
-    $dao = $this->getEntityDao();
-    $dao->is_deleted = 1;
-    $dao->update();
-  }
+    public function delete() 
+    {
+        $dao = $this->getEntityDao();
+        $dao->is_deleted = 1;
+        $dao->update();
+    }
 
-  public function undelete() 
-  {
-    $dao = $this->getEntityDao();
-    $dao->is_deleted = 0;
-    $dao->update();
-  }
+    public function undelete() 
+    {
+        $dao = $this->getEntityDao();
+        $dao->is_deleted = 0;
+        $dao->update();
+    }
 
-  public function search(array $cond, array $options = array()) 
-  {
-    $cond['is_deleted'] = 0;
-    return parent::search($cond, $options);
-  }
-  
-  public function getValues()
-  {
-    $result = parent::getValues();
-    unset($result['password']);
-    return $result;
-  }
+    public function search(array $cond, array $options = array()) 
+    {
+        $cond['is_deleted'] = 0;
+        return parent::search($cond, $options);
+    }
+
+    public function getValues()
+    {
+        $result = parent::getValues();
+        unset($result['password']);
+        return $result;
+    }
 }
 ```
