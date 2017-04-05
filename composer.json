@@ -1,5 +1,5 @@
 {
-    "name": "lastzero/doctrine-active-record",
+    "name": "symlex/doctrine-active-record",
     "type": "library",
     "description": "ActiveRecord model and DAO implementation for Doctrine DBAL",
     "keywords": [
@@ -10,7 +10,7 @@
         "symfony",
         "silex"
     ],
-    "homepage": "https://github.com/lastzero/doctrine-active-record",
+    "homepage": "https://github.com/symlex/doctrine-active-record",
     "license": "MIT",
     "authors": [
         {
