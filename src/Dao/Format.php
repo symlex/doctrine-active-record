@@ -35,6 +35,7 @@ class Format
     const DATETIMETZ = 'Y-m-d H:i:sO'; // Support for timezone (e.g. "+0230")
     const DATETIMEUTZ = 'Y-m-d H:i:s.uO'; // Support for microseconds & timezone
     const TIMESTAMP = 'U';
+    const CSV = 'csv';
 
     /**
      * Converts data from sql data source
@@ -88,6 +89,8 @@ class Format
                 return unserialize($data);
             case self::JSON:
                 return json_decode($data, true);
+            case self::CSV:
+                return str_getcsv($data);
             default:
                 throw new FormatException ('Unknown format: ' . $format);
         }
@@ -152,6 +155,8 @@ class Format
                 return serialize($data);
             case self::JSON:
                 return json_encode($data);
+            case self::CSV:
+                return implode(',', $data);
             default:
                 throw new FormatException ('Unknown format: ' . $format);
         }

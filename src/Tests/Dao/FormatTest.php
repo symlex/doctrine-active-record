@@ -366,4 +366,17 @@ class FormatTest extends UnitTestCase
         $output = Format::fromSql(Format::SERIALIZED, $output);
         $this->assertEquals(array('foo' => 'bar'), $output);
     }
+
+    public function testToSqlCsv()
+    {
+        $output = Format::toSql(Format::CSV, array('foo', 'bar', 123));
+        $this->assertEquals(array('foo', 'bar', 123), str_getcsv($output));
+    }
+
+    public function testFromSqlCsv()
+    {
+        $csvString = Format::toSql(Format::CSV, array('foo', 'bar', 123));
+        $csvArray = Format::fromSql(Format::CSV, $csvString);
+        $this->assertEquals(array('foo', 'bar', 123), $csvArray);
+    }
 }
