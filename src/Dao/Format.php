@@ -24,6 +24,7 @@ class Format
     const ALPHANUMERIC = 'alphanumeric';
     const SERIALIZED = 'serialized';
     const JSON = 'json';
+    const CSV = 'csv';
     const BOOL = 'bool';
     const TIME = 'H:i:s';
     const TIMEU = 'H:i:s.u'; // Support for microseconds (up to six digits)
@@ -35,7 +36,6 @@ class Format
     const DATETIMETZ = 'Y-m-d H:i:sO'; // Support for timezone (e.g. "+0230")
     const DATETIMEUTZ = 'Y-m-d H:i:s.uO'; // Support for microseconds & timezone
     const TIMESTAMP = 'U';
-    const CSV = 'csv';
 
     /**
      * Converts data from sql data source

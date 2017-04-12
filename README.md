@@ -206,6 +206,7 @@ const STRING = 'string';
 const ALPHANUMERIC = 'alphanumeric';
 const SERIALIZED = 'serialized';
 const JSON = 'json';
+const CSV = 'csv';
 const BOOL = 'bool';
 const TIME = 'H:i:s';
 const TIMEU = 'H:i:s.u'; // Support for microseconds (up to six digits)
