@@ -37,37 +37,37 @@ Usage in REST controller context
 
 Doctrine ActiveRecord is perfectly suited for building high-performance REST services.
 
-This example shows how to work with the EntityModel in a REST controller context. Note, how easy it is to avoid deeply nested structures. User model and form are injected as dependencies.
+This example shows how to work with the EntityModel in a REST controller context. Note, how easy it is to avoid deeply 
+nested structures. User model and form factory (provided by the [InputValidation](https://github.com/symlex/input-validation) 
+package) are injected as dependencies.
 
 ```php
-namespace App\Rest;
+namespace App\Controller\Rest;
 
 use Symfony\Component\HttpFoundation\Request;
 use App\Exception\FormInvalidException;
-use App\Form\UserForm;
-use App\Model\UserModel;
+use App\Form\FormFactory;
+use App\Model\User;
 
-class UserController
+class UsersController
 {
     protected $user;
-    protected $form;
+    protected $formFactory;
 
-    public function __construct(UserModel $user, UserForm $form)
+    public function __construct(User $user, FormFactory $formFactory)
     {
         $this->user = $user;
-        $this->form = $form;
+        $this->formFactory = $formFactory;
     }
-
-    public function cgetAction()
+    
+    public function cgetAction(Request $request)
     {
-        $users = $this->user->findAll();
-        $result = array();
-
-        foreach($users as $user) {
-            $result[] = $user->getValues();
-        }
-
-        return $result;
+        $options = array(
+            'count' => $request->query->get('count', 50),
+            'offset' => $request->query->get('offset', 0)
+        );
+        
+        return $this->user->search(array(), $options);
     }
 
     public function getAction($id)
@@ -83,26 +83,29 @@ class UserController
     public function putAction($id, Request $request)
     {
         $this->user->find($id);
-        $this->form->setDefinedWritableValues($request->request->all())->validate();
+        
+        $form = $this->formFactory->create('User\Edit');
+        $form->setDefinedWritableValues($request->request->all())->validate();
 
-        if($this->form->hasErrors()) {
-            throw new FormInvalidException($this->form->getFirstError());
+        if($form->hasErrors()) {
+            throw new FormInvalidException($form->getFirstError());
         } 
         
-        $this->user->update($this->form->getValues());
+        $this->user->update($form->getValues());
 
         return $this->user->getValues();
     }
 
     public function postAction(Request $request)
     {
-        $this->form->setDefinedWritableValues($request->request->all())->validate();
+        $form = $this->formFactory->create('User\Create');
+        $form->setDefinedWritableValues($request->request->all())->validate();
 
-        if($this->form->hasErrors()) {
-            throw new FormInvalidException($this->form->getFirstError());
+        if($form->hasErrors()) {
+            throw new FormInvalidException($form->getFirstError());
         }
         
-        $this->user->save($this->form->getValues());
+        $this->user->save($form->getValues());
 
         return $this->user->getValues();
     }

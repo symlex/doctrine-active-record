@@ -719,6 +719,7 @@ abstract class EntityDao extends Dao
         // Default values for all possible input parameters
         $defaults = array(
             'table' => $this->_tableName,
+            'table_alias' => '',
             'cond' => array(),
             'count' => 20,
             'offset' => 0,
@@ -731,7 +732,6 @@ abstract class EntityDao extends Dao
             'wrap' => true,
             'ids_only' => false,
             'sql_filter' => '',
-            'table_alias' => '',
             'id_filter' => array()
         );
 
