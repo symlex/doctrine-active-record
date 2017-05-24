@@ -349,6 +349,65 @@ abstract class EntityDao extends Dao
     }
 
     /**
+     * Returns all instances that match $cond - Attention: this can be a lot!
+     * Please use search() or searchAll(), if you want to use count, offset and order
+     *
+     * Background information: The findAll() should be cachable for future optimizations, while search
+     * does not use any caching. Caches (usually) don't support count, offset or order.
+     *
+     * @param array $cond Key/Value array of matching conditions
+     * @param boolean $wrapResult Create a new object for each result? If false, the function returns raw data.
+     * @return array
+     */
+    public function findAll(array $cond = array(), bool $wrapResult = true): array
+    {
+        $select = $this->createQueryBuilder();
+        $alias = $this->getDefaultTableAlias();
+
+        $db = $this->getDb();
+        $select->select('*');
+        $select->from($this->_tableName, $alias);
+
+        if (is_array($this->_primaryKey) && count($this->_primaryKey) == 1) {
+            $primaryKey = $this->_primaryKey[0];
+        } else {
+            $primaryKey = $this->_primaryKey;
+        }
+
+        foreach ($cond as $key => $val) {
+            if (is_numeric($key) && is_scalar($val) && $val !== NULL) {
+                if (isset($this->_formatMap[$primaryKey])) {
+                    $val = Format::toSql($this->_formatMap[$primaryKey], $val);
+                }
+
+                $select->orWhere($db->quoteIdentifier($primaryKey) . ' = ' . $db->quote($val));
+            } elseif (is_int($key) && is_object($val)) {
+                $select->andWhere((string)$val);
+            } elseif (is_int($key) && is_array($val)) {
+                $select->andWhere($db->quoteIdentifier($primaryKey) . ' IN (' . $this->sqlImplode($val) . ')');
+            } elseif (is_string($key) && is_array($val) && count($val) > 0) {
+                $select->andWhere($db->quoteIdentifier($key) . ' IN (' . $this->sqlImplode($val) . ')');
+            } elseif (is_string($key) && $val === NULL) {
+                $select->andWhere($db->quoteIdentifier($key) . ' IS NULL');
+            } else {
+                if (isset($this->_formatMap[$key])) {
+                    $val = Format::toSql($this->_formatMap[$key], $val);
+                }
+
+                $select->andWhere($db->quoteIdentifier($key) . ' = ' . $db->quote($val));
+            }
+        }
+
+        $rows = $db->fetchAll($select);
+
+        if ($wrapResult) {
+            return $this->wrapAll($rows);
+        } else {
+            return $rows;
+        }
+    }
+
+    /**
      * Reloads the entity values from database
      *
      * @return $this
@@ -617,59 +676,6 @@ abstract class EntityDao extends Dao
         }
 
         return $this;
-    }
-
-    /**
-     * Returns all instances that match $cond - Attention: this can be a lot!
-     * Please use search() or searchAll(), if you want to use count, offset and order
-     *
-     * Background information: The findAll() should be cachable for future optimizations, while search
-     * does not use any caching. Caches (usually) don't support count, offset or order.
-     *
-     * @param array $cond Key/Value array of matching conditions
-     * @param boolean $wrapResult Create a new object for each result? If false, the function returns raw data.
-     * @return array
-     */
-    public function findAll(array $cond = array(), bool $wrapResult = true): array
-    {
-        $select = $this->createQueryBuilder();
-        $alias = $this->getDefaultTableAlias();
-
-        $db = $this->getDb();
-        $select->from($this->_tableName, $alias);
-        $select->select('*');
-
-        foreach ($cond as $key => $val) {
-            if (is_numeric($key) && is_scalar($val) && $val !== NULL) {
-                if (isset($this->_formatMap[$this->_primaryKey])) {
-                    $val = Format::fromSql($this->_formatMap[$this->_primaryKey], $val);
-                }
-
-                $select->orWhere($db->quoteIdentifier($this->_primaryKey) . ' = ' . $db->quote($val));
-            } elseif (is_int($key) && is_object($val)) {
-                $select->andWhere((string)$val);
-            } elseif (is_int($key) && is_array($val)) {
-                $select->andWhere($db->quoteIdentifier($this->_primaryKey) . ' IN (' . $this->sqlImplode($val) . ')');
-            } elseif (is_string($key) && is_array($val) && count($val) > 0) {
-                $select->andWhere($db->quoteIdentifier($key) . ' IN (' . $this->sqlImplode($val) . ')');
-            } elseif (is_string($key) && $val === NULL) {
-                $select->andWhere($db->quoteIdentifier($key) . ' IS NULL');
-            } else {
-                if (isset($this->_formatMap[$key])) {
-                    $val = Format::fromSql($this->_formatMap[$key], $val);
-                }
-
-                $select->andWhere($db->quoteIdentifier($key) . ' = ' . $db->quote($val));
-            }
-        }
-
-        $rows = $db->fetchAll($select);
-
-        if ($wrapResult) {
-            return $this->wrapAll($rows);
-        } else {
-            return $rows;
-        }
     }
 
     /**
