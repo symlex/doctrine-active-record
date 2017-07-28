@@ -430,6 +430,7 @@ abstract class EntityDao extends Dao
     {
         $db = $this->getDb();
         $select = $this->createQueryBuilder();
+        $select->select('*');
         $select->from($this->_tableName, 'a');
 
         if (is_array($id)) {
