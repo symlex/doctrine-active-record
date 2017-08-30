@@ -9,7 +9,7 @@ use TestTools\TestCase\UnitTestCase;
  * @author Michael Mayer <michael@lastzero.net>
  * @license MIT
  */
-class EntityTest extends UnitTestCase
+class EntityDaoTest extends UnitTestCase
 {
     /**
      * @var UserDao
@@ -190,4 +190,12 @@ class EntityTest extends UnitTestCase
         $user->update();
         $this->assertTrue(true);
     }
+
+    public function testExists()
+    {
+        $user = $this->dao->createDao('User');
+        $result = $user->exists(1);
+        $this->assertTrue($result);
+    }
+
 }

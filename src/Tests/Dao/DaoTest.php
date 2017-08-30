@@ -133,4 +133,21 @@ class DaoTest extends UnitTestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    public function testQuoteIdentifier ()
+    {
+        $db = $this->get('dbal.connection');
+
+        $identifier = 'A';
+
+        $quotedIdentifier = $db->quoteIdentifier($identifier);
+
+        $this->assertEquals('`' . $identifier . '`', $quotedIdentifier);
+
+        $identifier = 'a';
+
+        $quotedIdentifier = $db->quoteIdentifier($identifier);
+
+        $this->assertEquals('`' . $identifier . '`', $quotedIdentifier);
+    }
 }

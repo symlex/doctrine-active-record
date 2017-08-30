@@ -1,4 +1,4 @@
-a:2:{s:6:"result";a:0:{}s:4:"args";a:1:{i:0;s:4864:"Argument could not be serialized: Doctrine\DBAL\Query\QueryBuilder Object
+a:2:{s:6:"result";b:0;s:4:"args";a:1:{i:0;s:4850:"Argument could not be serialized: Doctrine\DBAL\Query\QueryBuilder Object
 (
     [connection:Doctrine\DBAL\Query\QueryBuilder:private] => TestTools\Doctrine\DBAL\Connection Object
         (
@@ -37,7 +37,7 @@ a:2:{s:6:"result";a:0:{}s:4:"args";a:1:{i:0;s:4864:"Argument could not be serial
             [_params:Doctrine\DBAL\Connection:private] => Array
                 (
                     [host] => 127.0.0.1
-                    [port] => 3306
+                    [port] => 3308
                     [dbname] => doctrine-active-record
                     [charset] => utf8
                     [user] => doctrine
@@ -66,7 +66,7 @@ a:2:{s:6:"result";a:0:{}s:4:"args";a:1:{i:0;s:4864:"Argument could not be serial
 
             [_isRollbackOnly:Doctrine\DBAL\Connection:private] => 
             [defaultFetchMode:protected] => 2
-            [_fixturePath:TestTools\Doctrine\DBAL\Connection:private] => /Users/michael/Development/lastzero/doctrine-active-record/src/Tests/_fixtures/Model/EntityModel/
+            [_fixturePath:TestTools\Doctrine\DBAL\Connection:private] => /Users/michael/Development/symlex/doctrine-active-record/src/Tests/_fixtures/Dao/EntityDao/
             [_fixturePrefix:TestTools\Doctrine\DBAL\Connection:private] => sql
             [_fixtureOfflineMode:TestTools\Doctrine\DBAL\Connection:private] => 
             [_fixtureInstance:TestTools\Doctrine\DBAL\Connection:private] => parent
@@ -102,7 +102,7 @@ a:2:{s:6:"result";a:0:{}s:4:"args";a:1:{i:0;s:4864:"Argument could not be serial
                     [type:Doctrine\DBAL\Query\Expression\CompositeExpression:private] => AND
                     [parts:Doctrine\DBAL\Query\Expression\CompositeExpression:private] => Array
                         (
-                            [0] => `username` = 'XXX'
+                            [0] => `id` = '45345'
                         )
 
                 )
@@ -122,7 +122,7 @@ a:2:{s:6:"result";a:0:{}s:4:"args";a:1:{i:0;s:4864:"Argument could not be serial
 
         )
 
-    [sql:Doctrine\DBAL\Query\QueryBuilder:private] => SELECT * FROM users u WHERE `username` = 'XXX'
+    [sql:Doctrine\DBAL\Query\QueryBuilder:private] => SELECT * FROM users u WHERE `id` = '45345'
     [params:Doctrine\DBAL\Query\QueryBuilder:private] => Array
         (
         )

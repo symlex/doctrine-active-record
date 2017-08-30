@@ -1,4 +1,4 @@
-a:2:{s:6:"result";b:0;s:4:"args";a:1:{i:0;s:4849:"Argument could not be serialized: Doctrine\DBAL\Query\QueryBuilder Object
+a:2:{s:6:"result";a:0:{}s:4:"args";a:1:{i:0;s:4326:"Argument could not be serialized: Doctrine\DBAL\Query\QueryBuilder Object
 (
     [connection:Doctrine\DBAL\Query\QueryBuilder:private] => TestTools\Doctrine\DBAL\Connection Object
         (
@@ -37,28 +37,14 @@ a:2:{s:6:"result";b:0;s:4:"args";a:1:{i:0;s:4849:"Argument could not be serializ
             [_params:Doctrine\DBAL\Connection:private] => Array
                 (
                     [host] => 127.0.0.1
-                    [port] => 3306
+                    [port] => 3308
                     [dbname] => doctrine-active-record
                     [charset] => utf8
                     [user] => doctrine
                     [password] => doctrine
                 )
 
-            [platform:Doctrine\DBAL\Connection:private] => Doctrine\DBAL\Platforms\MySQL57Platform Object
-                (
-                    [doctrineTypeMapping:protected] => 
-                    [doctrineTypeComments:protected] => 
-                    [_eventManager:protected] => Doctrine\Common\EventManager Object
-                        (
-                            [_listeners:Doctrine\Common\EventManager:private] => Array
-                                (
-                                )
-
-                        )
-
-                    [_keywords:protected] => 
-                )
-
+            [platform:Doctrine\DBAL\Connection:private] => 
             [_schemaManager:protected] => 
             [_driver:protected] => Doctrine\DBAL\Driver\PDOMySql\Driver Object
                 (
@@ -66,7 +52,7 @@ a:2:{s:6:"result";b:0;s:4:"args";a:1:{i:0;s:4849:"Argument could not be serializ
 
             [_isRollbackOnly:Doctrine\DBAL\Connection:private] => 
             [defaultFetchMode:protected] => 2
-            [_fixturePath:TestTools\Doctrine\DBAL\Connection:private] => /Users/michael/Development/lastzero/doctrine-active-record/src/Tests/_fixtures/Dao/Entity/
+            [_fixturePath:TestTools\Doctrine\DBAL\Connection:private] => /Users/michael/Development/symlex/doctrine-active-record/src/Tests/_fixtures/Model/EntityModel/
             [_fixturePrefix:TestTools\Doctrine\DBAL\Connection:private] => sql
             [_fixtureOfflineMode:TestTools\Doctrine\DBAL\Connection:private] => 
             [_fixtureInstance:TestTools\Doctrine\DBAL\Connection:private] => parent
@@ -102,7 +88,7 @@ a:2:{s:6:"result";b:0;s:4:"args";a:1:{i:0;s:4849:"Argument could not be serializ
                     [type:Doctrine\DBAL\Query\Expression\CompositeExpression:private] => AND
                     [parts:Doctrine\DBAL\Query\Expression\CompositeExpression:private] => Array
                         (
-                            [0] => `id` = '45345'
+                            [0] => `username` = 'XXX'
                         )
 
                 )
@@ -122,7 +108,7 @@ a:2:{s:6:"result";b:0;s:4:"args";a:1:{i:0;s:4849:"Argument could not be serializ
 
         )
 
-    [sql:Doctrine\DBAL\Query\QueryBuilder:private] => SELECT * FROM users u WHERE `id` = '45345'
+    [sql:Doctrine\DBAL\Query\QueryBuilder:private] => SELECT * FROM users u WHERE `username` = 'XXX'
     [params:Doctrine\DBAL\Query\QueryBuilder:private] => Array
         (
         )

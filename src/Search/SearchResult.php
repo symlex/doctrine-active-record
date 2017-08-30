@@ -4,6 +4,7 @@ namespace Doctrine\ActiveRecord\Search;
 
 use Doctrine\ActiveRecord\Exception\NotFoundException;
 use Doctrine\ActiveRecord\Model\EntityModel;
+use Doctrine\ActiveRecord\Dao\EntityDao;
 
 /**
  * Search result object
@@ -110,7 +111,7 @@ class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
     /**
      * Returns all results as array of objects
      *
-     * @return EntityModel[]
+     * @return EntityDao[]|EntityModel[]
      */
     public function getAllResults()
     {
@@ -143,7 +144,7 @@ class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
     /**
      * Returns first result object or throws an exception
      *
-     * @return EntityModel
+     * @return EntityDao|EntityModel
      * @throws NotFoundException
      */
     public function getFirstResult()
