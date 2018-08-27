@@ -5,7 +5,7 @@ namespace Doctrine\ActiveRecord\Tests\Dao;
 use Doctrine\ActiveRecord\Dao\Dao;
 
 /**
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 class TestDao extends Dao

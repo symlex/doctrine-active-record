@@ -17,7 +17,7 @@ use Doctrine\ActiveRecord\Search\SearchResult;
  * you can use the basic Dao class, while EntityDao inherits from this and adds many powerful
  * methods to easily deal with single database tables and rows.
  *
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 abstract class EntityDao extends Dao

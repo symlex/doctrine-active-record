@@ -5,7 +5,7 @@ namespace Doctrine\ActiveRecord\Tests\Dao;
 use TestTools\TestCase\UnitTestCase;
 
 /**
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 class DocumentDaoTest extends UnitTestCase

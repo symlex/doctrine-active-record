@@ -6,7 +6,7 @@ use Doctrine\ActiveRecord\Dao\EntityDao;
 use Doctrine\ActiveRecord\Dao\Format;
 
 /**
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 class DocumentDao extends EntityDao

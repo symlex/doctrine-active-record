@@ -5,7 +5,7 @@ namespace Doctrine\ActiveRecord\Factory;
 use Doctrine\ActiveRecord\Exception\FactoryException;
 
 /**
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 class FactoryAbstract implements FactoryInterface

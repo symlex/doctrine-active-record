@@ -14,7 +14,7 @@ services:
     dbal.connection:
         class: TestTools\Doctrine\DBAL\Connection
         arguments:
-            - %dbal.params%
+            - "%dbal.params%"
             - "@dbal.driver"
         calls:
             - [setFixturePrefix, ['sql']]

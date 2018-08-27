@@ -14,7 +14,7 @@ use DateTime;
  * The DAO layer encapsulates the access to a database. You should use one DAO class for each entity or domain.
  * DAOs should not implement business logic, which belongs to the model layer.
  *
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 abstract class Dao

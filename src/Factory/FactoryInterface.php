@@ -3,7 +3,7 @@
 namespace Doctrine\ActiveRecord\Factory;
 
 /**
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 interface FactoryInterface

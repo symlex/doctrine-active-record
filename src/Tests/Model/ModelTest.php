@@ -5,7 +5,7 @@ namespace Doctrine\ActiveRecord\Tests\Model;
 use TestTools\TestCase\UnitTestCase;
 
 /**
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 class ModelTest extends UnitTestCase

@@ -6,7 +6,9 @@ Doctrine ActiveRecord
 [![Total Downloads](https://poser.pugx.org/lastzero/doctrine-active-record/downloads.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
 [![License](https://poser.pugx.org/symlex/doctrine-active-record/license.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
 
-As a lightweight alternative to Doctrine ORM, this library provides Business Model and Database Access Object (DAO) classes that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) functionality for relational databases. It is a lot faster and less complex than Datamapper ORM implementations.
+As a lightweight alternative to Doctrine ORM, this library provides Business Model and Database Access Object (DAO) classes 
+that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) 
+functionality for relational databases. It is a lot faster and less complex than Datamapper ORM implementations. See [TRADEOFFS.md](TRADEOFFS.md).
 
 Basic example
 -------------
@@ -112,20 +114,7 @@ class UsersController
 }
 ```
 
-See also [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/symlex/input-validation)
-
-Composer
---------
-
-If you are using composer, simply add "symlex/doctrine-active-record" to your composer.json file and run `composer update`:
-
-```
-"require": {
-    "symlex/doctrine-active-record": "*"
-}
-```
-    
-*Note: This is not an official Doctrine project and the author is not affiliated with the Doctrine Team.*
+See also: [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/symlex/input-validation)
 
 Workflow
 --------
@@ -158,7 +147,7 @@ In addition, `Doctrine\ActiveRecord\Dao\EntityDao` offers many powerful methods 
 - `hasId()`: Returns true, if the DAO instance has an ID assigned (primary key)
 - `setId($id)`: Set primary key
 - `findAll(array $cond = array(), $wrapResult = true)`: Returns all instances that match $cond (use search() or searchAll(), if you want to limit or sort the result set)
-- `search(array $params)`: Powerful alternative to findAll() to search the database incl. count, offset and order
+- `search(array $params)`: Returns a `SearchResult` object (see below for supported parameters)
 - `wrapAll(array $rows)`: Create and return a new DAO for each array element
 - `updateRelationTable(string $relationTable, string $primaryKeyName, string $foreignKeyName, array $existing, array $updated)`: Helper function to update n-to-m relationship tables
 - `hasTimestampEnabled()`: Returns true, if this DAO automatically adds timestamps when creating and updating rows
@@ -166,10 +155,12 @@ In addition, `Doctrine\ActiveRecord\Dao\EntityDao` offers many powerful methods 
 - `getTableName()`: Returns the name of the underlying database table
 - `getPrimaryKeyName()`: Returns the name of the primary key column (throws an exception, if primary key is an array)
 
-search() accepts the following optional parameters to limit, filter and sort search results:
+Search Parameters
+-----------------
+`search()` accepts the following optional parameters to limit, filter and sort search results:
 - `table`: Table name
 - `table_alias`: Alias name for "table" (table reference for join and join_left)
-- `cond`: Filters as associative array (key = value)
+- `cond`: Search conditions as array (key/value or just values for raw SQL)
 - `count`: Maximum number of results (integer)
 - `offset`: Result offset (integer)
 - `join`: List of joined tables incl join condition e.g. `array(array('u', 'phonenumbers', 'p', 'u.id = p.user_id'))`, see Doctrine DBAL manual
@@ -182,6 +173,8 @@ search() accepts the following optional parameters to limit, filter and sort sea
 - `sql_filter`: Raw SQL filter (WHERE)
 - `id_filter`: If not empty, limit result to this list of primary key IDs
 
+Entity Configuration
+--------------------
 DAO entities are configured using protected class properties:
 
 ```php
@@ -247,7 +240,7 @@ Public interfaces of models are high-level and should reflect all use cases with
 - `find($id)`: Find a record by primary key
 - `reload()`: Reload values from database
 - `findAll(array $cond = array(), $wrapResult = true)`: Find multiple records; if `$wrapResult` is false, plain DAOs are returned instead of model instances
-- `search(array $cond, array $options = array())`: Perform a search ($options can contain count, offset and/or sort order; the return value array also contains count, offset, sort order plus the total number of results; see DAO documentation)
+- `search(array $cond, array $options = array())`: Returns a `SearchResult` object ($options can contain count, offset, sort order etc, see search() in the DAO documentation above)
 - `searchAll(array $cond = array(), $order = false)`: Simple version of search(), similar to findAll()
 - `searchOne(array $cond = array())`: Search a single record; throws an exception if 0 or more than one record are found
 - `searchIds(array $cond, array $options = array())`: Returns an array of matching primary keys for the given search condition
@@ -315,3 +308,58 @@ class User extends EntityModel
     }
 }
 ```
+
+Search Result
+-------------
+When calling `search()` on a `EntityDao` or `EntityModel`, you'll get a `SearchResult` instance as return value.
+It implements `ArrayAccess`, `Serializable`, `IteratorAggregate` and `Countable` and can be used either as array
+or object with the following methods:
+
+- `getAsArray()`: Returns search result as array
+- `getSortOrder()`: Returns sort order as string
+- `getSearchCount()`: Returns search count (limit) as integer
+- `getSearchOffset()`:  Returns search offset as integer
+- `getResultCount()`: Returns the number of actual query results (<= limit)
+- `getTotalCount()`: Returns total result count (in the database)
+- `getAllResults()`: Returns all results as array of `EntityDao` or `EntityModel` instances
+- `getAllResultsAsArray()`: Returns all results as nested array (e.g. to serialize it as JSON)
+- `getFirstResult()`: Returns first result `EntityDao` or `EntityModel` instance or throws an exception
+
+Unit Tests
+----------
+
+This library comes with a `docker-compose.yml` file for MySQL and database fixtures to run unit tests (MySQL will bind to 127.0.0.1:3308):
+
+```
+localhost# docker-compose up -d
+localhost# docker-compose exec mysql sh
+docker# cd /share/src/Tests/_fixtures
+docker# mysql -u root --password=doctrine doctrine-active-record < schema.sql
+docker# exit
+localhost# bin/phpunit 
+PHPUnit 7.3.2 by Sebastian Bergmann and contributors.
+
+................................................................. 65 / 91 ( 71%)
+..........................                                        91 / 91 (100%)
+
+Time: 251 ms, Memory: 8.00MB
+
+OK (91 tests, 249 assertions)
+localhost# docker-compose down
+
+```
+
+Composer
+--------
+
+If you are using composer, simply add "symlex/doctrine-active-record" to your composer.json file and run `composer update`:
+
+```
+"require": {
+    "symlex/doctrine-active-record": "*"
+}
+```
+    
+*Note: This library is part of [Symlex](https://github.com/symlex/symlex) (a framework stack for agile Web development 
+based on Symfony) and not an official Doctrine project.*
+

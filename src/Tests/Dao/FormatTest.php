@@ -7,7 +7,7 @@ use Doctrine\ActiveRecord\Dao\Format;
 use DateTime;
 
 /**
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 class FormatTest extends UnitTestCase

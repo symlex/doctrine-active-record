@@ -15,14 +15,14 @@
     "authors": [
         {
             "name": "Michael Mayer",
-            "email": "michael@lastzero.net",
-            "homepage": "https://lastzero.net/",
+            "email": "michael@liquidbytes.net",
+            "homepage": "https://liquidbytes.net/",
             "role": "Developer"
         }
     ],
     "require": {
         "php": ">=7.0",
-        "doctrine/dbal": "~2.5"
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "lastzero/test-tools": "^4.0"

@@ -2,7 +2,8 @@ version: '3'
 
 services:
     mysql:
-        image: mysql
+        image: mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512
         ports:
             - "3308:3306"
         volumes:

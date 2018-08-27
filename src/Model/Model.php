@@ -19,7 +19,7 @@ use Closure;
  * use EntityModel instead of the basic Model, which only offers a number of
  * basic factory methods.
  *
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 abstract class Model

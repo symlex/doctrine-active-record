@@ -12,7 +12,7 @@ use Doctrine\ActiveRecord\Exception\FormatException;
  * this class intentionally is static. It's a pure conversion tool and does not
  * contain any state.
  *
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 class Format

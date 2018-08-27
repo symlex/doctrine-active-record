@@ -7,12 +7,12 @@ use Doctrine\ActiveRecord\Model\EntityModel;
 use Doctrine\ActiveRecord\Dao\EntityDao;
 
 /**
- * Search result object
+ * Search result
  *
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
-class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
+class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate, \Countable
 {
     private $result = array(
         'rows' => array(),
@@ -22,108 +22,102 @@ class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
         'total' => 0
     );
 
+    /**
+     * SearchResult constructor.
+     *
+     * @param array $searchResult
+     */
     public function __construct(array $searchResult = array())
     {
         $this->result = $searchResult + $this->result;
     }
 
     /**
-     * Returns PHP serialized data
-     *
-     * @return string
-     */
-    public function serialize()
-    {
-        return serialize($this->result);
-    }
-
-    public function unserialize($data)
-    {
-        $this->result = unserialize($data);
-    }
-
-    /**
-     * @return \ArrayIterator
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->result);
-    }
-
-    /**
-     * Returns search result as array
+     * Returns search result as array.
      *
      * @return array
      */
-    public function getAsArray()
+    public function getAsArray(): array
     {
         return $this->result;
     }
 
     /**
-     * Returns sort order as string
+     * Returns sort order as string.
      *
      * @return string
      */
-    public function getSortOrder()
+    public function getSortOrder(): string
     {
         return $this->result['order'];
     }
 
     /**
-     * Returns search count as integer
+     * Returns search count (limit) as integer.
      *
-     * @return integer
+     * @return int
      */
-    public function getSearchCount()
+    public function getSearchCount(): int
     {
         return (int)$this->result['count'];
     }
 
     /**
-     * Returns search offset as integer
+     * Returns search offset as integer.
      *
-     * @return integer
+     * @return int
      */
-    public function getSearchOffset()
+    public function getSearchOffset(): int
     {
         return (int)$this->result['offset'];
     }
 
     /**
-     * @return integer
+     * Returns the number of actual query results (<= limit)
+     *
+     * @return int
      */
-    public function getResultCount()
+    public function getResultCount(): int
     {
         return count($this->result['rows']);
     }
 
     /**
-     * Returns actual result count as integer
+     * Alias for getResultCount() (implements \Countable).
      *
-     * @return integer
+     * @return int
      */
-    public function getTotalCount()
+    public function count()
+    {
+        return $this->getResultCount();
+    }
+
+    /**
+     * Returns total result count (in the database).
+     *
+     * @return int
+     */
+    public function getTotalCount(): int
     {
         return (int)$this->result['total'];
     }
 
     /**
-     * Returns all results as array of objects
+     * Returns all results as array of objects.
      *
      * @return EntityDao[]|EntityModel[]
      */
-    public function getAllResults()
+    public function getAllResults(): array
     {
         return $this->result['rows'];
     }
 
     /**
-     * Returns all results as nested array
+     * Returns all results as nested array.
      *
      * @return array
      */
-    public function getAllResultsAsArray()
+    public function getAllResultsAsArray(): array
     {
         $result = array();
 
@@ -142,7 +136,7 @@ class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
     }
 
     /**
-     * Returns first result object or throws an exception
+     * Returns first result object or throws an exception.
      *
      * @return EntityDao|EntityModel
      * @throws NotFoundException
@@ -156,6 +150,42 @@ class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
         return $this->result['rows'][0];
     }
 
+    /**
+     * Returns PHP serialized data (implements \Serializable).
+     *
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize($this->result);
+    }
+
+    /**
+     * Sets data from serialized value (implements \Serializable).
+     *
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $this->result = unserialize($data);
+    }
+
+    /**
+     * Implements \IteratorAggregate.
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->result);
+    }
+
+    /**
+     * Implements \ArrayAccess.
+     *
+     * @param mixed $offset
+     * @param mixed $value
+     */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -165,16 +195,33 @@ class SearchResult implements \ArrayAccess, \Serializable, \IteratorAggregate
         }
     }
 
+    /**
+     * Implements \ArrayAccess.
+     *
+     * @param mixed $offset
+     * @return bool
+     */
     public function offsetExists($offset)
     {
         return isset($this->result[$offset]);
     }
 
+    /**
+     * Implements \ArrayAccess.
+     *
+     * @param mixed $offset
+     */
     public function offsetUnset($offset)
     {
         unset($this->result[$offset]);
     }
 
+    /**
+     * Implements \ArrayAccess.
+     *
+     * @param mixed $offset
+     * @return mixed|null
+     */
     public function offsetGet($offset)
     {
         return isset($this->result[$offset]) ? $this->result[$offset] : null;

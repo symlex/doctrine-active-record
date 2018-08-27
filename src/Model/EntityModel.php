@@ -17,7 +17,7 @@ use Doctrine\ActiveRecord\Search\SearchResult;
  * EntityModel implements a large number of standard ActiveRecord use-cases that
  * depend on Doctrine\ActiveRecord\Dao\EntiyDao instead of Doctrine\ActiveRecord\Dao\Dao
  *
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 abstract class EntityModel extends Model

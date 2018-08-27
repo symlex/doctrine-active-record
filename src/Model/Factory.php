@@ -8,7 +8,7 @@ use Doctrine\ActiveRecord\Dao\Factory as DaoFactory;
 use Doctrine\ActiveRecord\Factory\FactoryAbstract;
 
 /**
- * @author Michael Mayer <michael@lastzero.net>
+ * @author Michael Mayer <michael@liquidbytes.net>
  * @license MIT
  */
 class Factory extends FactoryAbstract
