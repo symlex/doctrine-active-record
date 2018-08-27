@@ -173,6 +173,22 @@ Search Parameters
 - `sql_filter`: Raw SQL filter (WHERE)
 - `id_filter`: If not empty, limit result to this list of primary key IDs
 
+Search Result
+-------------
+When calling `search()` on a `EntityDao` or `EntityModel`, you'll get a `SearchResult` instance as return value.
+It implements `ArrayAccess`, `Serializable`, `IteratorAggregate` and `Countable` and can be used either as array
+or object with the following methods:
+
+- `getAsArray()`: Returns search result as array
+- `getSortOrder()`: Returns sort order as string
+- `getSearchCount()`: Returns search count (limit) as integer
+- `getSearchOffset()`:  Returns search offset as integer
+- `getResultCount()`: Returns the number of actual query results (<= limit)
+- `getTotalCount()`: Returns total result count (in the database)
+- `getAllResults()`: Returns all results as array of `EntityDao` or `EntityModel` instances
+- `getAllResultsAsArray()`: Returns all results as nested array (e.g. to serialize it as JSON)
+- `getFirstResult()`: Returns first result `EntityDao` or `EntityModel` instance or throws an exception
+
 Entity Configuration
 --------------------
 DAO entities are configured using protected class properties:
@@ -308,22 +324,6 @@ class User extends EntityModel
     }
 }
 ```
-
-Search Result
--------------
-When calling `search()` on a `EntityDao` or `EntityModel`, you'll get a `SearchResult` instance as return value.
-It implements `ArrayAccess`, `Serializable`, `IteratorAggregate` and `Countable` and can be used either as array
-or object with the following methods:
-
-- `getAsArray()`: Returns search result as array
-- `getSortOrder()`: Returns sort order as string
-- `getSearchCount()`: Returns search count (limit) as integer
-- `getSearchOffset()`:  Returns search offset as integer
-- `getResultCount()`: Returns the number of actual query results (<= limit)
-- `getTotalCount()`: Returns total result count (in the database)
-- `getAllResults()`: Returns all results as array of `EntityDao` or `EntityModel` instances
-- `getAllResultsAsArray()`: Returns all results as nested array (e.g. to serialize it as JSON)
-- `getFirstResult()`: Returns first result `EntityDao` or `EntityModel` instance or throws an exception
 
 Unit Tests
 ----------
