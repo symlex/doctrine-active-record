@@ -1,7 +1,7 @@
 {
     "name": "symlex/doctrine-active-record",
     "type": "library",
-    "description": "ActiveRecord model and DAO implementation for Doctrine DBAL",
+    "description": "ActiveRecord Model and DAO implementation for Doctrine DBAL",
     "keywords": [
         "database",
         "db",
@@ -21,8 +21,8 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
-        "doctrine/dbal": "^2.5"
+        "php": ">=7.1",
+        "doctrine/dbal": "^2.8"
     },
     "require-dev": {
         "lastzero/test-tools": "^4.0"

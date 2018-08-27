@@ -4,7 +4,7 @@ Changelog
 Release 4
 ---------
 
-* 4.4.0 SearchResult implements \Countable; added CHANGELOG.md & TRADEOFFS.md; improved documentation
+* 4.4.0 SearchResult implements \Countable; removed PHP 7.0 support; added CHANGELOG.md & TRADEOFFS.md; improved documentation
 
 * 4.3.0 Fixed Dao->exists() method and recreated file fixtures for tests
 

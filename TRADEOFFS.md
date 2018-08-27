@@ -2,10 +2,10 @@
 
 ## Potential reasons to use Doctrine ActiveRecord
 
+- The active record pattern is perfectly suited for building REST services (create, read, update, delete)
 - It is a lot faster and less complex than Datamapper ORM implementations
 - Small code footprint
 - Easy to write unit tests (record & replay fixtures can automatically be created, see existing test suite) 
-- It has proven to be well suited for rapidly building microservices, CLI and single-page applications
 - Built on top of Doctrine DBAL
 - Part of the Symlex framework stack for agile Web development
 
