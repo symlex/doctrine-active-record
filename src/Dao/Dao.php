@@ -188,7 +188,7 @@ abstract class Dao
      *
      * @param \Closure $func The function to execute transactionally.
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function transactional(Closure $func)
     {
@@ -198,7 +198,7 @@ abstract class Dao
             $func();
 
             $this->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
 
             throw $e;
