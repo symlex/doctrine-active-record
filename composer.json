@@ -1,7 +1,7 @@
 {
     "name": "symlex/doctrine-active-record",
     "type": "library",
-    "description": "ActiveRecord Model and DAO implementation for Doctrine DBAL",
+    "description": "Object-oriented CRUD for Doctrine DBAL",
     "keywords": [
         "database",
         "db",

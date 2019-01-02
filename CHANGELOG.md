@@ -4,6 +4,8 @@ Changelog
 Release 4
 ---------
 
+* 4.4.2 Tested with latest Symfony; Updated docs, added contributing guide & codecov config 
+
 * 4.4.1 Catching Throwable instead of Exception to cover all errors in Dao::transactional() 
 
 * 4.4.0 SearchResult implements \Countable; removed PHP 7.0 support; added CHANGELOG.md & TRADEOFFS.md; improved documentation

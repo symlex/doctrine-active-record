@@ -1,17 +1,16 @@
-Doctrine ActiveRecord
-=====================
+# Doctrine ActiveRecord: Object-oriented CRUD for Doctrine DBAL
 
-[![Build Status](https://travis-ci.org/symlex/doctrine-active-record.png?branch=master)](https://travis-ci.org/symlex/doctrine-active-record)
 [![Latest Stable Version](https://poser.pugx.org/symlex/doctrine-active-record/v/stable.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
-[![Total Downloads](https://poser.pugx.org/lastzero/doctrine-active-record/downloads.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
 [![License](https://poser.pugx.org/symlex/doctrine-active-record/license.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
+[![Test Coverage](https://codecov.io/gh/symlex/doctrine-active-record/branch/master/graph/badge.svg)](https://codecov.io/gh/symlex/doctrine-active-record)
+[![Build Status](https://travis-ci.org/symlex/doctrine-active-record.png?branch=master)](https://travis-ci.org/symlex/doctrine-active-record)
+[![Documentation](https://readthedocs.org/projects/symlex-docs/badge/?version=latest&style=flat)](https://docs.symlex.org/en/latest/doctrine-active-record)
 
 As a lightweight alternative to Doctrine ORM, this library provides Business Model and Database Access Object (DAO) classes 
 that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) 
 functionality for relational databases. It is a lot faster and less complex than Datamapper ORM implementations. See [TRADEOFFS.md](TRADEOFFS.md).
 
-Basic example
--------------
+## Basic Example ##
 
 ```php
 use Doctrine\ActiveRecord\Dao\Factory as DaoFactory;
@@ -34,8 +33,7 @@ if ($user->email == '') {
 $group = $user->createModel('Group'); // Returns instance of App\Model\GroupModel
 ```
 
-Usage in REST controller context
---------------------------------
+## Usage in REST Controller Context ##
 
 Doctrine ActiveRecord is perfectly suited for building high-performance REST services.
 
@@ -116,15 +114,14 @@ class UsersController
 
 See also: [InputValidation for PHP – Easy & secure whitelist validation for input data of any origin](https://github.com/symlex/input-validation)
 
-Workflow
---------
+## Workflow ##
 
 This diagram illustrates how Controller, Model and DAO interact with each other:
 
 ![Architecture](https://www.lucidchart.com/publicSegments/view/5461d17e-f5a8-4166-9e43-47200a00dd77/image.png)
 
-Data Access Objects
--------------------
+## Data Access Objects ##
+
 DAOs directly deal with **database tables** and **raw SQL**, if needed. `Doctrine\ActiveRecord\Dao\Dao` is suited to implement custom methods using raw SQL. All DAOs expose the following public methods by default:
 - `createDao(string $name)`: Returns a new DAO instance
 - `beginTransaction()`: Start a database transaction
@@ -155,45 +152,69 @@ In addition, `Doctrine\ActiveRecord\Dao\EntityDao` offers many powerful methods 
 - `getTableName()`: Returns the name of the underlying database table
 - `getPrimaryKeyName()`: Returns the name of the primary key column (throws an exception, if primary key is an array)
 
-Search Parameters
------------------
-`search()` accepts the following optional parameters to limit, filter and sort search results:
-- `table`: Table name
-- `table_alias`: Alias name for "table" (table reference for join and join_left)
-- `cond`: Search conditions as array (key/value or just values for raw SQL)
-- `count`: Maximum number of results (integer)
-- `offset`: Result offset (integer)
-- `join`: List of joined tables incl join condition e.g. `array(array('u', 'phonenumbers', 'p', 'u.id = p.user_id'))`, see Doctrine DBAL manual
-- `left_join`: See join
-- `columns`: List of columns (array)
-- `order`: Sort order (if not false)
-- `group`: Group by (if not false)
-- `wrap`: If false, raw arrays are returned instead of DAO instances
-- `ids_only`: Return primary key values only
-- `sql_filter`: Raw SQL filter (WHERE)
-- `id_filter`: If not empty, limit result to this list of primary key IDs
+## Search Parameters ##
 
-Search Result
--------------
+**search() accepts the following optional parameters to limit, filter and sort search results:**
+
+`table`: Table name
+
+`table_alias`: Alias name for "table" (table reference for join and join_left)
+
+`cond`: Search conditions as array (key/value or just values for raw SQL)
+
+`count`: Maximum number of results (integer)
+
+`offset`: Result offset (integer)
+
+`join`: List of joined tables incl join condition e.g. `array(array('u', 'phonenumbers', 'p', 'u.id = p.user_id'))`, see Doctrine DBAL manual
+
+`left_join`: See join
+
+`columns`: List of columns (array)
+
+`order`: Sort order (if not false)
+
+`group`: Group by (if not false)
+
+`wrap`: If false, raw arrays are returned instead of DAO instances
+
+`ids_only`: Return primary key values only
+
+`sql_filter`: Raw SQL filter (WHERE)
+
+`id_filter`: If not empty, limit result to this list of primary key IDs
+
+## Search Result ##
+
 When calling `search()` on a `EntityDao` or `EntityModel`, you'll get a `SearchResult` instance as return value.
 It implements `ArrayAccess`, `Serializable`, `IteratorAggregate` and `Countable` and can be used either as array
 or object with the following methods:
 
-- `getAsArray()`: Returns search result as array
-- `getSortOrder()`: Returns sort order as string
-- `getSearchCount()`: Returns search count (limit) as integer
-- `getSearchOffset()`:  Returns search offset as integer
-- `getResultCount()`: Returns the number of actual query results (<= limit)
-- `getTotalCount()`: Returns total result count (in the database)
-- `getAllResults()`: Returns all results as array of `EntityDao` or `EntityModel` instances
-- `getAllResultsAsArray()`: Returns all results as nested array (e.g. to serialize it as JSON)
-- `getFirstResult()`: Returns first result `EntityDao` or `EntityModel` instance or throws an exception
+`getAsArray()`: Returns search result as array
 
-Entity Configuration
---------------------
+`getSortOrder()`: Returns sort order as string
+
+`getSearchCount()`: Returns search count (limit) as integer
+
+`getSearchOffset()`:  Returns search offset as integer
+
+`getResultCount()`: Returns the number of actual query results (<= limit)
+
+`getTotalCount()`: Returns total result count (in the database)
+
+`getAllResults()`: Returns all results as array of `EntityDao` or `EntityModel` instances
+
+`getAllResultsAsArray()`: Returns all results as nested array (e.g. to serialize it as JSON)
+
+`getFirstResult()`: Returns first result `EntityDao` or `EntityModel` instance or throws an exception
+
+## Entity Configuration ##
+
 DAO entities are configured using protected class properties:
 
 ```php
+<?php
+
 protected $_tableName = ''; // Database table name
 protected $_primaryKey = 'id'; // Name or array of primary key(s)
 protected $_fieldMap = array(); // 'db_column' => 'object_property'
@@ -208,6 +229,8 @@ protected $_timestampUpdatedCol = 'updated';
 Possible values for $_formatMap are defined as constants in `Doctrine\ActiveRecord\Dao\Format`:
 
 ```php
+<?php
+
 const NONE = '';
 const INT = 'int';
 const FLOAT = 'float';
@@ -246,34 +269,55 @@ class UserDao extends EntityDao
 }
 ```
 
-Business Models
----------------
+## Business Models ##
 
 **Business Models** are logically located between **Controllers** - which render views and validate user input - and **Data Access Objects** (DAOs), that are low-level interfaces to a storage backend or Web service.
 
 Public interfaces of models are high-level and should reflect all use cases within their domain. There are a number of standard use-cases that are pre-implemented in the base class `Doctrine\ActiveRecord\Model\EntityModel`:
-- `createModel(string $name = '', Dao $dao = null)`: Create a new model instance
-- `find($id)`: Find a record by primary key
-- `reload()`: Reload values from database
-- `findAll(array $cond = array(), $wrapResult = true)`: Find multiple records; if `$wrapResult` is false, plain DAOs are returned instead of model instances
-- `search(array $cond, array $options = array())`: Returns a `SearchResult` object ($options can contain count, offset, sort order etc, see search() in the DAO documentation above)
-- `searchAll(array $cond = array(), $order = false)`: Simple version of search(), similar to findAll()
-- `searchOne(array $cond = array())`: Search a single record; throws an exception if 0 or more than one record are found
-- `searchIds(array $cond, array $options = array())`: Returns an array of matching primary keys for the given search condition
-- `getModelName()`: Returns the model name without prefix and postfix
-- `getId()`: Returns the ID of the currently loaded record (throws exception, if empty)
-- `hasId()`: Returns true, if the model instance has an ID assigned (primary key)
-- `getValues()`: Returns all model properties as associative array
-- `getEntityTitle()`: Returns the common name of this entity
-- `isDeletable()`: Returns true, if the model instance can be deleted with delete()
-- `isUpdatable()`: Returns true, if the model instance can be updated with update($values)
-- `isCreatable()`: Returns true, if new entities can be created in the database with create($values)
-- `batchEdit(array $ids, array $properties)`: Update data for multiple records
-- `getTableName()`: Returns the name of the associated main database table
-- `hasTimestampEnabled()`: Returns true, if timestamps are enabled for the associated DAO
-- `delete()`: Permanently delete the entity record from the database
-- `save(array $values)`: Create a new record using the values provided
-- `update(array $values)`: Update model instance database record; before assigning multiple values to a model instance, data should be validated using a form class
+
+`createModel(string $name = '', Dao $dao = null)`: Create a new model instance
+
+`find($id)`: Find a record by primary key
+
+`reload()`: Reload values from database
+
+`findAll(array $cond = array(), $wrapResult = true)`: Find multiple records; if `$wrapResult` is false, plain DAOs are returned instead of model instances
+
+`search(array $cond, array $options = array())`: Returns a `SearchResult` object ($options can contain count, offset, sort order etc, see search() in the DAO documentation above)
+
+`searchAll(array $cond = array(), $order = false)`: Simple version of search(), similar to findAll()
+
+`searchOne(array $cond = array())`: Search a single record; throws an exception if 0 or more than one record are found
+
+`searchIds(array $cond, array $options = array())`: Returns an array of matching primary keys for the given search condition
+
+`getModelName()`: Returns the model name without prefix and postfix
+
+`getId()`: Returns the ID of the currently loaded record (throws exception, if empty)
+
+`hasId()`: Returns true, if the model instance has an ID assigned (primary key)
+
+`getValues()`: Returns all model properties as associative array
+
+`getEntityTitle()`: Returns the common name of this entity
+
+`isDeletable()`: Returns true, if the model instance can be deleted with delete()
+
+`isUpdatable()`: Returns true, if the model instance can be updated with update($values)
+
+`isCreatable()`: Returns true, if new entities can be created in the database with create($values)
+
+`batchEdit(array $ids, array $properties)`: Update data for multiple records
+
+`getTableName()`: Returns the name of the associated main database table
+
+`hasTimestampEnabled()`: Returns true, if timestamps are enabled for the associated DAO
+
+`delete()`: Permanently delete the entity record from the database
+
+`save(array $values)`: Create a new record using the values provided
+
+`update(array $values)`: Update model instance database record; before assigning multiple values to a model instance, data should be validated using a form class
 
 **How much validation should be implemented within a model?** Wherever invalid data can lead to security issues or major inconsistencies, some core validation rules must be implemented in the model layer. Model exception messages usually don’t require translation (in multilingual applications), since invalid values should be recognized beforehand by a form class. If you expect certain exceptions, you should catch and handle them in your controllers.
 
@@ -325,8 +369,7 @@ class User extends EntityModel
 }
 ```
 
-Unit Tests
-----------
+## Unit Tests ##
 
 This library comes with a `docker-compose.yml` file for MySQL and database fixtures to run unit tests (MySQL will bind to 127.0.0.1:3308):
 
@@ -349,17 +392,27 @@ localhost# docker-compose down
 
 ```
 
-Composer
---------
+## Composer ##
 
-If you are using composer, simply add "symlex/doctrine-active-record" to your composer.json file and run `composer update`:
+To use this library in your project, simply run `composer require symlex/doctrine-active-record` or
+add "symlex/doctrine-active-record" to your [composer.json](https://getcomposer.org/doc/04-schema.md) file and run `composer update`:
 
-```
-"require": {
-    "symlex/doctrine-active-record": "*"
+```json
+{
+    "require": {
+        "php": ">=7.1",
+        "symlex/doctrine-active-record": "^4.0"
+    }
 }
 ```
-    
-*Note: This library is part of [Symlex](https://github.com/symlex/symlex) (a framework stack for agile Web development 
-based on Symfony) and not an official Doctrine project.*
 
+## About ##
+
+Doctrine ActiveRecord is maintained by [Michael Mayer](https://blog.liquidbytes.net/about/).
+Feel free to send an e-mail to [hello@symlex.org](mailto:hello@symlex.org) if you have any questions, 
+need [commercial support](https://blog.liquidbytes.net/contact/) or just want to say hello. 
+We welcome contributions of any kind. If you have a bug or an idea, read our 
+[guide](CONTRIBUTING.md) before opening an issue.
+
+*Note: This library is part of [Symlex](https://symlex.org/) (a framework stack for agile Web development 
+based on Symfony) and not an official Doctrine project.*
