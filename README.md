@@ -13,6 +13,8 @@ functionality for relational databases. It is a lot faster and less complex than
 ## Basic Example ##
 
 ```php
+<?php
+
 use Doctrine\ActiveRecord\Dao\Factory as DaoFactory;
 use Doctrine\ActiveRecord\Model\Factory;
 
@@ -42,6 +44,8 @@ nested structures. User model and form factory (provided by the [InputValidation
 package) are injected as dependencies.
 
 ```php
+<?php
+
 namespace App\Controller\Rest;
 
 use Symfony\Component\HttpFoundation\Request;
