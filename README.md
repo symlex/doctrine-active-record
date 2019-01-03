@@ -1,4 +1,4 @@
-# Doctrine ActiveRecord: Object-oriented CRUD for Doctrine DBAL
+# Object-oriented CRUD for Doctrine DBAL
 
 [![Latest Stable Version](https://poser.pugx.org/symlex/doctrine-active-record/v/stable.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
 [![License](https://poser.pugx.org/symlex/doctrine-active-record/license.svg)](https://packagist.org/packages/symlex/doctrine-active-record)
@@ -9,6 +9,8 @@
 As a lightweight alternative to Doctrine ORM, this battle-tested library provides Business Model and Database Access Object (DAO) classes 
 that encapsulate **Doctrine DBAL** to provide high-performance, object-oriented CRUD (create, read, update, delete) 
 functionality for relational databases. It is a lot faster and less complex than Datamapper ORM implementations. See [TRADEOFFS.md](TRADEOFFS.md).
+
+Documentation: https://docs.symlex.org/en/latest/doctrine-active-record/
 
 ![Doctrine ActiveRecord](https://docs.symlex.org/en/latest/doctrine-active-record/img/workflow.svg)
 
