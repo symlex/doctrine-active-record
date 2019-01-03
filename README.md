@@ -36,7 +36,7 @@ $user->find(123);
 
 if ($user->email == '') {
     // Update email
-    $user->update(array('email' => 'bender@ilovebender.com')); 
+    $user->update(array('email' => 'user@example.com')); 
 }
 
 // Returns instance of App\Model\GroupModel
