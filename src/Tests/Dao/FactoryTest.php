@@ -16,7 +16,7 @@ class FactoryTest extends UnitTestCase
      */
     protected $factory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $db = $this->get('dbal.connection');
         $this->factory = new Factory ($db);
@@ -60,11 +60,9 @@ class FactoryTest extends UnitTestCase
         $this->assertEquals('', $this->factory->getFactoryPostfix());
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\FactoryException
-     */
     public function testGetDaoException()
     {
+        $this->expectException('\Doctrine\ActiveRecord\Exception\FactoryException');
         $this->factory->create('FooBar');
     }
 }

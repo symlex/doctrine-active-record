@@ -15,7 +15,7 @@ class DocumentDaoTest extends UnitTestCase
      */
     protected $dao;
 
-    public function setUp()
+    protected function setUp(): void
     {
         DocumentDao::setDateTimeClassName('\TestTools\Util\FixedDateTime');
         $factory = $this->get('dao.factory');

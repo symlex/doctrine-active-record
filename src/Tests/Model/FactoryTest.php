@@ -22,7 +22,7 @@ class FactoryTest extends UnitTestCase
      */
     protected $daoFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $db = $this->get('dbal.connection');
         $this->daoFactory = new DaoFactory($db);
@@ -81,19 +81,15 @@ class FactoryTest extends UnitTestCase
         $this->assertEquals('', $this->factory->getFactoryPostfix());
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\FactoryException
-     */
     public function testCreateDaoException()
     {
+        $this->expectException('\Doctrine\ActiveRecord\Exception\FactoryException');
         $this->factory->createDao('FooBar');
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\FactoryException
-     */
     public function testCreateModelException()
     {
+        $this->expectException('\Doctrine\ActiveRecord\Exception\FactoryException');
         $this->factory->create('FooBar');
     }
 }

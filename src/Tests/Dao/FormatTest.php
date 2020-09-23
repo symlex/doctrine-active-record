@@ -12,7 +12,7 @@ use DateTime;
  */
 class FormatTest extends UnitTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         date_default_timezone_set('UTC');
     }
@@ -114,27 +114,21 @@ class FormatTest extends UnitTestCase
         $this->assertEquals('04.12.2012 14:47', $output->format('d.m.Y H:i'));
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\FormatException
-     */
     public function testToSqlDateException()
     {
+        $this->expectException('\Doctrine\ActiveRecord\Exception\FormatException');
         Format::toSql(Format::DATE, new Format());
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\FormatException
-     */
     public function testToSqlDatetimeException()
     {
+        $this->expectException('\Doctrine\ActiveRecord\Exception\FormatException');
         Format::toSql(Format::DATETIME, new Format());
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\FormatException
-     */
     public function testFromSqlNumberException()
     {
+        $this->expectException('\Doctrine\ActiveRecord\Exception\FormatException');
         Format::fromSql('#.00', 1234);
     }
 
@@ -378,5 +372,14 @@ class FormatTest extends UnitTestCase
         $csvString = Format::toSql(Format::CSV, array('foo', 'bar', 123));
         $csvArray = Format::fromSql(Format::CSV, $csvString);
         $this->assertEquals(array('foo', 'bar', 123), $csvArray);
+    }
+
+    public function testISO8601()
+    {
+        $output = Format::toSql(Format::ISO8601, new DateTime('2014-03-30T02:30:00'));
+        $this->assertEquals('2014-03-30 02:30:00', $output);
+
+        $output = Format::fromSql(Format::ISO8601, '2010-10-11 18:34:45');
+        $this->assertEquals('2010-10-11T18:34:45', $output);
     }
 }

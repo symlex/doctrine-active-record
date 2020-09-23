@@ -16,18 +16,16 @@ class EntityDaoTest extends UnitTestCase
      */
     protected $dao;
 
-    public function setUp()
+    protected function setUp(): void
     {
         UserDao::setDateTimeClassName('\TestTools\Util\FixedDateTime');
         $factory = $this->get('dao.factory');
         $this->dao = new UserDao ($factory);
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\NotFoundException
-     */
     public function testFindNotFoundException()
     {
+        $this->expectException('\Doctrine\ActiveRecord\Exception\NotFoundException');
         $this->dao->find(45345);
         $this->assertTrue(true);
     }
@@ -115,12 +113,12 @@ class EntityDaoTest extends UnitTestCase
         $this->assertEquals(1, $result['total']);
         $this->assertEquals('id', $result['table_pk']);
         $this->assertEquals('u', $result['table_alias']);
-        $this->assertInternalType('array', $result['rows']);
+        $this->assertIsArray($result['rows']);
 
         $user = $result['rows'][0];
         $this->assertEquals('Foo', $user->username);
 
-        $this->assertContains('AND (active = 1)', $result['sql']);
+        $this->assertStringContainsString('AND (active = 1)', $result['sql']);
     }
 
     public function testSearchCountTotal()
@@ -147,15 +145,14 @@ class EntityDaoTest extends UnitTestCase
         $this->assertGreaterThanOrEqual(2, $result['total']);
         $this->assertEquals('id', $result['table_pk']);
         $this->assertEquals('u', $result['table_alias']);
-        $this->assertInternalType('array', $result['rows']);
+        $this->assertIsArray($result['rows']);
         $this->assertGreaterThanOrEqual(2, $result['rows']);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInsertInvalidArguments()
     {
+        $this->expectException('\InvalidArgumentException');
+
         $user = $this->dao->createDao('User');
         $user->save('foo');
     }

@@ -36,14 +36,15 @@ class Format
     const DATETIMETZ = 'Y-m-d H:i:sO'; // Support for timezone (e.g. "+0230")
     const DATETIMEUTZ = 'Y-m-d H:i:s.uO'; // Support for microseconds & timezone
     const TIMESTAMP = 'U';
+    const ISO8601 = 'Y-m-d\TH:i:s';
 
     /**
      * Converts data from sql data source
      *
      * @param string $format
      * @param mixed $data
-     * @throws FormatException
      * @return mixed
+     * @throws FormatException
      */
     public static function fromSql(string $format, $data = null)
     {
@@ -91,6 +92,8 @@ class Format
                 return json_decode($data, true);
             case self::CSV:
                 return str_getcsv($data);
+            case self::ISO8601:
+                return DateTime::createFromFormat(self::DATETIME, $data)->format(self::ISO8601);
             default:
                 throw new FormatException ('Unknown format: ' . $format);
         }
@@ -101,8 +104,8 @@ class Format
      *
      * @param string $format
      * @param mixed $data
-     * @throws FormatException
      * @return mixed
+     * @throws FormatException
      */
     public static function toSql(string $format, $data = null)
     {
@@ -136,13 +139,12 @@ class Format
 
                 return $result;
             case self::INT:
-                return (integer)$data;
             case self::BOOL:
                 return (integer)$data;
             case self::FLOAT:
                 if (strpos($data, ',') > strpos($data, '.')) {
                     $data = str_replace(array('.', ','), array('', '.'), $data);
-                } elseif(strpos($data, '.') > strpos($data, ',')) {
+                } elseif (strpos($data, '.') > strpos($data, ',')) {
                     $data = str_replace(',', '', $data);
                 }
 
@@ -157,6 +159,18 @@ class Format
                 return json_encode($data);
             case self::CSV:
                 return implode(',', $data);
+            case self::ISO8601:
+                if (empty($data)) {
+                    $result = null;
+                } elseif (!is_object($data)) {
+                    $result = DateTime::createFromFormat(self::ISO8601, $data)->format(self::DATETIME);
+                } elseif ($data instanceof DateTime) {
+                    $result = $data->format(self::DATETIME);
+                } else {
+                    throw new FormatException('Unknown datetime object: ' . get_class($data));
+                }
+
+                return $result;
             default:
                 throw new FormatException ('Unknown format: ' . $format);
         }

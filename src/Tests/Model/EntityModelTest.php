@@ -15,7 +15,7 @@ class EntityModelTest extends UnitTestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         /**
          * @var \Doctrine\ActiveRecord\Model\Factory
@@ -38,11 +38,9 @@ class EntityModelTest extends UnitTestCase
         $this->assertEquals('User', $this->model->getModelName());
     }
 
-    /**
-     * @expectedException \Doctrine\ActiveRecord\Exception\NotFoundException
-     */
     public function testFindNotFoundException()
     {
+        $this->expectException('\Doctrine\ActiveRecord\Exception\NotFoundException');
         $this->model->find(45345);
     }
 
@@ -82,12 +80,12 @@ class EntityModelTest extends UnitTestCase
 
         $usersArray = $this->model->findAll(array(), false);
 
-        $this->assertInternalType('array', $usersArray);
+        $this->assertIsArray($usersArray);
         $this->assertCount(5, $usersArray);
 
         $emptyUsersArray = $this->model->findAll(array('username' => 'XXX'), false);
 
-        $this->assertInternalType('array', $emptyUsersArray);
+        $this->assertIsArray($emptyUsersArray);
         $this->assertCount(0, $emptyUsersArray);
     }
 
@@ -110,7 +108,7 @@ class EntityModelTest extends UnitTestCase
         $this->assertEquals('u', $result['table_alias']);
         $this->assertContainsOnlyInstancesOf('\Doctrine\ActiveRecord\Tests\Model\UserModel', $result['rows']);
         $this->assertCount(1, $result['rows']);
-        $this->assertInternalType('array', $result->getAllResultsAsArray()[0]);
+        $this->assertIsArray($result->getAllResultsAsArray()[0]);
     }
 
     public function searchAll()
@@ -165,7 +163,7 @@ class EntityModelTest extends UnitTestCase
         $this->model->find(1);
         $values = $this->model->getValues();
 
-        $this->assertInternalType('array', $values);
+        $this->assertIsArray($values);
         $this->assertArrayNotHasKey('password', $values);
         $this->assertEquals(1, $values['id']);
         $this->assertEquals('Foo', $values['username']);

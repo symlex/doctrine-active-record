@@ -15,7 +15,7 @@ class ModelTest extends UnitTestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $factory = $this->get('model.factory');
         $this->model = new SimpleModel ($factory);
@@ -41,7 +41,7 @@ class ModelTest extends UnitTestCase
     {
         $result = $this->model->getTables();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
 
         $this->assertEquals('documents', $result[0]);
     }

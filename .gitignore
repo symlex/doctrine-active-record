@@ -49,6 +49,7 @@ composer.lock
 .settings
 .*\.swp
 .tmp
+.phpunit.result.cache
 phpunit.xml
 
 # Project specific files #
