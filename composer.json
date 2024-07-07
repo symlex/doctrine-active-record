@@ -1,38 +1,39 @@
 {
-    "name": "symlex/doctrine-active-record",
-    "type": "library",
-    "description": "Object-oriented CRUD for Doctrine DBAL",
-    "keywords": [
-        "database",
-        "db",
-        "dao",
-        "model",
-        "symfony",
-        "silex"
-    ],
-    "homepage": "https://github.com/symlex/doctrine-active-record",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Michael Mayer",
-            "email": "michael@liquidbytes.net",
-            "homepage": "https://liquidbytes.net/",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php": ">=7.3",
-        "doctrine/dbal": "^2.8"
-    },
-    "require-dev": {
-        "lastzero/test-tools": "^4.2"
-    },
-    "autoload": {
-        "psr-4": {
-            "Doctrine\\ActiveRecord\\": "src/"
-        }
-    },
-    "config": {
-        "bin-dir": "bin/"
+  "name": "symlex/doctrine-active-record",
+  "type": "library",
+  "description": "Object-oriented CRUD for Doctrine DBAL",
+  "keywords": [
+    "database",
+    "db",
+    "dao",
+    "model",
+    "symfony",
+    "silex"
+  ],
+  "homepage": "https://github.com/symlex/doctrine-active-record",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michael Mayer",
+      "email": "michael@liquidbytes.net",
+      "homepage": "https://liquidbytes.net/",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "ext-json": "*",
+    "doctrine/dbal": "^2.8"
+  },
+  "require-dev": {
+    "lastzero/test-tools": "^4.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Doctrine\\ActiveRecord\\": "src/"
+    }
+  },
+  "config": {
+    "bin-dir": "bin/"
+  }
 }

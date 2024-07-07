@@ -12,7 +12,7 @@ use DateTime;
  */
 class FormatTest extends UnitTestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         date_default_timezone_set('UTC');
     }
@@ -339,6 +339,10 @@ class FormatTest extends UnitTestCase
     {
         $output = Format::toSql(Format::JSON, array('foo' => 'bar'));
         $this->assertEquals(array('foo' => 'bar'), json_decode($output, true));
+        $output = Format::toSql(Format::JSON, '{"foo":"bar"}');
+        $this->assertEquals(array('foo' => 'bar'), json_decode($output, true));
+        $output = Format::toSql(Format::JSON, '');
+        $this->assertEquals('', $output);
     }
 
     public function testFromSqlJSON()

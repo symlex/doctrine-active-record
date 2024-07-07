@@ -15,7 +15,7 @@ class EntityModelTest extends UnitTestCase
      */
     protected $model;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         /**
          * @var \Doctrine\ActiveRecord\Model\Factory

@@ -15,7 +15,7 @@ class ModelTest extends UnitTestCase
      */
     protected $model;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $factory = $this->get('model.factory');
         $this->model = new SimpleModel ($factory);

@@ -16,7 +16,7 @@ class EntityDaoTest extends UnitTestCase
      */
     protected $dao;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         UserDao::setDateTimeClassName('\TestTools\Util\FixedDateTime');
         $factory = $this->get('dao.factory');

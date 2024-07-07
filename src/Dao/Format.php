@@ -89,6 +89,10 @@ class Format
             case self::SERIALIZED:
                 return unserialize($data);
             case self::JSON:
+                if (empty($data)) {
+                    return array();
+                }
+
                 return json_decode($data, true);
             case self::CSV:
                 return str_getcsv($data);
@@ -156,6 +160,12 @@ class Format
             case self::SERIALIZED:
                 return serialize($data);
             case self::JSON:
+                if (empty($data)) {
+                    return '';
+                } else if (is_string($data)) {
+                    return $data;
+                }
+
                 return json_encode($data);
             case self::CSV:
                 return implode(',', $data);

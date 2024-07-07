@@ -22,7 +22,7 @@ class FactoryTest extends UnitTestCase
      */
     protected $daoFactory;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $db = $this->get('dbal.connection');
         $this->daoFactory = new DaoFactory($db);

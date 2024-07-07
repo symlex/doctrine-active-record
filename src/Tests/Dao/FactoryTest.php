@@ -16,7 +16,7 @@ class FactoryTest extends UnitTestCase
      */
     protected $factory;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $db = $this->get('dbal.connection');
         $this->factory = new Factory ($db);
