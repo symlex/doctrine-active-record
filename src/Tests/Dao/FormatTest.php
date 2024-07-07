@@ -338,11 +338,15 @@ class FormatTest extends UnitTestCase
     public function testToSqlJSON()
     {
         $output = Format::toSql(Format::JSON, array('foo' => 'bar'));
-        $this->assertEquals(array('foo' => 'bar'), json_decode($output, true));
+        $this->assertEquals(['foo' => 'bar'], json_decode($output, true));
         $output = Format::toSql(Format::JSON, '{"foo":"bar"}');
-        $this->assertEquals(array('foo' => 'bar'), json_decode($output, true));
+        $this->assertEquals(['foo' => 'bar'], json_decode($output, true));
+        $output = Format::toSql(Format::JSON, '[]');
+        $this->assertNull($output);
+        $output = Format::toSql(Format::JSON, '{}');
+        $this->assertNull($output);
         $output = Format::toSql(Format::JSON, '');
-        $this->assertEquals('', $output);
+        $this->assertNull($output);
     }
 
     public function testFromSqlJSON()

@@ -160,8 +160,8 @@ class Format
             case self::SERIALIZED:
                 return serialize($data);
             case self::JSON:
-                if (empty($data)) {
-                    return '';
+                if (empty($data) || $data === '[]' || $data === '{}') {
+                    return null;
                 } else if (is_string($data)) {
                     return $data;
                 }
